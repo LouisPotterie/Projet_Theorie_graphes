@@ -9,10 +9,10 @@ public class Main {
 
     public void djistra( int[][] matrice)
     {
-        ArrayList<Noeud> CC = new ArrayList<Noeud>();
-        ArrayList<Noeud> M = new ArrayList<Noeud>(); // A initialiser avec tous les sommets
+        ArrayList<Noeud> cc = new ArrayList<Noeud>();
+        ArrayList<Noeud> m = new ArrayList<Noeud>(); // A initialiser avec tous les sommets
 
-        int nombre_sommet = M.size();
+        int nombre_sommet = m.size();
         int pi_etoile[] = new int[nombre_sommet]; // tableau des valeurs de Pi étoiles de taille nombre de sommets
         int pi[] = new int[nombre_sommet]; // tableau des valeurs de Pi  de taille nombre de sommets
 
@@ -21,12 +21,12 @@ public class Main {
 
         int initiale = kb.nextInt();
 
-        for (Noeud i : M)  // parcourt de l'ensemble M
+        for (Noeud i : m)  // parcourt de l'ensemble M
         {
 
             if (initiale == i.getSommet()) {  // si la l'attribut sommet est celle choisi alors
-                CC.add(i); // Ajout du Noeud dans CC
-                M.remove(i); // On retire le noeud de CC
+                cc.add(i); // Ajout du Noeud dans CC
+                m.remove(i); // On retire le noeud de CC
                 pi_etoile[initiale]=0; // on initialise son pi_etoile à 0
             }
             pi[i.getSommet()] = matrice[initiale][i.getSommet()]; // On initialise tous les autres PI
@@ -36,20 +36,21 @@ public class Main {
         Noeud tampon_sommet = new Noeud();
 
 
-        while(M.size() != 0)
+        while(m.size() != 0)
         {
-            for (Noeud i : M)  // parcourt de l'ensemble M
+            for (Noeud i : m)  // parcourt de l'ensemble M
             {
                 if (pi[i.getSommet()] < tampon_valeur)
                 {
                     tampon_valeur = pi[i.getSommet()];
-                    tampon_sommet = i; // objet = objet
 
+                    tampon_sommet = (Noeud) i.clone(); // objet = objet
                 }
             }
 
-            CC.add(tampon_sommet);
-            M.remove(tampon_sommet);
+            cc.add(tampon_sommet);
+            m.remove(tampon_sommet);
+            pi_etoile[tampon_sommet.getSommet()]= pi[tampon_sommet.getSommet()];
         }
 
 

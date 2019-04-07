@@ -1,8 +1,9 @@
 package com.company;
 
 import java.util.ArrayList;
+import java.lang.Cloneable;
 
-public class Noeud {
+public class Noeud implements Cloneable{
 
 
         private int sommet;
@@ -21,6 +22,7 @@ public class Noeud {
     public Noeud() {
     }
 
+
     public Noeud (int nSommet, int nLongueur, int nSuccesseur, int nPredecesseur) {
             this.sommet = nSommet;
             this.longueur.add(nLongueur);
@@ -28,5 +30,20 @@ public class Noeud {
             this.predecesseur.add(nPredecesseur);
 
         }
+
+
+    public Noeud clone() {
+        Noeud o = null;
+        try {
+            // On récupère l'instance à renvoyer par l'appel de la
+            // méthode super.clone()
+            o = (Noeud) super.clone();
+        } catch(CloneNotSupportedException cnse) {
+
+            cnse.printStackTrace(System.err);
+        }
+
+        return o;
+    }
 
 }
