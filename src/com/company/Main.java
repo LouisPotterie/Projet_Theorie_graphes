@@ -20,7 +20,7 @@ public class Main {
         enregistrementMatrice(matrice);
 
     }
-
+//
     public void djistra(int[][] matrice) {
         ArrayList<Noeud> cc = new ArrayList<Noeud>();
         Graphe m = new Graphe(); // A initialiser avec tous les sommets
