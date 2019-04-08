@@ -20,7 +20,7 @@ public class Main {
         enregistrementMatrice(matrice);
 
     }
-//
+
     public void djistra(int[][] matrice) {
         ArrayList<Noeud> cc = new ArrayList<Noeud>();
         Graphe m = new Graphe(); // A initialiser avec tous les sommets
@@ -35,7 +35,7 @@ public class Main {
 
         int initiale = kb.nextInt();
 
-        for (Noeud i : m)  // parcourt de l'ensemble M
+        for (Noeud i : m.getNoeuds())  // parcourt de l'ensemble M
         {
 
             if (initiale == i.getSommet()) {  // si la l'attribut sommet est celle choisi alors
@@ -62,7 +62,7 @@ public class Main {
 
 
         while (m.getNoeuds().size() != 0) {
-            for (Noeud i : m)  // parcourt de l'ensemble M
+            for (Noeud i : m.getNoeuds())  // parcourt de l'ensemble M
             {
                 if (pi[i.getSommet()] < tampon_valeur)
                 {
@@ -225,35 +225,6 @@ public class Main {
 
         readMatrice.close();
         return matrice;
-    }
-
-
-    Graphe initialisationSommetSuccesseur() throws FileNotFoundException {
-        File fileMatrice = new File("L3-D4-1.txt");
-        Scanner readMatrice = new Scanner(fileMatrice);
-        Graphe m = new Graphe();
-
-        int taille = readMatrice.nextInt();
-        int succ;
-        int pred;
-        int longueur;
-
-        for (int i = 0; i < taille; i++) {
-            m.getNoeuds().add(new Noeud(i));
-        }
-
-        while (readMatrice.hasNext()) {
-            pred = readMatrice.nextInt();
-            longueur = readMatrice.nextInt();
-            succ = readMatrice.nextInt();
-
-            m.getNoeuds().get(pred).addSuccesseur(succ);
-            m.getNoeuds().get(pred).addLongueur(longueur);
-            m.getNoeuds().get(succ).addPredecesseur(pred);
-        }
-
-        readMatrice.close();
-        return m;
     }
 
 
