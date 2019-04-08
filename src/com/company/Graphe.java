@@ -32,6 +32,8 @@ public class Graphe {
         int pred;
         int longueur;
 
+        noeuds.clear();
+
         for (int i = 0; i < taille; i++) {
             this.noeuds.add(new Noeud(i));
         }
@@ -57,6 +59,8 @@ public class Graphe {
         int pred;
         int longueur;
 
+        noeuds.clear();
+
         for (int i = 0; i < taille; i++) {
             this.noeuds.add(new Noeud(i));
         }
@@ -72,21 +76,60 @@ public class Graphe {
         readMatrice.close();
     }
 
-    void creationTableauAffichage()
+    int[][] creationTableauAffichage()
     {
         int tableau[][] = new int [noeuds.size()][noeuds.size()];
 
         for (int i = 0;i < noeuds.size();i++)
         {
-            Noeud noeud = noeuds.get(i);
             for (int j = 0; j < noeuds.size();j++)
             {
-                if()
-
+                if(noeuds.get(i).getSuccesseurs().get(noeuds.get(j))!= null)// à vérifier
+                {
+                    tableau[i][j] = noeuds.get(i).getSuccesseurs().get(noeuds.get(j));
+                }
             }
         }
+        return tableau;
+    }
+
+    void affichage() {
+
+        int matrice[][] = creationTableauAffichage();
+
+        //affichage n°ligne
+        System.out.print("suc ");
+        for (int cmpt1 = 0; cmpt1 < matrice.length; cmpt1++) {
+            System.out.print(cmpt1 + " ");
+            if (cmpt1 < 10) {
+                System.out.print(" ");
+            }
+        }
+        System.out.println();
+        System.out.print("pre");
+        for (int cmpt2 = 0; cmpt2 < matrice.length; cmpt2++) {
+            System.out.print("__");
+            if (cmpt2 < 10) {
+                System.out.print("_");
+            }
+        }
+        System.out.println();
+
+        //affichage matrice
+        for (int i = 0; i < matrice.length; i++) {
+            //affichage n°colonne
+            System.out.print(i + " | ");
 
 
+            for (int j = 0; j < matrice.length; j++) {
+
+                System.out.print(matrice[i][j] + " ");
+                if (matrice[i][j] < 10) {
+                    System.out.print(" ");
+                }
+            }
+            System.out.println();
+        }
     }
 
 
