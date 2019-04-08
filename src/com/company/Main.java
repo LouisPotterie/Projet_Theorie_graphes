@@ -28,6 +28,7 @@ public class Main {
         int nombre_sommet = m.getNoeuds().size();
         int pi_etoile[] = new int[nombre_sommet]; // tableau des valeurs de Pi étoiles de taille nombre de sommets
         int pi[] = new int[nombre_sommet]; // tableau des valeurs de Pi  de taille nombre de sommets
+        int tab_matrice[] = new int [nombre_sommet];
 
         Scanner kb = new Scanner(System.in);
         System.out.println("Quel est le sommet de départ ?"); // choix du sommet de départ
@@ -42,20 +43,32 @@ public class Main {
                 m.getNoeuds().remove(i); // On retire le noeud de CC
                 pi_etoile[initiale] = 0; // on initialise son pi_etoile à 0
             }
-            pi[i.getSommet()] = matrice[initiale][i.getSommet()]; // On initialise tous les autres PI
+            //si matrice_adjacence = 1
+            if (matriceAdjacence[initiale][i.getSommet()]== 1)
+            {
+                pi[i.getSommet()] = matriceValeur[initiale][i.getSommet()]; // On initialise tous les autres PI
+            }
+
+            else
+            {
+                pi[i.getSommet()] = 100000;
+            }
+
+
         }
 
-        int tampon_valeur = pi[1]; //initialisation arbitraire
+        int tampon_valeur = 1000; //initialisation arbitraire
         Noeud tampon_sommet = new Noeud();
 
 
         while (m.getNoeuds().size() != 0) {
             for (Noeud i : m)  // parcourt de l'ensemble M
             {
-                if (pi[i.getSommet()] < tampon_valeur) {
+                if (pi[i.getSommet()] < tampon_valeur)
+                {
                     tampon_valeur = pi[i.getSommet()];
 
-                    tampon_sommet = (Noeud) i.clone(); // objet = objet
+                    tampon_sommet = i; // objet = objet
                 }
             }
 
@@ -63,6 +76,24 @@ public class Main {
             m.getNoeuds().remove(tampon_sommet);
             pi_etoile[tampon_sommet.getSommet()] = pi[tampon_sommet.getSommet()];
         }
+
+        if (m.size()!= 0)
+        {
+            for (Noeud i : m)  // parcourt de l'ensemble M
+            {
+                if (matriceAdjacence[i.getSommet()][tampon_sommet.getSommet()] == 1 && m.contains(i))
+                {
+                    pi[i.getSommet()] = Math.min(pi[i.getSommet()],pi[tampon_sommet.getSommet()] + matriceValeur[tampon_sommet.getSommet()][i.getSommet()]);
+                    tab_matrice[i.getSommet()] = tampon_sommet.getSommet();
+                }
+
+            }
+        }
+
+        // tant que tab[sommet choisi cc]  =! tab [sommet initiale] return i = tab
+
+
+    }
 
 
     }
