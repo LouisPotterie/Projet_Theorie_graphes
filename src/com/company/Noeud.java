@@ -15,11 +15,16 @@ public class Noeud implements Cloneable{
         return sommet;
     }
 
-    public void setSommet(int sommet) {
+    public Noeud() {
+    }
+
+    public Noeud(int sommet)
+    {
         this.sommet = sommet;
     }
 
-    public Noeud() {
+    public void setSommet(int sommet) {
+        this.sommet = sommet;
     }
 
 
@@ -45,5 +50,18 @@ public class Noeud implements Cloneable{
 
         return o;
     }
+
+    public void addSuccesseur(int valeur) {
+        this.successeur.add(valeur);
+    }
+
+    public void addPredecesseur(int valeur) {
+        this.predecesseur.add(valeur);
+    }
+
+    public void addLongueur(int valeur) {
+        this.longueur.add(valeur);
+    }
+
 
 }

@@ -6,13 +6,26 @@ import java.util.*;
 
 public class Main {
 
-//Leo
-    public void djistra( int[][] matrice)
-    {
-        ArrayList<Noeud> cc = new ArrayList<Noeud>();
-        ArrayList<Noeud> m = new ArrayList<Noeud>(); // A initialiser avec tous les sommets
+    //Leo
+    public static void main(String[] args) throws FileNotFoundException {
 
-        int nombre_sommet = m.size();
+        System.out.println("Hello World!");
+
+        int[][] matrice = creationMatrice();
+
+        System.out.println("\n\n");
+
+        int[][] matriceValeur = creationMatriceValeur();
+
+        enregistrementMatrice(matrice);
+
+    }
+
+    public void djistra(int[][] matrice) {
+        ArrayList<Noeud> cc = new ArrayList<Noeud>();
+        Graphe m = new Graphe(); // A initialiser avec tous les sommets
+
+        int nombre_sommet = m.getNoeuds().size();
         int pi_etoile[] = new int[nombre_sommet]; // tableau des valeurs de Pi étoiles de taille nombre de sommets
         int pi[] = new int[nombre_sommet]; // tableau des valeurs de Pi  de taille nombre de sommets
 
@@ -26,8 +39,8 @@ public class Main {
 
             if (initiale == i.getSommet()) {  // si la l'attribut sommet est celle choisi alors
                 cc.add(i); // Ajout du Noeud dans CC
-                m.remove(i); // On retire le noeud de CC
-                pi_etoile[initiale]=0; // on initialise son pi_etoile à 0
+                m.getNoeuds().remove(i); // On retire le noeud de CC
+                pi_etoile[initiale] = 0; // on initialise son pi_etoile à 0
             }
             pi[i.getSommet()] = matrice[initiale][i.getSommet()]; // On initialise tous les autres PI
         }
@@ -36,12 +49,10 @@ public class Main {
         Noeud tampon_sommet = new Noeud();
 
 
-        while(m.size() != 0)
-        {
+        while (m.getNoeuds().size() != 0) {
             for (Noeud i : m)  // parcourt de l'ensemble M
             {
-                if (pi[i.getSommet()] < tampon_valeur)
-                {
+                if (pi[i.getSommet()] < tampon_valeur) {
                     tampon_valeur = pi[i.getSommet()];
 
                     tampon_sommet = (Noeud) i.clone(); // objet = objet
@@ -49,42 +60,24 @@ public class Main {
             }
 
             cc.add(tampon_sommet);
-            m.remove(tampon_sommet);
-            pi_etoile[tampon_sommet.getSommet()]= pi[tampon_sommet.getSommet()];
+            m.getNoeuds().remove(tampon_sommet);
+            pi_etoile[tampon_sommet.getSommet()] = pi[tampon_sommet.getSommet()];
         }
 
 
-
-
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
-
-        System.out.println("Hello World!");
-
-        int[][] matrice = creationMatrice();
-
-        System.out.println("\n\n");
-
-        int[][]matriceValeur = creationMatriceValeur();
-
-        enregistrementMatrice(matrice);
-
-    }
-
-    static int[][]  creationMatrice() throws FileNotFoundException
-    {
+    static int[][] creationMatrice() throws FileNotFoundException {
         File fileMatrice = new File("L3-D4-1.txt");
         Scanner readMatrice = new Scanner(fileMatrice);
 
         int nombreSommets = readMatrice.nextInt();
-        int[][] matrice = new int [nombreSommets][nombreSommets];
+        int[][] matrice = new int[nombreSommets][nombreSommets];
         int succ;
         int prec;
         int valeur;
 
-        while(readMatrice.hasNext())
-        {
+        while (readMatrice.hasNext()) {
             succ = readMatrice.nextInt();
             valeur = readMatrice.nextInt();
             prec = readMatrice.nextInt();
@@ -97,25 +90,20 @@ public class Main {
         return matrice;
     }
 
-    static void affichage (int[][]matrice)
-    {
+    static void affichage(int[][] matrice) {
         //affichage n°ligne
         System.out.print("suc ");
-        for (int cmpt1 = 0; cmpt1<matrice.length; cmpt1++)
-        {
-            System.out.print(cmpt1+" ");
-            if(cmpt1<10)
-            {
+        for (int cmpt1 = 0; cmpt1 < matrice.length; cmpt1++) {
+            System.out.print(cmpt1 + " ");
+            if (cmpt1 < 10) {
                 System.out.print(" ");
             }
         }
         System.out.println();
         System.out.print("pre");
-        for (int cmpt2 = 0; cmpt2<matrice.length; cmpt2++)
-        {
+        for (int cmpt2 = 0; cmpt2 < matrice.length; cmpt2++) {
             System.out.print("__");
-            if(cmpt2<10)
-            {
+            if (cmpt2 < 10) {
                 System.out.print("_");
             }
         }
@@ -123,18 +111,15 @@ public class Main {
 
 
         //affichage matrice
-        for (int i = 0; i< matrice.length; i++)
-        {
+        for (int i = 0; i < matrice.length; i++) {
             //affichage n°colonne
-            System.out.print(i+" | ");
+            System.out.print(i + " | ");
 
 
-            for (int j = 0; j< matrice.length; j++)
-            {
+            for (int j = 0; j < matrice.length; j++) {
 
-                System.out.print(matrice[i][j]+" ");
-                if(matrice[i][j]<10)
-                {
+                System.out.print(matrice[i][j] + " ");
+                if (matrice[i][j] < 10) {
                     System.out.print(" ");
                 }
             }
@@ -142,32 +127,27 @@ public class Main {
         }
     }
 
-    static void enregistrementMatrice(int [][] matrice) throws FileNotFoundException
-    {
+    static void enregistrementMatrice(int[][] matrice) throws FileNotFoundException {
         final int NUMERO_GRAPHE = 1;
         final int SOMMET_DEPART = 1;
 
-        int taille = matrice.length-1;
+        int taille = matrice.length - 1;
 
-        PrintWriter enregistrement = new PrintWriter("L3-D4-trace"+NUMERO_GRAPHE+"_"+SOMMET_DEPART+".txt");
+        PrintWriter enregistrement = new PrintWriter("L3-D4-trace" + NUMERO_GRAPHE + "_" + SOMMET_DEPART + ".txt");
 
         //affichage n°ligne
         enregistrement.print("suc ");
-        for (int cmpt1 = 0; cmpt1<matrice.length; cmpt1++)
-        {
-            enregistrement.print(cmpt1+" ");
-            if(cmpt1<10)
-            {
+        for (int cmpt1 = 0; cmpt1 < matrice.length; cmpt1++) {
+            enregistrement.print(cmpt1 + " ");
+            if (cmpt1 < 10) {
                 enregistrement.print(" ");
             }
         }
         enregistrement.println();
         enregistrement.print("pre");
-        for (int cmpt2 = 0; cmpt2<matrice.length; cmpt2++)
-        {
+        for (int cmpt2 = 0; cmpt2 < matrice.length; cmpt2++) {
             enregistrement.print("__");
-            if(cmpt2<10)
-            {
+            if (cmpt2 < 10) {
                 enregistrement.print("_");
             }
         }
@@ -175,17 +155,14 @@ public class Main {
 
 
         //affichage matrice
-        for (int i = 0; i< matrice[taille].length; i++)
-        {
+        for (int i = 0; i < matrice[taille].length; i++) {
             //affichage n°colonne
-            enregistrement.print(i+" | ");
+            enregistrement.print(i + " | ");
 
 
-            for (int j = 0; j< matrice.length; j++)
-            {
-                enregistrement.print(matrice[i][j]+" ");
-                if(matrice[i][j]<10)
-                {
+            for (int j = 0; j < matrice.length; j++) {
+                enregistrement.print(matrice[i][j] + " ");
+                if (matrice[i][j] < 10) {
                     enregistrement.print(" ");
                 }
             }
@@ -196,19 +173,17 @@ public class Main {
         enregistrement.close();
     }
 
-    static int[][]  creationMatriceValeur() throws FileNotFoundException
-    {
+    static int[][] creationMatriceValeur() throws FileNotFoundException {
         File fileMatrice = new File("L3-D4-1.txt");
         Scanner readMatrice = new Scanner(fileMatrice);
 
         int nombreSommets = readMatrice.nextInt();
-        int[][] matrice = new int [nombreSommets][nombreSommets];
+        int[][] matrice = new int[nombreSommets][nombreSommets];
         int succ;
         int prec;
         int valeur;
 
-        while(readMatrice.hasNext())
-        {
+        while (readMatrice.hasNext()) {
             succ = readMatrice.nextInt();
             valeur = readMatrice.nextInt();
             prec = readMatrice.nextInt();
@@ -220,4 +195,36 @@ public class Main {
         readMatrice.close();
         return matrice;
     }
+
+
+    Graphe initialisationSommetSuccesseur() throws FileNotFoundException {
+        File fileMatrice = new File("L3-D4-1.txt");
+        Scanner readMatrice = new Scanner(fileMatrice);
+        Graphe m = new Graphe();
+
+        int taille = readMatrice.nextInt();
+        int succ;
+        int pred;
+        int longueur;
+
+        for (int i = 0; i < taille; i++) {
+            m.getNoeuds().add(new Noeud(i));
+        }
+
+        while (readMatrice.hasNext()) {
+            pred = readMatrice.nextInt();
+            longueur = readMatrice.nextInt();
+            succ = readMatrice.nextInt();
+
+            m.getNoeuds().get(pred).addSuccesseur(succ);
+            m.getNoeuds().get(pred).addLongueur(longueur);
+            m.getNoeuds().get(succ).addPredecesseur(pred);
+        }
+
+        readMatrice.close();
+        return m;
+    }
+
+
 }
+
