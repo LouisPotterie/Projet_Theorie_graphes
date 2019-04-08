@@ -2,18 +2,17 @@ package com.company;
 
 import java.util.ArrayList;
 import java.lang.Cloneable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Noeud implements Cloneable{
 
 
         private int sommet;
-        private ArrayList<Integer> longueur = new ArrayList<>();
-        private ArrayList<Integer> successeur = new ArrayList<>();
-        private ArrayList<Integer> predecesseur = new ArrayList<>();
+        private Map<Noeud,Integer> successeurs = new HashMap<>();
+        private ArrayList<Integer> predecesseurs = new ArrayList<>();
 
-    public int getSommet() {
-        return sommet;
-    }
+
 
     public Noeud() {
     }
@@ -27,15 +26,9 @@ public class Noeud implements Cloneable{
         this.sommet = sommet;
     }
 
-
-    public Noeud (int nSommet, int nLongueur, int nSuccesseur, int nPredecesseur) {
-            this.sommet = nSommet;
-            this.longueur.add(nLongueur);
-            this.successeur.add(nSuccesseur);
-            this.predecesseur.add(nPredecesseur);
-
-        }
-
+    public int getSommet() {
+        return sommet;
+    }
 
     public Noeud clone() {
         Noeud o = null;
@@ -51,17 +44,15 @@ public class Noeud implements Cloneable{
         return o;
     }
 
-    public void addSuccesseur(int valeur) {
-        this.successeur.add(valeur);
+    public void addSuccesseurs(Noeud noeud,int valeur) {
+        this.successeurs.put(noeud,valeur);
     }
 
-    public void addPredecesseur(int valeur) {
-        this.predecesseur.add(valeur);
+    public void addPredecesseurs(int valeur) {
+        this.predecesseurs.add(valeur);
     }
 
-    public void addLongueur(int valeur) {
-        this.longueur.add(valeur);
+    public Map<Noeud, Integer> getSuccesseurs() {
+        return successeurs;
     }
-
-
 }
