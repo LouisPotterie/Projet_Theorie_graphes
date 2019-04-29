@@ -19,10 +19,12 @@ public class Main {
 
         enregistrementMatrice(matrice);
 
+        djistra();
+
     }
 //
-    public void djistra(int[][] matrice) {
-        ArrayList<Noeud> cc = new ArrayList<Noeud>();
+    public static void djistra() {
+        ArrayList<Noeud> cc = new ArrayList<>();
         Graphe graphe = new Graphe(); // A initialiser avec tous les sommets
         ArrayList<Noeud> m =graphe.getNoeuds();
 
@@ -35,6 +37,8 @@ public class Main {
         System.out.println("Quel est le sommet de départ ?"); // choix du sommet de départ
 
         int initiale = kb.nextInt();
+
+        System.out.println("Le sommet choisi est :" + initiale);
 
         for (Noeud i : m)  // parcourt de l'ensemble M
         {
@@ -72,9 +76,8 @@ public class Main {
         while (m.size() != 0) {
             for (Noeud i : m)  // parcourt de l'ensemble M
             {
-                if (i.getDistance() < tampon_valeur)
-                {
-                    tampon_valeur = i.getDistance() ;
+                if (i.getDistance() < tampon_valeur) {
+                    tampon_valeur = i.getDistance();
 
                     tampon_sommet = i; // objet = objet
                 }
@@ -83,28 +86,76 @@ public class Main {
             cc.add(tampon_sommet);
             m.remove(tampon_sommet);
             pi_etoile[tampon_sommet.getSommet()] = pi[tampon_sommet.getSommet()];
-        }
 
-        if (m.size()!= 0)
-        {
-            for (Noeud i : m)  // parcourt de l'ensemble M
-            {
-                if (i.estPredecesseur(tampon_sommet) && m.contains(i))
+
+            if (m.size() != 0) {
+                for (Noeud i : m)  // parcourt de l'ensemble M
                 {
-                    i.setDistance(Math.min(i.getDistance(),tampon_sommet.getDistance()+tampon_sommet.getSuccesseurs().get(i)))    ;
-                    //pi[i.getSommet()] = Math.min(pi[i.getSommet()],pi[tampon_sommet.getSommet()] + matriceValeur[tampon_sommet.getSommet()][i.getSommet()]);
-                    //tab_matrice[i.getSommet()] = tampon_sommet.getSommet();
-                    i.setSommetChemin(tampon_sommet.getSommet());
-                }
+                    if (i.estPredecesseur(tampon_sommet) && m.contains(i)) {
+                        i.setDistance(Math.min(i.getDistance(), tampon_sommet.getDistance() + tampon_sommet.getSuccesseurs().get(i)));
+                        //pi[i.getSommet()] = Math.min(pi[i.getSommet()],pi[tampon_sommet.getSommet()] + matriceValeur[tampon_sommet.getSommet()][i.getSommet()]);
+                        //tab_matrice[i.getSommet()] = tampon_sommet.getSommet();
+                        i.setSommetChemin(tampon_sommet.getSommet());
+                    }
 
+                }
             }
         }
 
+        System.out.println("Choisir un sommet : \n");
+
+        int choix = kb.nextInt();
+
+        System.out.println("Vous avez choisi le sommet : " + choix + "\n");
+
+        Noeud sommet_choisi = new Noeud();
+
+        for (Noeud n : cc)
+        {
+            if (choix == n.getSommet())
+            {
+                sommet_choisi = n;
+            }
+        }
+
+        cheminLePlusCourt(initiale,sommet_choisi);
+        
+
         // tant que tab[sommet choisi cc]  =! tab [sommet initiale] return i = tab
+
+
 
        
     }
 
+    public static void  cheminLePlusCourt(int initiale, Noeud sommet_choisi)
+    {
+        if (initiale == sommet_choisi.getSommet())
+        {
+            System.out.println("Le sommet choisi est le sommet initiale");
+        }
+
+        Noeud a = new Noeud();
+
+        a = sommet_choisi;
+
+        if (a.getSommetChemin() == initiale)
+        {
+            System.out.println("Le chemin le plus court est " + sommet_choisi +","+ initiale );
+        }
+
+        while (a.getSommet()!= initiale)
+        {
+            System.out.println(a.getSommetChemin()+",");
+            a.setSommet(a.getSommetChemin());
+        }
+
+        if(a.getSommet() == initiale)
+        {
+            System.out.println(initiale);
+        }
+
+    }
 
 
 
