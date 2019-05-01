@@ -45,8 +45,6 @@ public class L3_D4_Main {
             System.out.println("Le sommet choisi est :" + initiale);
 
             for (Noeud i : m)  // parcourt de l'ensemble M
-            {
-
                 if (initiale == i.getSommet()) {  // on cherche le sommet que l'utilisateur a choisi
                     cc.add(i); // Ajout du Noeud dans CC
                     m.remove(i); // On retire le noeud de CC
@@ -56,12 +54,14 @@ public class L3_D4_Main {
                     System.out.println(cc.get(0).getSuccesseurs());
                     if (i.aSuccesseurs()) {
 
-                        Set cles = cc.get(0).getSuccesseurs().keySet();
-                        Iterator it = cles.iterator();
-                        while (it.hasNext()){
-                            Object cle = it.next();
-                            i.setDistance(cc.get(0).getSuccesseurs().get(cle));
+
+                        for(Map.Entry<Noeud,Integer> entry : cc.get(0).getSuccesseurs().entrySet())
+                        {
+                            Noeud cle = entry.getKey();
+                            cle.setDistance(entry.getValue());
+
                         }
+
 
                     } else i.setDistance(1000);
 
@@ -102,25 +102,15 @@ public class L3_D4_Main {
 
                         if (m.size() != 0) {
                             for (Noeud c : m)  // parcourt de l'ensemble M
-                            {
                                 if (c.estPredecesseur(tampon_sommet) && m.contains(c)) {
 
-                                    Set cle = tampon_sommet.getSuccesseurs().keySet();
-                                    Iterator it = cle.iterator();
-                                    while (it.hasNext()){
-                                        Object cle2 = it.next();
-                                        if (c.getDistance() > Math.min(c.getDistance(), tampon_sommet.getDistance() + tampon_sommet.getSuccesseurs().get(cle2))) {
-                                            c.setDistance(Math.min(c.getDistance(), tampon_sommet.getDistance() + tampon_sommet.getSuccesseurs().get(cle2)));
-                                        }
-                                    }
+                                    c.setDistance(Math.min(c.getDistance(), tampon_sommet.getDistance() + tampon_sommet.getSuccesseurs().get(c)));
 
 
                                     //pi[i.getSommet()] = Math.min(pi[i.getSommet()],pi[tampon_sommet.getSommet()] + matriceValeur[tampon_sommet.getSommet()][i.getSommet()]);
                                     //tab_matrice[i.getSommet()] = tampon_sommet.getSommet();
                                     c.setSommetChemin(tampon_sommet.getSommet());
                                 }
-
-                            }
                         }
                     }
 
@@ -141,7 +131,6 @@ public class L3_D4_Main {
                     cheminLePlusCourt(initiale, sommet_choisi, cc);
 
                 }
-            }
 
 
             // tant que tab[sommet choisi cc]  =! tab [sommet initiale] return i = tab
