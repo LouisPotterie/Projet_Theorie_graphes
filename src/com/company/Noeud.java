@@ -75,8 +75,11 @@ public class Noeud implements Cloneable {
 
     public boolean estPredecesseur(Noeud noeud)
     {
-
-        return (successeurs.containsKey(noeud));
+        if(successeurs.get(noeud)== null)
+        {
+            return false;
+        }
+        return true;
     }
 
     public void addPredecesseurs(int valeur) {

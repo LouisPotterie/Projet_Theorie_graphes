@@ -25,12 +25,14 @@ public class L3_D4_Main {
 
     }
 //
-    public static void djistra() {
+    public static void djistra() throws FileNotFoundException
+    {
         ArrayList<Noeud> cc = new ArrayList<>();
         Graphe graphe = new Graphe(); // A initialiser avec tous les sommets
+
         try {
-            graphe.initialisationMatriceAdjacence();
             graphe.initialisationMatriceValeur();
+            graphe.affichageValeurs();
             ArrayList<Noeud> m = graphe.getNoeuds();
             int nombre_sommet = graphe.getNoeuds().size();
             int pi_etoile[] = new int[nombre_sommet]; // tableau des valeurs de Pi étoiles de taille nombre de sommets
@@ -86,13 +88,15 @@ public class L3_D4_Main {
 
                     int tampon_nom = -1;
 
-
+                    int sommet=initiale;
                     while (m.size() != 0) {
 
-                        Noeud tampon_sommet = distanceLaPlusCourte(m);
+                        Noeud tampon_sommet = distanceLaPlusCourte(m, graphe.getMatriceAdjacence(),sommet);
+                        sommet=tampon_sommet.getSommet();
+                        System.out.println("TEST : " + tampon_sommet.getSommet());
                         m.remove(tampon_sommet);
 
-                        System.out.println("TEST : " + tampon_sommet.getSommet());
+
                         cc.add(tampon_sommet);
 
                         pi_etoile[tampon_sommet.getSommet()] = pi[tampon_sommet.getSommet()];
@@ -102,7 +106,7 @@ public class L3_D4_Main {
 
                         if (m.size() != 0) {
                             for (Noeud c : m)  // parcourt de l'ensemble M
-                                if (c.estPredecesseur(tampon_sommet) && m.contains(c)) {
+                                if (tampon_sommet.estPredecesseur(c) && graphe.getMatriceAdjacence()[c.getSommet()][tampon_sommet.getSommet()]==1) {
 
                                     c.setDistance(Math.min(c.getDistance(), tampon_sommet.getDistance() + tampon_sommet.getSuccesseurs().get(c)));
 
@@ -142,7 +146,7 @@ public class L3_D4_Main {
     }
 
 
-    public static void test()
+    public static void test() throws FileNotFoundException
     {
         Graphe test = new Graphe();
 
@@ -162,17 +166,21 @@ public class L3_D4_Main {
         }
     }
 
-    public static Noeud distanceLaPlusCourte(ArrayList<Noeud> m)
+    public static Noeud distanceLaPlusCourte(ArrayList<Noeud> m, int[][] matriceAdjacence, int initiale)
     {
         Noeud tampon_sommet = null;
         int tampon_valeur = Integer.MAX_VALUE;
 
         for (Noeud n: m) {
-            int noeudDistance = n.getDistance();
-            if (noeudDistance < tampon_valeur) {
-                tampon_valeur = noeudDistance;
-                tampon_sommet = n;
+            if (matriceAdjacence[initiale][n.getSommet()]==1)
+            {
+                int noeudDistance = n.getDistance();
+                if (noeudDistance < tampon_valeur) {
+                    tampon_valeur = noeudDistance;
+                    tampon_sommet = n;
+                }
             }
+
         }
         return tampon_sommet;
     }
