@@ -21,39 +21,53 @@ public class Main {
 
         djistra();
 
+        //test();
+
     }
 //
     public static void djistra() {
         ArrayList<Noeud> cc = new ArrayList<>();
         Graphe graphe = new Graphe(); // A initialiser avec tous les sommets
-        ArrayList<Noeud> m =graphe.getNoeuds();
+        try {
+            graphe.initialisationMatriceAdjacence();
+            graphe.initialisationMatriceValeur();
+            ArrayList<Noeud> m = graphe.getNoeuds();
+            int nombre_sommet = graphe.getNoeuds().size();
+            int pi_etoile[] = new int[nombre_sommet]; // tableau des valeurs de Pi étoiles de taille nombre de sommets
+            int pi[] = new int[nombre_sommet]; // tableau des valeurs de Pi  de taille nombre de sommets
+            int tab_matrice[] = new int[nombre_sommet];
 
-        int nombre_sommet = graphe.getNoeuds().size();
-        int pi_etoile[] = new int[nombre_sommet]; // tableau des valeurs de Pi étoiles de taille nombre de sommets
-        int pi[] = new int[nombre_sommet]; // tableau des valeurs de Pi  de taille nombre de sommets
-        int tab_matrice[] = new int [nombre_sommet];
+            Scanner kb = new Scanner(System.in);
+            System.out.println("Quel est le sommet de départ ?"); // choix du sommet de départ
 
-        Scanner kb = new Scanner(System.in);
-        System.out.println("Quel est le sommet de départ ?"); // choix du sommet de départ
+            int initiale = kb.nextInt();
 
-        int initiale = kb.nextInt();
+            System.out.println("Le sommet choisi est :" + initiale);
 
-        System.out.println("Le sommet choisi est :" + initiale);
-
-        for (Noeud i : m)  // parcourt de l'ensemble M
-        {
-
-            if (initiale == i.getSommet()) {  // on cherche le sommet que l'utilisateur a choisi
-                cc.add(i); // Ajout du Noeud dans CC
-                m.remove(i); // On retire le noeud de CC
-                pi_etoile[initiale] = 0; // on initialise son pi_etoile à 0
-            }
-            //si matrice_adjacence = 1
-            if (i.aSuccesseurs())
+            for (Noeud i : m)  // parcourt de l'ensemble M
             {
-                                  i.setDistance(m.get(initiale).getSuccesseurs().get(i));
-                 }
-                 else i.setDistance(1000);
+
+                if (initiale == i.getSommet()) {  // on cherche le sommet que l'utilisateur a choisi
+                    cc.add(i); // Ajout du Noeud dans CC
+                    m.remove(i); // On retire le noeud de CC
+                    pi_etoile[initiale] = 0; // on initialise son pi_etoile à 0
+                    System.out.println("IN");
+
+                    System.out.println(cc.get(0).getSuccesseurs());
+                    if (i.aSuccesseurs()) {
+
+                        Set cles = cc.get(0).getSuccesseurs().keySet();
+                        Iterator it = cles.iterator();
+                        while (it.hasNext()){
+                            Object cle = it.next();
+                            i.setDistance(cc.get(0).getSuccesseurs().get(cle));
+                        }
+
+                    } else i.setDistance(1000);
+
+
+                    //si matrice_adjacence = 1
+
 
             /*if (matriceAdjacence[initiale][i.getSommet()]== 1)
             {
@@ -66,78 +80,126 @@ public class Main {
             }
                     */
 
-        }
 
-        int tampon_valeur = 1000; //initialisation arbitraire
-        Noeud tampon_sommet = new Noeud();
+                    int tampon_valeur = 1000; //initialisation arbitraire
+                    //Noeud tampon_sommet = new Noeud();
 
-
-
-        while (m.size() != 0) {
-            for (Noeud i : m)  // parcourt de l'ensemble M
-            {
-                if (i.getDistance() < tampon_valeur) {
-                    tampon_valeur = i.getDistance();
-
-                    tampon_sommet = i; // objet = objet
-                }
-            }
-
-            cc.add(tampon_sommet);
-            m.remove(tampon_sommet);
-            pi_etoile[tampon_sommet.getSommet()] = pi[tampon_sommet.getSommet()];
+                    int tampon_nom = -1;
 
 
-            if (m.size() != 0) {
-                for (Noeud i : m)  // parcourt de l'ensemble M
-                {
-                    if (i.estPredecesseur(tampon_sommet) && m.contains(i)) {
-                        i.setDistance(Math.min(i.getDistance(), tampon_sommet.getDistance() + tampon_sommet.getSuccesseurs().get(i)));
-                        //pi[i.getSommet()] = Math.min(pi[i.getSommet()],pi[tampon_sommet.getSommet()] + matriceValeur[tampon_sommet.getSommet()][i.getSommet()]);
-                        //tab_matrice[i.getSommet()] = tampon_sommet.getSommet();
-                        i.setSommetChemin(tampon_sommet.getSommet());
+                    while (m.size() != 0) {
+
+                        Noeud tampon_sommet = distanceLaPlusCourte(m);
+                        m.remove(tampon_sommet);
+
+                        System.out.println("TEST : " + tampon_sommet.getSommet());
+                        cc.add(tampon_sommet);
+
+                        pi_etoile[tampon_sommet.getSommet()] = pi[tampon_sommet.getSommet()];
+
+                        System.out.println("Taille de m" + m.size());
+
+
+                        if (m.size() != 0) {
+                            for (Noeud c : m)  // parcourt de l'ensemble M
+                            {
+                                if (c.estPredecesseur(tampon_sommet) && m.contains(c)) {
+
+                                    Set cle = tampon_sommet.getSuccesseurs().keySet();
+                                    Iterator it = cle.iterator();
+                                    while (it.hasNext()){
+                                        Object cle2 = it.next();
+                                        if (c.getDistance() > Math.min(c.getDistance(), tampon_sommet.getDistance() + tampon_sommet.getSuccesseurs().get(cle2))) {
+                                            c.setDistance(Math.min(c.getDistance(), tampon_sommet.getDistance() + tampon_sommet.getSuccesseurs().get(cle2)));
+                                        }
+                                    }
+
+
+                                    //pi[i.getSommet()] = Math.min(pi[i.getSommet()],pi[tampon_sommet.getSommet()] + matriceValeur[tampon_sommet.getSommet()][i.getSommet()]);
+                                    //tab_matrice[i.getSommet()] = tampon_sommet.getSommet();
+                                    c.setSommetChemin(tampon_sommet.getSommet());
+                                }
+
+                            }
+                        }
                     }
 
+                    System.out.println("Choisir un sommet : \n");
+
+                    int choix = kb.nextInt();
+
+                    System.out.println("Vous avez choisi le sommet : " + choix + "\n");
+
+                    Noeud sommet_choisi = new Noeud();
+
+                    for (Noeud n : cc) {
+                        if (choix == n.getSommet()) {
+                            sommet_choisi = n;
+                        }
+                    }
+
+                    cheminLePlusCourt(initiale, sommet_choisi, cc);
+
                 }
             }
+
+
+            // tant que tab[sommet choisi cc]  =! tab [sommet initiale] return i = tab
+
+
+        } catch (FileNotFoundException e) {
+            System.out.println("Aucun fichier trouvé");
         }
-
-        System.out.println("Choisir un sommet : \n");
-
-        int choix = kb.nextInt();
-
-        System.out.println("Vous avez choisi le sommet : " + choix + "\n");
-
-        Noeud sommet_choisi = new Noeud();
-
-        for (Noeud n : cc)
-        {
-            if (choix == n.getSommet())
-            {
-                sommet_choisi = n;
-            }
-        }
-
-        cheminLePlusCourt(initiale,sommet_choisi);
-        
-
-        // tant que tab[sommet choisi cc]  =! tab [sommet initiale] return i = tab
-
-
-
-       
     }
 
-    public static void  cheminLePlusCourt(int initiale, Noeud sommet_choisi)
+
+    public static void test()
+    {
+        Graphe test = new Graphe();
+
+        try {
+            test.initialisationMatriceValeur();
+            test.initialisationMatriceAdjacence();
+
+            for (Noeud n : test.getNoeuds())
+            {
+                System.out.println("Nom noeud : "+ n.getSommet()+ " Sucesseurs " + n.getSuccesseurs().get(n) + "Predecesseur" + n.getSommetChemin() +"\n");
+            }
+
+        }
+        catch(FileNotFoundException e)
+        {
+            System.out.println("Erreur");
+        }
+    }
+
+    public static Noeud distanceLaPlusCourte(ArrayList<Noeud> m)
+    {
+        Noeud tampon_sommet = null;
+        int tampon_valeur = Integer.MAX_VALUE;
+
+        for (Noeud n: m) {
+            int noeudDistance = n.getDistance();
+            if (noeudDistance < tampon_valeur) {
+                tampon_valeur = noeudDistance;
+                tampon_sommet = n;
+            }
+        }
+        return tampon_sommet;
+    }
+
+    public static void  cheminLePlusCourt(int initiale, Noeud sommet_choisi, ArrayList<Noeud> cc)
     {
         if (initiale == sommet_choisi.getSommet())
         {
             System.out.println("Le sommet choisi est le sommet initiale");
         }
 
-        Noeud a = new Noeud();
+        Noeud a = null;
 
         a = sommet_choisi;
+
+        System.out.println(a.getSommet());
 
         if (a.getSommetChemin() == initiale)
         {
@@ -146,8 +208,9 @@ public class Main {
 
         while (a.getSommet()!= initiale)
         {
-            System.out.println(a.getSommetChemin()+",");
-            a.setSommet(a.getSommetChemin());
+            System.out.println("NEW : " + a.getSommetChemin());
+            a = predecesseur(cc, a.getSommetChemin());
+            System.out.println("New s : " + a.getSommetChemin());
         }
 
         if(a.getSommet() == initiale)
@@ -157,6 +220,19 @@ public class Main {
 
     }
 
+    public static Noeud predecesseur(ArrayList<Noeud> cc, int pred)
+    {
+        Noeud tampon = null;
+        for (Noeud n : cc)
+        {
+           if (pred == n.getSommet())
+           {
+               tampon = n;
+           }
+        }
+
+        return tampon;
+    }
 
 
     static int[][] creationMatrice() throws FileNotFoundException {
