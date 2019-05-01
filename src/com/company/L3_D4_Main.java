@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.*;
 
-public class Main {
+public class L3_D4_Main {
 
     //Leo
     public static void main(String[] args) throws FileNotFoundException {
@@ -363,34 +363,6 @@ public class Main {
         readMatrice.close();
         return matrice;
     }
-
-
-  
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
