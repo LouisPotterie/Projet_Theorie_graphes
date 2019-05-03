@@ -87,8 +87,16 @@ public class L3_D4_Main
                 System.out.println("--");
 
                 Noeud sommetProche= distanceLaPlusCourte(m, dijkstra, etape-1);
-                m.remove(sommetProche);
-                cc.add(sommetProche.getSommet());
+                if (sommetProche!=null)
+                {
+                    m.remove(sommetProche);
+                    cc.add(sommetProche.getSommet());
+                }
+                else
+                {
+                    continue;
+                }
+
 //                sommetProche.setDistance(sommetProche.getDistance());
 
                 for (Noeud noeud : m)  // parcourt de l'ensemble M
