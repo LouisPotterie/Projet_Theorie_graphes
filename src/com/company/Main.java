@@ -1,30 +1,47 @@
 package com.company;
 
+import java.io.FileNotFoundException;
+import java.util.Map;
+
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException
+    {
 
         //initialisation d'un graph sous la forme d'un tableau de transition
 
+        Graphe graphe = new Graphe();
+        int nombreSommets= graphe.getNombreSommets();
+        int tableau_transitions[][]= new int[graphe.getNombreTransitions()][3];
+       int transition=0;
+            for (Noeud noeud : graphe.getNoeuds())
+            {
+                for (Map.Entry<Noeud, Integer> entry : noeud.getSuccesseurs().entrySet())
+                {
+                    tableau_transitions[transition]= new int[]{noeud.getSommet(), entry.getKey().getSommet(), entry.getValue()};
+                    transition++;
+                }
+            }
+      
+
         // prec - succ - valeur de transition
-        int tableau_transitions[][] = { {0,1,5},{1,2,-10}, {2,0,3} };
+        //int tableau_transitions[][] = { {0,1,5},{1,2,-10}, {2,0,3} };
 
-        //le nombre de sommet est à récuperer en première ligne du txt
-        int nbr_sommet;
-        nbr_sommet = 3;
+        //le nombre  de sommet est à récuperer en première ligne du txt
 
+     
         //le nombre de transition du graph
-        int nbr_transition;
-        nbr_transition = tableau_transitions.length;
+        int nombreTransitions;
+        nombreTransitions = tableau_transitions.length;
 
         /*
             Tableau des k
 
             Taille :
-            (en ligne) de k = 0 à k = nbr_sommet - 1
-            (en colonne) tous les sommets, donc nbr_sommet
+            (en ligne) de k = 0 à k = nombreSommets - 1
+            (en colonne) tous les sommets, donc nombreSommets
         */
-        int tableau_de_k[][] = new int[nbr_sommet][nbr_sommet];
+        int tableau_de_k[][] = new int[nombreSommets][nombreSommets];
 
         /*
             Tableau des predecesseurs
@@ -32,14 +49,14 @@ public class Main {
             meme dimensions que le tableau des k
             il permet de recuperer les prédecesseurs permettant de dresser le chemin le plus cours
          */
-        int tableau_de_predecesseur[][] = new int[nbr_sommet][nbr_sommet];
+        int tableau_de_predecesseur[][] = new int[nombreSommets][nombreSommets];
 
         // Le MAX_SIZE permet de remplacer le signe infini dans le tableau des k
          int MAX_SIZE = 999;
 
         // On initialise le tableau des k avec la variable MAX_SIZE (inifini)
-        for (int i = 0; i < nbr_sommet; i++){
-            for (int n =0; n < nbr_sommet; n++){
+        for (int i = 0; i < nombreSommets; i++){
+            for (int n =0; n < nombreSommets; n++){
                 tableau_de_k[i][n] = MAX_SIZE;
             }
         }
@@ -49,7 +66,7 @@ public class Main {
         sommet_depart = 0;
 
         //initialisation de la colonne du sommet de départ
-        for(int j = 0; j < nbr_sommet; j++)
+        for(int j = 0; j < nombreSommets; j++)
         {
             tableau_de_k[j][sommet_depart]=0;
             tableau_de_predecesseur[j][sommet_depart]=sommet_depart;
@@ -59,7 +76,7 @@ public class Main {
         int absorbant_ou_pas;
         int plus_petite_transition = 0;
 
-        for (int recherche_absorbant_ou_pas = 0; recherche_absorbant_ou_pas < nbr_transition; recherche_absorbant_ou_pas++){
+        for (int recherche_absorbant_ou_pas = 0; recherche_absorbant_ou_pas < nombreTransitions; recherche_absorbant_ou_pas++){
             plus_petite_transition = Math.min(plus_petite_transition,tableau_transitions[recherche_absorbant_ou_pas][2]);
         }
         if (plus_petite_transition < 0)
@@ -81,8 +98,8 @@ public class Main {
 
         //Si le graph a un circuit absorbant
         if (absorbant_ou_pas == 0){
-            for (int k = 1; k < nbr_sommet; k++) {
-                for (int o = 0; o < nbr_transition; o++){
+            for (int k = 1; k < nombreSommets; k++) {
+                for (int o = 0; o < nombreTransitions; o++){
 
                     prec = tableau_transitions[o][0]; //on récup le prec grace au graph
                     succ = tableau_transitions[o][1];
@@ -105,7 +122,7 @@ public class Main {
         else { //si le graph n'a pas de circuit absorbant
             int k = 1;
             while (suivant == 1) {
-                for (int o = 0; o < nbr_transition; o++) {
+                for (int o = 0; o < nombreTransitions; o++) {
 
                     prec = tableau_transitions[o][0]; //on récup le prec grace au graph
                     succ = tableau_transitions[o][1];
@@ -124,12 +141,12 @@ public class Main {
                     }
                 }
 
-                for (int m = 0; m < nbr_sommet; m++){
+                for (int m = 0; m < nombreSommets; m++){
                     if (tableau_de_k[k-1][m] == tableau_de_k[k][m]){
                         compteur ++;
                     }
                 }
-                if (compteur == nbr_sommet)
+                if (compteur == nombreSommets)
                     suivant = 0;
 
                 compteur = 0;
@@ -145,10 +162,10 @@ public class Main {
         int a = 1;
         int b;
 
-        while (a < nbr_sommet)
+        while (a < nombreSommets)
         {
             b = 0;
-            while(b < nbr_sommet)
+            while(b < nombreSommets)
             {
                 if (tableau_de_k[a][b] > 900) {
                     System.out.printf("%4s    |", "*");

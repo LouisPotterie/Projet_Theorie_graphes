@@ -12,24 +12,19 @@ public class L3_D4_Main
     public static void main(String[] args) throws FileNotFoundException
     {
 
-        System.out.println("Hello World!");
 
-        int[][] matrice = creationMatrice();
+//        int[][] matrice = creationMatrice();
 
-        System.out.println("\n\n");
+  //      enregistrementMatrice(matrice);
 
-        int[][] matriceValeur = creationMatriceValeur();
-
-        enregistrementMatrice(matrice);
-
-        djistra();
+        dijkstra();
 
         //test();
 
     }
 
     //
-    public static void djistra() throws FileNotFoundException
+    public static void dijkstra() throws FileNotFoundException
     {
         ArrayList<Integer>  cc = new ArrayList<>();
         Map<Noeud, Noeud> predecesseurCheminCourt = new HashMap<>();
@@ -38,7 +33,7 @@ public class L3_D4_Main
         Integer[][] dijkstra = new Integer[nombreSommets][nombreSommets];
         try
         {
-            graphe.initialisationMatriceValeur();
+            graphe.affichageAdjascence();
             graphe.affichageValeurs();
             ArrayList<Noeud> m = graphe.getNoeuds();
 
@@ -122,8 +117,6 @@ public class L3_D4_Main
 
 
 
-
-
             }
 
             for (int ligne = 0 ; ligne < nombreSommets; ligne++)
@@ -153,12 +146,9 @@ public class L3_D4_Main
 
     public static void test() throws FileNotFoundException
     {
-        Graphe test = new Graphe();
-
         try
         {
-            test.initialisationMatriceValeur();
-            test.initialisationMatriceAdjacence();
+            Graphe test = new Graphe();
 
             for (Noeud n : test.getNoeuds())
             {
@@ -218,101 +208,6 @@ public class L3_D4_Main
         return tampon_sommet;
     }
 
- /*   public static void cheminLePlusCourt(int initiale, Noeud sommet_choisi, Map<Integer, Noeud> cc)
-    {
-        //Map<Noeud, Noeud> chemin= new HashMap<>();
-
-        ArrayList<Noeud> chemin = new ArrayList<>();
-        Map<Noeud,ArrayList> toutLesChemins = new HashMap<>();
-        if (initiale == sommet_choisi.getSommet())
-        {
-            System.out.println("Le sommet choisi est le sommet initiale \n");
-            //chemin.put(sommet_choisi,sommet_choisi);
-            chemin.add(sommet_choisi);
-            System.out.println("Le chemin est : ");
-
-
-            for (Map.Entry<Noeud, Noeud> entry : chemin.entrySet())
-            {
-                Noeud cle = entry.getKey();
-                System.out.print(cle.getSommet());
-
-            }
-
-
-            for (Noeud affichage : chemin)
-            {
-                System.out.print(affichage.getSommet());
-            }
-
-
-        }
-
-        Noeud a = null;
-
-        a = sommet_choisi.clone();
-
-        System.out.println("Le sommet clone a pour nom : " + a.getSommet());
-
-
-        if (a.getSommetChemin() == initiale)
-        {
-            System.out.println("Le chemin le plus court est " + sommet_choisi.getDistance() + "," + initiale);
-        }
-            //System.out.println("Le chemin le plus court est " + sommet_choisi + "," + initiale);
-            //chemin.put(sommet_choisi,sommet_choisi);
-            //chemin.put(cc.get(initiale),cc.get(initiale));
-
-
-            chemin.add(sommet_choisi);
-            chemin.add(cc.get(initiale));
-            System.out.println("Le chemin est : ");
-
-
-
-
-            for (Noeud affichage : chemin)
-            {
-                System.out.print(affichage.getSommet());
-            }
-
-
-
-
-
-        if (a.getSommet() != initiale) {
-            while (a.getSommet() != initiale) {
-                System.out.println("Valeur mise dans la map de a :  " + a.getSommet());
-                //chemin.put(a, a);
-                chemin.add(a);
-                a = cc.get(a.getSommetChemin()).clone();
-                System.out.println("Nouvelle valeur de a : " + a.getSommet());
-
-
-            }
-
-            //chemin.put(cc.get(initiale), cc.get(initiale));
-
-            chemin.add(cc.get(initiale));
-
-            /*
-            for (Map.Entry<Noeud, Noeud> entry : chemin.entrySet())
-            {
-                Noeud cle = entry.getKey();
-                System.out.print(cle.getSommet());
-            }
-
-            System.out.println("Le chemin est : ");
-            for (Noeud affichage : chemin)
-            {
-                System.out.print(affichage.getSommet());
-            }
-
-            toutLesChemins.put(sommet_choisi,chemin);
-
-
-        }
-    }*/
 
     public static Noeud predecesseur(Map<Integer, Noeud> cc, int pred)
     {
