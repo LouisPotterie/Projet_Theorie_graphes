@@ -130,7 +130,7 @@ public class L3_D4_Main
                         System.out.print(dijkstra[ligne][sommet] +" ,");
                     }
                 }
-                System.out.println("");
+                System.out.println();
             }
 
         }
@@ -164,7 +164,6 @@ public class L3_D4_Main
         }
     }
 
-    public static Noeud distanceLaPlusCourte(ArrayList<Noeud> m, Integer[][] dijkstra, int etape)
     public static void test2() throws FileNotFoundException
     {
         int nom_1 = 1;
@@ -189,11 +188,11 @@ public class L3_D4_Main
 
 
 
-        cheminLePlusCourt(premier.getSommet(),quatre,cc);
+      //  cheminLePlusCourt(premier.getSommet(),quatre,cc);
     }
 
 
-    public static Noeud distanceLaPlusCourte(ArrayList<Noeud> m, int[][] matriceAdjacence, int sommet)
+    public static Noeud distanceLaPlusCourte(ArrayList<Noeud> m, Integer[][] dijkstra, int etape)
     {
         Noeud tampon_sommet = null;
         int tampon_valeur = Integer.MAX_VALUE;
@@ -211,7 +210,7 @@ public class L3_D4_Main
         return tampon_sommet;
     }
 
-    public static void cheminLePlusCourt(int initiale, Noeud sommet_choisi, Map<Integer, Noeud> cc)
+ /*   public static void cheminLePlusCourt(int initiale, Noeud sommet_choisi, Map<Integer, Noeud> cc)
     {
         //Map<Noeud, Noeud> chemin= new HashMap<>();
 
@@ -224,14 +223,14 @@ public class L3_D4_Main
             chemin.add(sommet_choisi);
             System.out.println("Le chemin est : ");
 
-            /*
+
             for (Map.Entry<Noeud, Noeud> entry : chemin.entrySet())
             {
                 Noeud cle = entry.getKey();
                 System.out.print(cle.getSommet());
 
             }
-            */
+
 
             for (Noeud affichage : chemin)
             {
@@ -261,13 +260,8 @@ public class L3_D4_Main
             chemin.add(cc.get(initiale));
             System.out.println("Le chemin est : ");
 
-            /*
-            for (Map.Entry<Noeud, Noeud> entry : chemin.entrySet())
-            {
-                Noeud cle = entry.getKey();
-                System.out.print(cle.getSommet());
 
-            */
+
 
             for (Noeud affichage : chemin)
             {
@@ -276,7 +270,7 @@ public class L3_D4_Main
 
 
 
-        }
+
 
         if (a.getSommet() != initiale) {
             while (a.getSommet() != initiale) {
@@ -299,7 +293,7 @@ public class L3_D4_Main
                 Noeud cle = entry.getKey();
                 System.out.print(cle.getSommet());
             }
-            */
+
             System.out.println("Le chemin est : ");
             for (Noeud affichage : chemin)
             {
@@ -310,7 +304,7 @@ public class L3_D4_Main
 
 
         }
-    }
+    }*/
 
     public static Noeud predecesseur(Map<Integer, Noeud> cc, int pred)
     {
