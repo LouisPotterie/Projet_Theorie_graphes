@@ -3,15 +3,29 @@ package com.company;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Graphe {
 
+    private Map<Noeud, Noeud> chemin= new HashMap<>();
     private ArrayList<Noeud> noeuds;
 
-    public Graphe()
+    public int[][] getMatriceAdjacence()
+    {
+        return matriceAdjacence;
+    }
+
+    private int[][] matriceAdjacence;
+    private ArrayList<Noeud> matriceValeurs;
+
+    public Graphe() throws FileNotFoundException
     {
         noeuds = new ArrayList<>();
+        initialisationMatriceAdjacence();
+        matriceAdjacence=creationTableauAffichage();
+
     }
 
     public ArrayList<Noeud> getNoeuds() {
@@ -93,9 +107,11 @@ public class Graphe {
         return tableau;
     }
 
-    void affichage() {
+    void affichage() throws FileNotFoundException
+    {
 
         int matrice[][] = creationTableauAffichage();
+
 
         //affichage n°ligne
         System.out.print("suc ");
@@ -124,13 +140,64 @@ public class Graphe {
             for (int j = 0; j < matrice.length; j++) {
 
                 System.out.print(matrice[i][j] + " ");
+
                 if (matrice[i][j] < 10) {
                     System.out.print(" ");
                 }
+
             }
             System.out.println();
         }
     }
 
+    public void affichageValeurs() throws FileNotFoundException
+    {
+        initialisationMatriceAdjacence();
+        int[][] matriceAdjacence=creationTableauAffichage();
+        initialisationMatriceValeur();
+        int matrice[][] = creationTableauAffichage();
+        //affichage n°ligne
+        System.out.print("suc ");
+        for (int cmpt1 = 0; cmpt1 < matrice.length; cmpt1++) {
+            System.out.print(cmpt1 + " ");
+            if (cmpt1 < 10) {
+                System.out.print(" ");
+            }
+        }
+        System.out.println();
+        System.out.print("pre");
+        for (int cmpt2 = 0; cmpt2 < matrice.length; cmpt2++) {
+            System.out.print("__");
+            if (cmpt2 < 10) {
+                System.out.print("_");
+            }
+        }
+        System.out.println();
+
+        //affichage matrice
+        for (int i = 0; i < matrice.length; i++) {
+            //affichage n°colonne
+            System.out.print(i + " | ");
+
+
+            for (int j = 0; j < matrice.length; j++) {
+                if (matriceAdjacence[i][j]==1)
+                {
+                    System.out.print(matrice[i][j] + " ");
+
+                }
+                else
+                {
+                    System.out.print("-" + " ");
+                }
+                if (matrice[i][j] < 10) {
+                    System.out.print(" ");
+                }
+
+            }
+            System.out.println();
+        }
+
+    }
 
 }
