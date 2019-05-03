@@ -31,18 +31,16 @@ public class L3_D4_Main
     //
     public static void djistra() throws FileNotFoundException
     {
-        Map<Integer, Noeud> cc = new HashMap<>();
+        ArrayList<Integer>  cc = new ArrayList<>();
+        Map<Noeud, Noeud> predecesseurCheminCourt = new HashMap<>();
         Graphe graphe = new Graphe(); // A initialiser avec tous les sommets
-
+        int nombreSommets = graphe.getNombreSommets();
+        Integer[][] dijkstra = new Integer[nombreSommets][nombreSommets];
         try
         {
             graphe.initialisationMatriceValeur();
             graphe.affichageValeurs();
             ArrayList<Noeud> m = graphe.getNoeuds();
-            int nombre_sommet = graphe.getNoeuds().size();
-            int pi_etoile[] = new int[nombre_sommet]; // tableau des valeurs de Pi étoiles de taille nombre de sommets
-            int pi[] = new int[nombre_sommet]; // tableau des valeurs de Pi  de taille nombre de sommets
-            int tab_matrice[] = new int[nombre_sommet];
 
             Scanner kb = new Scanner(System.in);
             System.out.println("Quel est le sommet de départ ?"); // choix du sommet de départ
@@ -52,102 +50,88 @@ public class L3_D4_Main
             System.out.println("Le sommet choisi est :" + initiale);
 
             Noeud i = m.get(initiale);
-            // on cherche le sommet que l'utilisateur a choisi
-            cc.put(i.getSommet(), i); // Ajout du Noeud dans CC
+            cc.add(initiale); // Ajout du Noeud dans CC
             m.remove(i); // On retire le noeud de CC
-            pi_etoile[initiale] = 0; // on initialise son pi_etoile à 0
             System.out.println("IN");
 
-            System.out.println(cc.get(0).getSuccesseurs());
-            if (i.aSuccesseurs())
+            //tout initialiser à l'infini
+            for (int ligne = 0; ligne < nombreSommets; ligne++)
             {
-
-
-                for (Map.Entry<Noeud, Integer> entry : cc.get(0).getSuccesseurs().entrySet())
+                for (int colonne = 0; colonne < nombreSommets; colonne++)
                 {
-                    Noeud cle = entry.getKey();
-                    cle.setDistance(entry.getValue());
-
+                    dijkstra[ligne][colonne] = Integer.MAX_VALUE;
                 }
 
-
-            } else i.setDistance(1000);
-
-
-            //si matrice_adjacence = 1
-
-
-            /*if (matriceAdjacence[initiale][i.getSommet()]== 1)
-            {
-                pi[i.getSommet()] = matriceValeur[initiale][i.getSommet()]; // On initialise tous les autres PI
             }
 
-            else
+
+            for (Map.Entry<Noeud, Integer> entry : i.getSuccesseurs().entrySet())
             {
-                pi[i.getSommet()] = 100000;
+                Noeud cle = entry.getKey();
+                cle.setDistance(entry.getValue());
+                dijkstra[0][cle.getSommet()] = (entry.getValue());
             }
-                    */
+
+            dijkstra[0][initiale] = 0;
 
 
-            int tampon_valeur = 1000; //initialisation arbitraire
-            //Noeud tampon_sommet = new Noeud();
-
-            int tampon_nom = -1;
-
-            int sommet = initiale;
-            for (int etape = 0; etape < graphe.getNoeuds().size(); etape++)
+            for (int etape = 1; etape < nombreSommets; etape++)
             {
-                // Sommet le plus proche du nouveau sommet ajouté
-                Noeud sommet_proche = distanceLaPlusCourte(m, graphe.getMatriceAdjacence(), sommet);
-                Integer nouvelle_distance = null;
-                if (sommet_proche != null)
+                dijkstra[etape] = dijkstra[etape - 1].clone();
+                for (int ligne = 0; ligne < nombreSommets; ligne++)
                 {
-                    nouvelle_distance = cc.get(sommet).getSuccesseurs().get(sommet_proche) + cc.get(sommet).getDistance();
+
+                    System.out.println( Arrays.toString(dijkstra[ligne]));
                 }
-                for (Noeud noeud : m)
-                {
-                    if (nouvelle_distance == null || noeud.getDistance() < nouvelle_distance)
+
+                System.out.println("--");
+
+                Noeud sommetProche= distanceLaPlusCourte(m, dijkstra, etape-1);
+                m.remove(sommetProche);
+                cc.add(sommetProche.getSommet());
+//                sommetProche.setDistance(sommetProche.getDistance());
+
+                for (Noeud noeud : m)  // parcourt de l'ensemble M
+                    if (sommetProche.estPredecesseur(noeud) && graphe.getMatriceAdjacence()[sommetProche.getSommet()][noeud.getSommet()] == 1)
                     {
-                        sommet_proche = noeud;
-                        nouvelle_distance = sommet_proche.getDistance();
+                        int distance_sommetproche_vers_noeud = sommetProche.getSuccesseurs().get(noeud);
+                        int nouvelleDistance;
+                        if (dijkstra[etape][sommetProche.getSommet()]!=Integer.MAX_VALUE)
+                        {
+                                nouvelleDistance= dijkstra[etape][sommetProche.getSommet()]+distance_sommetproche_vers_noeud;
+                        }
+
+                        else {
+                            nouvelleDistance = Integer.MAX_VALUE;
+                        }
+                        //int nouvelleDistance = sommetProche.getDistance() + distance_sommetproche_vers_noeud;
+                        if (nouvelleDistance <dijkstra[etape][noeud.getSommet()])
+                        {
+                            dijkstra[etape][noeud.getSommet()] = nouvelleDistance;
+                            predecesseurCheminCourt.put(noeud,sommetProche);
+                        }
+                    }
+
+
+
+
+
+            }
+
+            for (int ligne = 0 ; ligne < nombreSommets; ligne++)
+            {
+                for(int sommet = 0; sommet < nombreSommets;sommet++)
+                {
+                    if (cc.contains(sommet)&& ligne>= cc.indexOf(sommet)&& ligne !=0 )
+                    {
+                        System.out.print(". ,");
+                    }
+                    else {
+                        System.out.print(dijkstra[ligne][sommet] +" ,");
                     }
                 }
-
-                Noeud tampon_sommet = sommet_proche;
-
-                sommet = tampon_sommet.getSommet();
-                System.out.println("TEST : " + tampon_sommet.getSommet());
-                m.remove(tampon_sommet);
-
-
-                cc.put(tampon_sommet.getSommet(), tampon_sommet);
-                pi_etoile[tampon_sommet.getSommet()] = pi[tampon_sommet.getSommet()];
-
-                System.out.println("Taille de m" + m.size());
-
-
-                for (Noeud c : m)  // parcourt de l'ensemble M
-                    if (tampon_sommet.estPredecesseur(c) && graphe.getMatriceAdjacence()[c.getSommet()][tampon_sommet.getSommet()] == 1)
-                    {
-
-                        c.setDistance(nouvelle_distance);
-                        c.setSommetChemin(tampon_sommet.getSommet());
-                    }
+                System.out.println("");
             }
-
-            System.out.println("Choisir un sommet : \n");
-
-            int choix = kb.nextInt();
-
-            System.out.println("Vous avez choisi le sommet : " + choix + "\n");
-
-            Noeud sommet_choisi = cc.get(choix);
-
-            cheminLePlusCourt(initiale, sommet_choisi, cc);
-
-
-            // tant que tab[sommet choisi cc]  =! tab [sommet initiale] return i = tab
-
 
         }
         catch (FileNotFoundException e)
@@ -155,6 +139,8 @@ public class L3_D4_Main
             System.out.println("Aucun fichier trouvé");
         }
     }
+
+
 
 
     public static void test() throws FileNotFoundException
@@ -178,22 +164,19 @@ public class L3_D4_Main
         }
     }
 
-    public static Noeud distanceLaPlusCourte(ArrayList<Noeud> m, int[][] matriceAdjacence, int sommet)
+    public static Noeud distanceLaPlusCourte(ArrayList<Noeud> m, Integer[][] dijkstra, int etape)
     {
         Noeud tampon_sommet = null;
         int tampon_valeur = Integer.MAX_VALUE;
 
         for (Noeud n : m)
         {
-            if (matriceAdjacence[sommet][n.getSommet()] == 1)
-            {
-                int noeudDistance = n.getDistance();
-                if (noeudDistance < tampon_valeur)
+                if ( dijkstra[etape][n.getSommet()]<tampon_valeur)
                 {
-                    tampon_valeur = noeudDistance;
+                    tampon_valeur = dijkstra[etape][n.getSommet()];
                     tampon_sommet = n;
                 }
-            }
+
 
         }
         return tampon_sommet;
@@ -214,7 +197,7 @@ public class L3_D4_Main
 
         if (a.getSommetChemin() == initiale)
         {
-            System.out.println("Le chemin le plus court est " + sommet_choisi + "," + initiale);
+            System.out.println("Le chemin le plus court est " + sommet_choisi.getDistance() + "," + initiale);
         }
 
         while (a.getSommet() != initiale)

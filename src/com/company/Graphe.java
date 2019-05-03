@@ -9,12 +9,17 @@ import java.util.Scanner;
 
 public class Graphe {
 
-    private Map<Noeud, Noeud> chemin= new HashMap<>();
+
     private ArrayList<Noeud> noeuds;
 
     public int[][] getMatriceAdjacence()
     {
         return matriceAdjacence;
+    }
+
+    public int getNombreSommets()
+    {
+        return noeuds.size();
     }
 
     private int[][] matriceAdjacence;

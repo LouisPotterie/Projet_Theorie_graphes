@@ -25,11 +25,11 @@ public class Noeud implements Cloneable {
         this.distance = distance;
     }
 
-    public int getDistance() {
+    public Integer getDistance() {
         return distance;
     }
 
-    private int distance;
+    private Integer distance;
     private int distancePlusCourt;
 
 
