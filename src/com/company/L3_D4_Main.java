@@ -122,7 +122,7 @@ public class L3_D4_Main
             {
                 for(int sommet = 0; sommet < nombreSommets;sommet++)
                 {
-                    if (cc.contains(sommet)&& ligne>= cc.indexOf(sommet)&& ligne !=0 )
+                    if (cc.contains(sommet)&& ligne>= cc.indexOf(sommet)&& ligne !=0 && ligne !=nombreSommets-1 )
                     {
                         System.out.print(". ,");
                     }
