@@ -511,18 +511,17 @@ public class L3_D4_Main
             System.out.println("");
             a++;
         }
-
-        if (absorbant == 0)
-        {
+        if (absorbant == 0) {
             int w = MAX_SIZE;
             int p = MAX_SIZE;
             int longueur = 0;
 
-            for (int ii = 0; ii < nombreSommets; ii++)
-            {
+
+
+            for (int ii = 0; ii < nombreSommets; ii++){
                 p = ii;
-                enregistrement.println("Le chemin le plus court du sommet " + ii + " au sommet initial " + sommet_depart + " est : ");
-                System.out.println("Le chemin le plus court du sommet " + ii + " au sommet initial " + sommet_depart + " est : ");
+                System.out.println("Le chemin le plus court du sommet "+ii+" au sommet initial "+sommet_depart+" est : ");
+                System.out.print(ii);
                 w = MAX_SIZE;
                 while (w != sommet_depart){
                     if (tableau_de_predecesseur[nombreSommets-1][p] == 0)
@@ -532,16 +531,15 @@ public class L3_D4_Main
                     System.out.print(" " +p);
                     w = p;
                 }
-
+                System.out.print(" "+sommet_depart);
                 longueur = tableau_de_k[nombreSommets-1][ii];
                 if (longueur == MAX_SIZE){
-                    enregistrement.println("infinie");
-                    System.out.println("infinie");
+                    System.out.println("infini");
                 }
                 else {
-                    enregistrement.println(" et de longueur : " + longueur);
                     System.out.println(" et de longueur : "+longueur);
                 }
+                System.out.println(" ");
                 longueur = 0;
             }
         }
