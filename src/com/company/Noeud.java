@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.lang.Cloneable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Noeud implements Cloneable {
 
@@ -88,5 +89,20 @@ public class Noeud implements Cloneable {
 
     public Map<Noeud, Integer> getSuccesseurs() {
         return successeurs;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (!(o instanceof Noeud)) return false;
+        Noeud noeud = (Noeud) o;
+        return getSommet() == noeud.getSommet();
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(getSommet());
     }
 }

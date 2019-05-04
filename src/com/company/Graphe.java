@@ -100,9 +100,9 @@ public class Graphe {
             succ = readMatrice.nextInt();
             nombreTransitions++;
             noeudsAdjascence.get(succ).addPredecesseurs(pred);//ajout du predecesseur
-            noeudsAdjascence.get(pred).getSuccesseurs().put(noeudsAdjascence.get(succ),1);// ajout du successeur et dde la valeur 1
+            noeudsAdjascence.get(pred).addSuccesseurs(noeudsAdjascence.get(succ),1);// ajout du successeur et dde la valeur 1
             this.noeuds.get(succ).addPredecesseurs(pred);//ajout du predecesseur
-            this.noeuds.get(pred).getSuccesseurs().put(noeuds.get(succ),longueur);// ajout du successeur et dde la valeur 1
+            this.noeuds.get(pred).addSuccesseurs(noeuds.get(succ),longueur);// ajout du successeur et dde la valeur 1
         }
 
         matriceValeurs = creationTableauAffichage(noeuds);
