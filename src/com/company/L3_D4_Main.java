@@ -673,7 +673,7 @@ public class L3_D4_Main
             saisie = inputWithOnlyInt();
         } while (saisie < 1 || saisie > 10);
 
-        return "L3-D4-" + saisie + ".txt";
+        return "L3_D4_" + saisie + ".txt";
     }
 
     public static int inputWithOnlyInt()
