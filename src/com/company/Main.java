@@ -1,214 +1,187 @@
 package com.company;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.*;
 
+import java.io.FileNotFoundException;
+import java.util.Map;
+/*
 public class Main {
 
-    //Leo
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException
+    {
 
-        System.out.println("Hello World!");
-    /*
-        int[][] matrice = creationMatrice();
+        //initialisation d'un graph sous la forme d'un tableau de transition
 
-        System.out.println("\n\n");
-
-        int[][] matriceValeur = creationMatriceValeur();
-
-        enregistrementMatrice(matrice);
-    */
-
-    /*
-    Graphe graphe = new Graphe();
-    graphe.initialisationMatriceValeur();
-    graphe.affichage();
-    System.out.println();
-    graphe.initialisationMatriceAdjacence();
-    graphe.affichage();
-    */
-
-    Graphe graphe = new Graphe();
-    graphe.initialisationMatriceValeur();
-    graphe.bellman2();
-    }
-
-    public void djistra(int[][] matrice) {
-        ArrayList<Noeud> cc = new ArrayList<Noeud>();
-        Graphe m = new Graphe(); // A initialiser avec tous les sommets
-
-        int nombre_sommet = m.getNoeuds().size();
-        int pi_etoile[] = new int[nombre_sommet]; // tableau des valeurs de Pi étoiles de taille nombre de sommets
-        int pi[] = new int[nombre_sommet]; // tableau des valeurs de Pi  de taille nombre de sommets
-
-        Scanner kb = new Scanner(System.in);
-        System.out.println("Quel est le sommet de départ ?"); // choix du sommet de départ
-
-        int initiale = kb.nextInt();
-
-        for (Noeud i : m.getNoeuds())  // parcourt de l'ensemble M
-        {
-
-            if (initiale == i.getSommet()) {  // si la l'attribut sommet est celle choisi alors
-                cc.add(i); // Ajout du Noeud dans CC
-                m.getNoeuds().remove(i); // On retire le noeud de CC
-                pi_etoile[initiale] = 0; // on initialise son pi_etoile à 0
-            }
-            pi[i.getSommet()] = matrice[initiale][i.getSommet()]; // On initialise tous les autres PI
-        }
-
-        int tampon_valeur = pi[1]; //initialisation arbitraire
-        Noeud tampon_sommet = new Noeud();
-
-
-        while (m.getNoeuds().size() != 0) {
-            for (Noeud i : m.getNoeuds())  // parcourt de l'ensemble M
+        Graphe graphe = new Graphe();
+        int nombreSommets= graphe.getNombreSommets();
+        int tableau_transitions[][]= new int[graphe.getNombreTransitions()][3];
+       int transition=0;
+            for (Noeud noeud : graphe.getNoeuds())
             {
-                if (pi[i.getSommet()] < tampon_valeur) {
-                    tampon_valeur = pi[i.getSommet()];
-
-                    tampon_sommet = (Noeud) i.clone(); // objet = objet
+                for (Map.Entry<Noeud, Integer> entry : noeud.getSuccesseurs().entrySet())
+                {
+                    tableau_transitions[transition]= new int[]{noeud.getSommet(), entry.getKey().getSommet(), entry.getValue()};
+                    transition++;
                 }
             }
+      
 
-            cc.add(tampon_sommet);
-            m.getNoeuds().remove(tampon_sommet);
-            pi_etoile[tampon_sommet.getSommet()] = pi[tampon_sommet.getSommet()];
-        }
+        // prec - succ - valeur de transition
+        //int tableau_transitions[][] = { {0,1,5},{1,2,-10}, {2,0,3} };
+
+        //le nombre  de sommet est à récuperer en première ligne du txt
 
 
-    }
+        //le nombre de transition du graph
+        int nombreTransitions;
+        nombreTransitions = tableau_transitions.length;
 
-    static int[][] creationMatrice() throws FileNotFoundException {
-        File fileMatrice = new File("L3-D4-1.txt");
-        Scanner readMatrice = new Scanner(fileMatrice);
+        /*
+            Tableau des k
 
-        int nombreSommets = readMatrice.nextInt();
-        int[][] matrice = new int[nombreSommets][nombreSommets];
-        int succ;
-        int prec;
-        int valeur;
+            Taille :
+            (en ligne) de k = 0 à k = nombreSommets - 1
+            (en colonne) tous les sommets, donc nombreSommets
+        */
+    /*    int tableau_de_k[][] = new int[nombreSommets][nombreSommets];
 
-        while (readMatrice.hasNext()) {
-            succ = readMatrice.nextInt();
-            valeur = readMatrice.nextInt();
-            prec = readMatrice.nextInt();
-            matrice[succ][prec] = 1;
-        }
+        /*
+            Tableau des predecesseurs
 
-        affichage(matrice);
+            meme dimensions que le tableau des k
+            il permet de recuperer les prédecesseurs permettant de dresser le chemin le plus cours
+         */
+     /*   int tableau_de_predecesseur[][] = new int[nombreSommets][nombreSommets];
 
-        readMatrice.close();
-        return matrice;
-    }
+        // Le MAX_SIZE permet de remplacer le signe infini dans le tableau des k
+         int MAX_SIZE = 999;
 
-    static void affichage(int[][] matrice) {
-        //affichage n°ligne
-        System.out.print("suc ");
-        for (int cmpt1 = 0; cmpt1 < matrice.length; cmpt1++) {
-            System.out.print(cmpt1 + " ");
-            if (cmpt1 < 10) {
-                System.out.print(" ");
+        // On initialise le tableau des k avec la variable MAX_SIZE (inifini)
+        for (int i = 0; i < nombreSommets; i++){
+            for (int n =0; n < nombreSommets; n++){
+                tableau_de_k[i][n] = MAX_SIZE;
             }
         }
-        System.out.println();
-        System.out.print("pre");
-        for (int cmpt2 = 0; cmpt2 < matrice.length; cmpt2++) {
-            System.out.print("__");
-            if (cmpt2 < 10) {
-                System.out.print("_");
-            }
+
+        //l'utilisateur choisit le sommet de départ
+        int sommet_depart;
+        sommet_depart = 0;
+
+        //initialisation de la colonne du sommet de départ
+        for(int j = 0; j < nombreSommets; j++)
+        {
+            tableau_de_k[j][sommet_depart]=0;
+            tableau_de_predecesseur[j][sommet_depart]=sommet_depart;
         }
-        System.out.println();
 
+        //Savoir si le graph est absorbant ou pas ?
+        int absorbant_ou_pas;
+        int plus_petite_transition = 0;
 
-        //affichage matrice
-        for (int i = 0; i < matrice.length; i++) {
-            //affichage n°colonne
-            System.out.print(i + " | ");
+        for (int recherche_absorbant_ou_pas = 0; recherche_absorbant_ou_pas < nombreTransitions; recherche_absorbant_ou_pas++){
+            plus_petite_transition = Math.min(plus_petite_transition,tableau_transitions[recherche_absorbant_ou_pas][2]);
+        }
+        if (plus_petite_transition < 0)
+            absorbant_ou_pas = 0;
+        else
+            absorbant_ou_pas = 1;
 
+        /*
+            initialisation des différentes variables
+         */
+     /*   int prec = 0;
+        int succ = 0;
+        int prec_v2 = 0;
+        int succ_v2 = 0;
+        int value = 0;
+        int v = 0;
+        int suivant = 1;
+        int compteur = 0;
 
-            for (int j = 0; j < matrice.length; j++) {
+        //Si le graph a un circuit absorbant
+        if (absorbant_ou_pas == 0){
+            for (int k = 1; k < nombreSommets; k++) {
+                for (int o = 0; o < nombreTransitions; o++){
 
-                System.out.print(matrice[i][j] + " ");
-                if (matrice[i][j] < 10) {
-                    System.out.print(" ");
+                    prec = tableau_transitions[o][0]; //on récup le prec grace au graph
+                    succ = tableau_transitions[o][1];
+                    value = tableau_transitions[o][2];
+
+                    prec_v2 = tableau_de_k[k-1][prec]; //on recup le poids pour le prec dans le tableau k
+                    succ_v2 = tableau_de_k[k-1][succ];
+
+                    v = Math.min(succ_v2, (prec_v2 + value)); //on cherche le min
+
+                    if ( v < tableau_de_k[k][succ]){
+                        tableau_de_k[k][succ] = v; // on modifie la valeur dans le tableau k pour avoir le plus petit chemin
+                        if (v != tableau_de_k[k-1][succ]) {
+                            tableau_de_predecesseur[k][succ] = prec;
+                        }
+                    }
                 }
             }
-            System.out.println();
         }
-    }
+        else { //si le graph n'a pas de circuit absorbant
+            int k = 1;
+            while (suivant == 1) {
+                for (int o = 0; o < nombreTransitions; o++) {
 
-    static void enregistrementMatrice(int[][] matrice) throws FileNotFoundException {
-        final int NUMERO_GRAPHE = 1;
-        final int SOMMET_DEPART = 1;
+                    prec = tableau_transitions[o][0]; //on récup le prec grace au graph
+                    succ = tableau_transitions[o][1];
+                    value = tableau_transitions[o][2];
 
-        int taille = matrice.length - 1;
+                    prec_v2 = tableau_de_k[k - 1][prec]; //on recup le poids pour le prec dans le tableau k
+                    succ_v2 = tableau_de_k[k - 1][succ];
 
-        PrintWriter enregistrement = new PrintWriter("L3-D4-trace" + NUMERO_GRAPHE + "_" + SOMMET_DEPART + ".txt");
+                    v = Math.min(succ_v2, (prec_v2 + value)); //on cherche le min
 
-        //affichage n°ligne
-        enregistrement.print("suc ");
-        for (int cmpt1 = 0; cmpt1 < matrice.length; cmpt1++) {
-            enregistrement.print(cmpt1 + " ");
-            if (cmpt1 < 10) {
-                enregistrement.print(" ");
-            }
-        }
-        enregistrement.println();
-        enregistrement.print("pre");
-        for (int cmpt2 = 0; cmpt2 < matrice.length; cmpt2++) {
-            enregistrement.print("__");
-            if (cmpt2 < 10) {
-                enregistrement.print("_");
-            }
-        }
-        enregistrement.println();
-
-
-        //affichage matrice
-        for (int i = 0; i < matrice[taille].length; i++) {
-            //affichage n°colonne
-            enregistrement.print(i + " | ");
-
-
-            for (int j = 0; j < matrice.length; j++) {
-                enregistrement.print(matrice[i][j] + " ");
-                if (matrice[i][j] < 10) {
-                    enregistrement.print(" ");
+                    if (v < tableau_de_k[k][succ]) {
+                        tableau_de_k[k][succ] = v; // on modifie la valeur dans le tableau k pour avoir le plus petit chemin
+                        if (v != tableau_de_k[k - 1][succ]) {
+                            tableau_de_predecesseur[k][succ] = prec;
+                        }
+                    }
                 }
+
+                for (int m = 0; m < nombreSommets; m++){
+                    if (tableau_de_k[k-1][m] == tableau_de_k[k][m]){
+                        compteur ++;
+                    }
+                }
+                if (compteur == nombreSommets)
+                    suivant = 0;
+
+                compteur = 0;
+                k++;
             }
-            enregistrement.println();
-
-
-        }
-        enregistrement.close();
-    }
-
-    static int[][] creationMatriceValeur() throws FileNotFoundException {
-        File fileMatrice = new File("L3-D4-1.txt");
-        Scanner readMatrice = new Scanner(fileMatrice);
-
-        int nombreSommets = readMatrice.nextInt();
-        int[][] matrice = new int[nombreSommets][nombreSommets];
-        int succ;
-        int prec;
-        int valeur;
-
-        while (readMatrice.hasNext()) {
-            succ = readMatrice.nextInt();
-            valeur = readMatrice.nextInt();
-            prec = readMatrice.nextInt();
-            matrice[succ][prec] = valeur;
         }
 
-        affichage(matrice);
 
-        readMatrice.close();
-        return matrice;
+
+        /*
+        Affichage des deux tableaux combinés, tableau des k et prédécesseur
+         */
+      /*  int a = 1;
+        int b;
+
+        while (a < nombreSommets)
+        {
+            b = 0;
+            while(b < nombreSommets)
+            {
+                if (tableau_de_k[a][b] > 900) {
+                    System.out.printf("%4s    |", "*");
+                }
+                else {
+                    if (tableau_de_predecesseur[a][b] == 0){
+                        tableau_de_predecesseur[a][b] = tableau_de_predecesseur[a-1][b];
+                    }
+                    System.out.printf("%3d (%d) |",tableau_de_k[a][b], tableau_de_predecesseur[a][b]);
+                }
+                b++;
+            }
+            System.out.println("");
+            a++;
+        }
+
     }
-
-
 }
-
+*/

@@ -12,37 +12,33 @@ public class L3_D4_Main
     public static void main(String[] args) throws FileNotFoundException
     {
 
-        System.out.println("Hello World!");
 
-        //int[][] matrice = creationMatrice();
+//        int[][] matrice = creationMatrice();
 
-        //System.out.println("\n\n");
+  //      enregistrementMatrice(matrice);
 
-        //int[][] matriceValeur = creationMatriceValeur();
+        //dijkstra();
 
-        //enregistrementMatrice(matrice);
+        menu();
 
-        //djistra();
-
-        test2();
+        //test();
 
     }
 
     //
-    public static void djistra() throws FileNotFoundException
+    public static void dijkstra(Graphe graphe) throws FileNotFoundException
     {
-        Map<Integer, Noeud> cc = new HashMap<>();
-        Graphe graphe = new Graphe(); // A initialiser avec tous les sommets
-
+        ArrayList<Integer>  cc = new ArrayList<>();
+        Map<Noeud, Noeud> predecesseurCheminCourt = new HashMap<>();
+        //Graphe graphe = new Graphe();
+        int nombreSommets = graphe.getNombreSommets();
+        Integer[][] dijkstra = new Integer[nombreSommets][nombreSommets];
         try
         {
-            graphe.initialisationMatriceValeur();
+            graphe.affichageAdjascence();
             graphe.affichageValeurs();
-            ArrayList<Noeud> m = graphe.getNoeuds();
-            int nombre_sommet = graphe.getNoeuds().size();
-            int pi_etoile[] = new int[nombre_sommet]; // tableau des valeurs de Pi étoiles de taille nombre de sommets
-            int pi[] = new int[nombre_sommet]; // tableau des valeurs de Pi  de taille nombre de sommets
-            int tab_matrice[] = new int[nombre_sommet];
+            ArrayList<Noeud> m = cloneList(graphe.getNoeuds());
+
 
             Scanner kb = new Scanner(System.in);
             System.out.println("Quel est le sommet de départ ?"); // choix du sommet de départ
@@ -52,101 +48,114 @@ public class L3_D4_Main
             System.out.println("Le sommet choisi est :" + initiale);
 
             Noeud i = m.get(initiale);
-            // on cherche le sommet que l'utilisateur a choisi
-            cc.put(i.getSommet(), i); // Ajout du Noeud dans CC
+            cc.add(initiale); // Ajout du Noeud dans CC
             m.remove(i); // On retire le noeud de CC
-            pi_etoile[initiale] = 0; // on initialise son pi_etoile à 0
             System.out.println("IN");
 
-            System.out.println(cc.get(0).getSuccesseurs());
-            if (i.aSuccesseurs())
+            //tout initialiser à l'infini
+            for (int ligne = 0; ligne < nombreSommets; ligne++)
             {
-
-
-                for (Map.Entry<Noeud, Integer> entry : cc.get(0).getSuccesseurs().entrySet())
+                for (int colonne = 0; colonne < nombreSommets; colonne++)
                 {
-                    Noeud cle = entry.getKey();
-                    cle.setDistance(entry.getValue());
-
+                    dijkstra[ligne][colonne] = Integer.MAX_VALUE;
                 }
 
-
-            } else i.setDistance(1000);
-
-
-            //si matrice_adjacence = 1
-
-
-            /*if (matriceAdjacence[initiale][i.getSommet()]== 1)
-            {
-                pi[i.getSommet()] = matriceValeur[initiale][i.getSommet()]; // On initialise tous les autres PI
             }
 
-            else
+
+            for (Map.Entry<Noeud, Integer> entry : i.getSuccesseurs().entrySet())
             {
-                pi[i.getSommet()] = 100000;
+                Noeud cle = entry.getKey();
+                cle.setDistance(entry.getValue());
+                dijkstra[0][cle.getSommet()] = (entry.getValue());
             }
-                    */
+
+            dijkstra[0][initiale] = 0;
 
 
-            int tampon_valeur = 1000; //initialisation arbitraire
-            //Noeud tampon_sommet = new Noeud();
-
-            int tampon_nom = -1;
-
-            int sommet = initiale;
-            for (int etape = 0; etape < graphe.getNoeuds().size(); etape++)
+            for (int etape = 1; etape < nombreSommets; etape++)
             {
-                // Sommet le plus proche du nouveau sommet ajouté
-                Noeud sommet_proche = distanceLaPlusCourte(m, graphe.getMatriceAdjacence(), sommet);
-                Integer nouvelle_distance = null;
-                if (sommet_proche != null)
+                dijkstra[etape] = dijkstra[etape - 1].clone();
+                for (int ligne = 0; ligne < nombreSommets; ligne++)
                 {
-                    nouvelle_distance = cc.get(sommet).getSuccesseurs().get(sommet_proche) + cc.get(sommet).getDistance();
+
+                    System.out.println( Arrays.toString(dijkstra[ligne]));
                 }
-                for (Noeud noeud : m)
+
+                System.out.println("--");
+
+                Noeud sommetProche= distanceLaPlusCourte(m, dijkstra, etape-1);
+                if (sommetProche!=null)
                 {
-                    if (nouvelle_distance == null || noeud.getDistance() < nouvelle_distance)
+                    m.remove(sommetProche);
+                    cc.add(sommetProche.getSommet());
+                }
+                else
+                {
+                    continue;
+                }
+
+//                sommetProche.setDistance(sommetProche.getDistance());
+
+                for (Noeud noeud : m)  // parcourt de l'ensemble M
+                    if (sommetProche.estPredecesseur(noeud) && graphe.getMatriceAdjacence()[sommetProche.getSommet()][noeud.getSommet()] == 1)
                     {
-                        sommet_proche = noeud;
-                        nouvelle_distance = sommet_proche.getDistance();
+                        int distance_sommetproche_vers_noeud = sommetProche.getSuccesseurs().get(noeud);
+                        int nouvelleDistance;
+                        if (dijkstra[etape][sommetProche.getSommet()]!=Integer.MAX_VALUE)
+                        {
+                                nouvelleDistance= dijkstra[etape][sommetProche.getSommet()]+distance_sommetproche_vers_noeud;
+                        }
+
+                        else {
+                            nouvelleDistance = Integer.MAX_VALUE;
+                        }
+                        //int nouvelleDistance = sommetProche.getDistance() + distance_sommetproche_vers_noeud;
+                        if (nouvelleDistance <dijkstra[etape][noeud.getSommet()])
+                        {
+                            dijkstra[etape][noeud.getSommet()] = nouvelleDistance;
+                            predecesseurCheminCourt.put(noeud,sommetProche);
+                        }
+                    }
+
+
+
+            }
+
+            for (int ligne = 0 ; ligne < nombreSommets; ligne++)
+            {
+                for(int sommet = 0; sommet < nombreSommets;sommet++)
+                {
+                    if (cc.contains(sommet)&& ligne>= cc.indexOf(sommet)&& ligne !=0 && ligne !=nombreSommets-1 )
+                    {
+                        System.out.print(". ,");
+                    }
+                    else {
+                        System.out.print(dijkstra[ligne][sommet] +" ,");
                     }
                 }
-
-                Noeud tampon_sommet = sommet_proche;
-
-                sommet = tampon_sommet.getSommet();
-                System.out.println("TEST : " + tampon_sommet.getSommet());
-                m.remove(tampon_sommet);
-
-
-                cc.put(tampon_sommet.getSommet(), tampon_sommet);
-                pi_etoile[tampon_sommet.getSommet()] = pi[tampon_sommet.getSommet()];
-
-                System.out.println("Taille de m" + m.size());
-
-
-                for (Noeud c : m)  // parcourt de l'ensemble M
-                    if (tampon_sommet.estPredecesseur(c) && graphe.getMatriceAdjacence()[c.getSommet()][tampon_sommet.getSommet()] == 1)
-                    {
-
-                        c.setDistance(nouvelle_distance);
-                        c.setSommetChemin(tampon_sommet.getSommet());
-                    }
+                System.out.println();
             }
 
-            System.out.println("Choisir un sommet : \n");
 
+            System.out.println("Choisir un sommet : ");
             int choix = kb.nextInt();
 
-            System.out.println("Vous avez choisi le sommet : " + choix + "\n");
+            Noeud sommet_choisi = new Noeud();
 
-            Noeud sommet_choisi = cc.get(choix);
+            for (Noeud j : graphe.getNoeuds())
+            {
+                if(j.getSommet() == choix)
+                {
+                    sommet_choisi = j.clone();
+                }
+            }
 
-            cheminLePlusCourt(initiale, sommet_choisi, cc);
+            System.out.println("Taille Map Predecesseur :" + predecesseurCheminCourt.size());
+
+            //cheminLePlusCourt(initiale, sommet_choisi, cc, predecesseurCheminCourt,graphe);
 
 
-            // tant que tab[sommet choisi cc]  =! tab [sommet initiale] return i = tab
 
 
         }
@@ -156,15 +165,20 @@ public class L3_D4_Main
         }
     }
 
+    public static ArrayList<Noeud> cloneList( ArrayList<Noeud> noeuds)
+    {
+        ArrayList<Noeud> clone = new ArrayList<>(noeuds.size());
+        for(Noeud item : noeuds) clone.add(item.clone());
+        return clone;
+    }
+
+    /*
 
     public static void test() throws FileNotFoundException
     {
-        Graphe test = new Graphe();
-
         try
         {
-            test.initialisationMatriceValeur();
-            test.initialisationMatriceAdjacence();
+            Graphe test = new Graphe();
 
             for (Noeud n : test.getNoeuds())
             {
@@ -177,6 +191,7 @@ public class L3_D4_Main
             System.out.println("Erreur");
         }
     }
+    */
 
     public static void test2() throws FileNotFoundException
     {
@@ -202,37 +217,34 @@ public class L3_D4_Main
 
 
 
-        cheminLePlusCourt(premier.getSommet(),quatre,cc);
+      //  cheminLePlusCourt(premier.getSommet(),quatre,cc);
     }
 
 
-    public static Noeud distanceLaPlusCourte(ArrayList<Noeud> m, int[][] matriceAdjacence, int sommet)
+    public static Noeud distanceLaPlusCourte(ArrayList<Noeud> m, Integer[][] dijkstra, int etape)
     {
         Noeud tampon_sommet = null;
         int tampon_valeur = Integer.MAX_VALUE;
 
         for (Noeud n : m)
         {
-            if (matriceAdjacence[sommet][n.getSommet()] == 1)
-            {
-                int noeudDistance = n.getDistance();
-                if (noeudDistance < tampon_valeur)
+                if ( dijkstra[etape][n.getSommet()]<tampon_valeur)
                 {
-                    tampon_valeur = noeudDistance;
+                    tampon_valeur = dijkstra[etape][n.getSommet()];
                     tampon_sommet = n;
                 }
-            }
+
 
         }
         return tampon_sommet;
     }
 
-    public static void cheminLePlusCourt(int initiale, Noeud sommet_choisi, Map<Integer, Noeud> cc) // faudra passer le graph aussi
+    public static void cheminLePlusCourt(int initiale, Noeud sommet_choisi, ArrayList<Integer> cc, Map<Noeud,Noeud> predecesseurCheminCourt, Graphe graphe)
     {
         //Map<Noeud, Noeud> chemin= new HashMap<>();
 
         ArrayList<Noeud> chemin = new ArrayList<>();
-        Map<Noeud,ArrayList> toutLesChemins = new HashMap<>();
+
         if (initiale == sommet_choisi.getSommet())
         {
             System.out.println("Le sommet choisi est le sommet initiale \n");
@@ -249,6 +261,7 @@ public class L3_D4_Main
             }
             */
 
+
             for (Noeud affichage : chemin)
             {
                 System.out.print(affichage.getSommet());
@@ -258,46 +271,51 @@ public class L3_D4_Main
         }
 
         Noeud a = null;
+        Noeud b = null;
 
         a = sommet_choisi.clone();
 
         System.out.println("Le sommet clone a pour nom : " + a.getSommet());
 
 
-        if (a.getSommetChemin() == initiale)
-        {
+        if (predecesseurCheminCourt.get(a).getSommet() == initiale) {
+            System.out.println("Le chemin le plus court est " + sommet_choisi.getDistance() + "," + initiale);
+
             //System.out.println("Le chemin le plus court est " + sommet_choisi + "," + initiale);
             //chemin.put(sommet_choisi,sommet_choisi);
             //chemin.put(cc.get(initiale),cc.get(initiale));
 
 
-            chemin.add(sommet_choisi);
-            chemin.add(cc.get(initiale));
-            System.out.println("Le chemin est : ");
 
-            /*
-            for (Map.Entry<Noeud, Noeud> entry : chemin.entrySet())
+            for (Noeud j : graphe.getNoeuds())
             {
-                Noeud cle = entry.getKey();
-                System.out.print(cle.getSommet());
-
-            */
-
-            for (Noeud affichage : chemin)
-            {
-                System.out.print(affichage.getSommet());
+                if(j.getSommet() == cc.get(0))
+                {
+                    b = j.clone();
+                }
             }
 
+            chemin.add(sommet_choisi);
+            chemin.add(b);
+
+            System.out.println("Le chemin est : ");
 
 
+            for (Noeud affichage : chemin) {
+                System.out.print(affichage.getSommet());
+            }
         }
+
+
+
+
 
         if (a.getSommet() != initiale) {
             while (a.getSommet() != initiale) {
                 System.out.println("Valeur mise dans la map de a :  " + a.getSommet());
                 //chemin.put(a, a);
                 chemin.add(a);
-                a = cc.get(a.getSommetChemin()).clone();
+                a = predecesseurCheminCourt.get(a).clone();
                 System.out.println("Nouvelle valeur de a : " + a.getSommet());
 
 
@@ -305,22 +323,23 @@ public class L3_D4_Main
 
             //chemin.put(cc.get(initiale), cc.get(initiale));
 
-            chemin.add(cc.get(initiale));
+            chemin.add(b);
 
             /*
             for (Map.Entry<Noeud, Noeud> entry : chemin.entrySet())
             {
                 Noeud cle = entry.getKey();
                 System.out.print(cle.getSommet());
-            }
-            */
+            }*/
+
+            Collections.reverse(chemin);
             System.out.println("Le chemin est : ");
             for (Noeud affichage : chemin)
             {
                 System.out.print(affichage.getSommet());
             }
 
-            toutLesChemins.put(sommet_choisi,chemin);
+            graphe.getToutLesChemins().put(sommet_choisi,chemin);
 
 
         }
@@ -329,6 +348,185 @@ public class L3_D4_Main
     public static Noeud predecesseur(Map<Integer, Noeud> cc, int pred)
     {
         return cc.get(pred);
+    }
+
+
+    public static void bellman(Graphe graphe)
+    {
+        //initialisation d'un graph sous la forme d'un tableau de transition
+
+
+        int nombreSommets= graphe.getNombreSommets();
+        int tableau_transitions[][]= new int[graphe.getNombreTransitions()][3];
+        int transition=0;
+        for (Noeud noeud : graphe.getNoeuds())
+        {
+            for (Map.Entry<Noeud, Integer> entry : noeud.getSuccesseurs().entrySet())
+            {
+                tableau_transitions[transition]= new int[]{noeud.getSommet(), entry.getKey().getSommet(), entry.getValue()};
+                transition++;
+            }
+        }
+
+
+        // prec - succ - valeur de transition
+        //int tableau_transitions[][] = { {0,1,5},{1,2,-10}, {2,0,3} };
+
+        //le nombre  de sommet est à récuperer en première ligne du txt
+
+
+        //le nombre de transition du graph
+        int nombreTransitions;
+        nombreTransitions = tableau_transitions.length;
+
+        /*
+            Tableau des k
+
+            Taille :
+            (en ligne) de k = 0 à k = nombreSommets - 1
+            (en colonne) tous les sommets, donc nombreSommets
+        */
+        int tableau_de_k[][] = new int[nombreSommets][nombreSommets];
+
+        /*
+            Tableau des predecesseurs
+
+            meme dimensions que le tableau des k
+            il permet de recuperer les prédecesseurs permettant de dresser le chemin le plus cours
+         */
+        int tableau_de_predecesseur[][] = new int[nombreSommets][nombreSommets];
+
+        // Le MAX_SIZE permet de remplacer le signe infini dans le tableau des k
+        int MAX_SIZE = 999;
+
+        // On initialise le tableau des k avec la variable MAX_SIZE (inifini)
+        for (int i = 0; i < nombreSommets; i++){
+            for (int n =0; n < nombreSommets; n++){
+                tableau_de_k[i][n] = MAX_SIZE;
+            }
+        }
+
+        //l'utilisateur choisit le sommet de départ
+        int sommet_depart;
+        sommet_depart = 0;
+
+        //initialisation de la colonne du sommet de départ
+        for(int j = 0; j < nombreSommets; j++)
+        {
+            tableau_de_k[j][sommet_depart]=0;
+            tableau_de_predecesseur[j][sommet_depart]=sommet_depart;
+        }
+
+        //Savoir si le graph est absorbant ou pas ?
+        int absorbant_ou_pas;
+        int plus_petite_transition = 0;
+
+        for (int recherche_absorbant_ou_pas = 0; recherche_absorbant_ou_pas < nombreTransitions; recherche_absorbant_ou_pas++){
+            plus_petite_transition = Math.min(plus_petite_transition,tableau_transitions[recherche_absorbant_ou_pas][2]);
+        }
+        if (plus_petite_transition < 0)
+            absorbant_ou_pas = 0;
+        else
+            absorbant_ou_pas = 1;
+
+        /*
+            initialisation des différentes variables
+         */
+        int prec = 0;
+        int succ = 0;
+        int prec_v2 = 0;
+        int succ_v2 = 0;
+        int value = 0;
+        int v = 0;
+        int suivant = 1;
+        int compteur = 0;
+
+        //Si le graph a un circuit absorbant
+        if (absorbant_ou_pas == 0){
+            for (int k = 1; k < nombreSommets; k++) {
+                for (int o = 0; o < nombreTransitions; o++){
+
+                    prec = tableau_transitions[o][0]; //on récup le prec grace au graph
+                    succ = tableau_transitions[o][1];
+                    value = tableau_transitions[o][2];
+
+                    prec_v2 = tableau_de_k[k-1][prec]; //on recup le poids pour le prec dans le tableau k
+                    succ_v2 = tableau_de_k[k-1][succ];
+
+                    v = Math.min(succ_v2, (prec_v2 + value)); //on cherche le min
+
+                    if ( v < tableau_de_k[k][succ]){
+                        tableau_de_k[k][succ] = v; // on modifie la valeur dans le tableau k pour avoir le plus petit chemin
+                        if (v != tableau_de_k[k-1][succ]) {
+                            tableau_de_predecesseur[k][succ] = prec;
+                        }
+                    }
+                }
+            }
+        }
+        else { //si le graph n'a pas de circuit absorbant
+            int k = 1;
+            while (suivant == 1) {
+                for (int o = 0; o < nombreTransitions; o++) {
+
+                    prec = tableau_transitions[o][0]; //on récup le prec grace au graph
+                    succ = tableau_transitions[o][1];
+                    value = tableau_transitions[o][2];
+
+                    prec_v2 = tableau_de_k[k - 1][prec]; //on recup le poids pour le prec dans le tableau k
+                    succ_v2 = tableau_de_k[k - 1][succ];
+
+                    v = Math.min(succ_v2, (prec_v2 + value)); //on cherche le min
+
+                    if (v < tableau_de_k[k][succ]) {
+                        tableau_de_k[k][succ] = v; // on modifie la valeur dans le tableau k pour avoir le plus petit chemin
+                        if (v != tableau_de_k[k - 1][succ]) {
+                            tableau_de_predecesseur[k][succ] = prec;
+                        }
+                    }
+                }
+
+                for (int m = 0; m < nombreSommets; m++){
+                    if (tableau_de_k[k-1][m] == tableau_de_k[k][m]){
+                        compteur ++;
+                    }
+                }
+                if (compteur == nombreSommets)
+                    suivant = 0;
+
+                compteur = 0;
+                k++;
+            }
+        }
+
+
+
+        /*
+        Affichage des deux tableaux combinés, tableau des k et prédécesseur
+         */
+        int a = 1;
+        int b;
+
+        while (a < nombreSommets)
+        {
+            b = 0;
+            while(b < nombreSommets)
+            {
+                if (tableau_de_k[a][b] > 900) {
+                    System.out.printf("%4s    |", "*");
+                }
+                else {
+                    if (tableau_de_predecesseur[a][b] == 0){
+                        tableau_de_predecesseur[a][b] = tableau_de_predecesseur[a-1][b];
+                    }
+                    System.out.printf("%3d (%d) |",tableau_de_k[a][b], tableau_de_predecesseur[a][b]);
+                }
+                b++;
+            }
+            System.out.println("");
+            a++;
+        }
+
     }
 
 
@@ -479,6 +677,97 @@ public class L3_D4_Main
 
         readMatrice.close();
         return matrice;
+    }
+
+    public static void menu()
+    {
+        Scanner kb = new Scanner(System.in);
+
+        int rep = 0;
+
+        do {
+            System.out.println("Projet Théorie des Graphes L3 Groupe D equipe 4 \n");
+
+
+            try {
+                String fichier = choixFichier();
+                Graphe graphe = new Graphe(fichier);
+                if (graphe.isArcsPositifs() == false)
+                {
+                    //appel Bellman
+                    bellman(graphe);
+                }
+                else
+                {
+                    System.out.println("Voulez-vous utiliser l'algorithme de Dijkstra (1) ou de Bellman (2) ? \n");
+                    int choix = 0;
+                    choix = kb.nextInt();
+
+                    while(choix < 1 || choix > 2)
+                    {
+                        System.out.println("Veuillez refaire votre choix (1 ou 2) : ");
+                        choix = kb.nextInt();
+                    }
+
+                    if (choix == 1)
+                    {
+                        dijkstra(graphe);
+                    }
+
+                    if (choix == 2)
+                    {
+                        bellman(graphe);
+                    }
+
+                }
+            }
+            catch (FileNotFoundException e)
+            {
+                System.out.println("Aucun fichier trouvé");
+            }
+
+
+            System.out.println("Voulez vous continuer (1) ou quitter ? (2)");
+
+            rep = inputWithOnlyInt();
+
+
+
+
+
+        } while(rep!=2);
+
+
+    }
+
+    /**
+     * Methode qui demande à la personne de choisir quelle graphe elle souhaite ouvrir parmi les 10 disponibles
+     * avec une saisie sécurisée contre les caracteres
+     * @return le fichier que l'on souhaite ouvrir
+     */
+    public static String choixFichier()
+    {
+        int saisie;
+        System.out.println("Choisissez un graphe entre 1 et 10 :");
+        do {
+            saisie = inputWithOnlyInt();
+        }while (saisie<1 || saisie>10);
+
+        return "L3-D4-"+saisie+".txt";
+    }
+
+    public static int inputWithOnlyInt()
+    {
+        Scanner kb = new Scanner(System.in);
+
+        System.out.print("-> ");
+        while (!kb.hasNextInt())  //si la selection est différente d'un entier on coninue de demander une saisie
+        {
+            System.out.print("Make a correct selection please\n-> ");
+            kb.next();
+        }
+
+        return kb.nextInt();
     }
 
 

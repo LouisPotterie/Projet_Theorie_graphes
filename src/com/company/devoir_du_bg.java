@@ -25,7 +25,7 @@ public class devoir_du_bg {
      * Methode permettant le choix du sommet de départ pour les algorithmes de dijkstra et/ou Bellman
      * @return le sommet de départ
      */
-    public int choixSommet()
+ /*   public int choixSommet()
     {
         int saisie;
         System.out.println("Choisissez le sommet de départ entre 0 et "+ graphe.getNombreSommets()+" :");
@@ -35,7 +35,7 @@ public class devoir_du_bg {
 
         return saisie;
     }
-
+*/
     /**
      * Methode qui s'assure que la saisie est bien un entier
      * @return un entier saisie

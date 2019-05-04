@@ -2,22 +2,64 @@ package com.company;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Parameter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Graphe {
 
+    private Map<Noeud,ArrayList> toutLesChemins = new HashMap<>();
+
+    public Map<Noeud, ArrayList> getToutLesChemins() {
+        return toutLesChemins;
+    }
+
+    public void setToutLesChemins(Map<Noeud, ArrayList> toutLesChemins) {
+        this.toutLesChemins = toutLesChemins;
+    }
+
+
+    private boolean arcsPositifs = true;
+
+    public boolean isArcsPositifs() {
+        return arcsPositifs;
+    }
+
+    public void setArcsPositifs(boolean arcsPositifs) {
+        this.arcsPositifs = arcsPositifs;
+    }
+
+
+
     private ArrayList<Noeud> noeuds;
 
-    private ArrayList<Noeud> bellmanNoeuds;
-    private ArrayList<Integer> bellmanLongueur;
-    private ArrayList<Integer> bellmanNombreIteration;
+    public int getNombreTransitions()
+    {
+        return nombreTransitions;
+    }
 
-    public Graphe()
+    private int nombreTransitions;
+
+    public int[][] getMatriceAdjacence()
+    {
+        return matriceAdjacence;
+    }
+
+    public int getNombreSommets()
+    {
+        return noeuds.size();
+    }
+
+    private int[][] matriceAdjacence;
+    private int[][] matriceValeurs;
+
+    public Graphe(String fichier) throws FileNotFoundException
     {
         noeuds = new ArrayList<>();
+        initialisationMatrices(fichier);
+        //initialisationMatrices();
     }
 
     public ArrayList<Noeud> getNoeuds() {
@@ -28,11 +70,13 @@ public class Graphe {
         this.noeuds = noeuds;
     }
 
-    void initialisationMatriceValeur() throws FileNotFoundException {
-        File fileMatrice = new File("L3-D4-2.txt");
+     void initialisationMatrices(String fichier) throws FileNotFoundException {
+        //File fileMatrice = new File("L3-D4-1.txt");
+
+        File fileMatrice = new File(fichier);
         Scanner readMatrice = new Scanner(fileMatrice);
 
-
+        ArrayList<Noeud> noeudsAdjascence = new ArrayList<>();
 
         int taille = readMatrice.nextInt();
         int succ;
@@ -43,72 +87,51 @@ public class Graphe {
 
         for (int i = 0; i < taille; i++) {
             this.noeuds.add(new Noeud(i));
+            noeudsAdjascence.add(new Noeud(i));
         }
-
-        while (readMatrice.hasNext()) {
-            pred = readMatrice.nextInt();
-            longueur = readMatrice.nextInt();
-            succ = readMatrice.nextInt();
-
-            this.noeuds.get(succ).addPredecesseurs(pred);//ajout du predecesseur
-            this.noeuds.get(pred).getSuccesseurs().put(noeuds.get(succ),longueur);// ajout du successeur et de la longueur de la liaison
-
-        }
-
-        readMatrice.close();
-    }
-
-    void initialisationMatriceAdjacence() throws FileNotFoundException {
-        File fileMatrice = new File("L3-D4-1.txt");
-        Scanner readMatrice = new Scanner(fileMatrice);
-
-
-        int taille = readMatrice.nextInt();
-        int succ;
-        int pred;
-        int longueur;
-
-        noeuds.clear();
-
-        for (int i = 0; i < taille; i++) {
-            this.noeuds.add(new Noeud(i));
-        }
-
+        nombreTransitions=0;
         while (readMatrice.hasNext()) {
             pred = readMatrice.nextInt();
             longueur = readMatrice.nextInt();// meme si la longeur n'est pas utilisée, il est préférable de la stocker pour éviter tout désagrément
+            if (longueur<0)
+            {
+                arcsPositifs = false;
+            }
             succ = readMatrice.nextInt();
-
+            nombreTransitions++;
+            noeudsAdjascence.get(succ).addPredecesseurs(pred);//ajout du predecesseur
+            noeudsAdjascence.get(pred).getSuccesseurs().put(noeudsAdjascence.get(succ),1);// ajout du successeur et dde la valeur 1
             this.noeuds.get(succ).addPredecesseurs(pred);//ajout du predecesseur
-            this.noeuds.get(pred).getSuccesseurs().put(noeuds.get(succ),1);// ajout du successeur et de la valeur 1
+            this.noeuds.get(pred).getSuccesseurs().put(noeuds.get(succ),longueur);// ajout du successeur et dde la valeur 1
         }
+
+        matriceValeurs = creationTableauAffichage(noeuds);
+        matriceAdjacence = creationTableauAffichage(noeudsAdjascence);
         readMatrice.close();
     }
 
-    int[][] creationTableauAffichage()
+    int[][] creationTableauAffichage(ArrayList<Noeud> noeuds2)
     {
-        int tableau[][] = new int [noeuds.size()][noeuds.size()];
+        int tableau[][] = new int [noeuds2.size()][noeuds2.size()];
 
-        for (int i = 0;i < noeuds.size();i++)
+        for (int i = 0;i < noeuds2.size();i++)
         {
-            for (int j = 0; j < noeuds.size();j++)
+            for (int j = 0; j < noeuds2.size();j++)
             {
-                if(noeuds.get(i).getSuccesseurs().get(noeuds.get(j))!= null)
+                if(noeuds2.get(i).getSuccesseurs().get(noeuds2.get(j))!= null)// à vérifier
                 {
-                    tableau[i][j] = noeuds.get(i).getSuccesseurs().get(noeuds.get(j));
+                    tableau[i][j] = noeuds2.get(i).getSuccesseurs().get(noeuds2.get(j));
                 }
             }
         }
         return tableau;
     }
 
-    void affichage() {
-
-        int matrice[][] = creationTableauAffichage();
-
+    public void affichageAdjascence() throws FileNotFoundException
+    {
         //affichage n°ligne
         System.out.print("suc ");
-        for (int cmpt1 = 0; cmpt1 < matrice.length; cmpt1++) {
+        for (int cmpt1 = 0; cmpt1 < matriceAdjacence.length; cmpt1++) {
             System.out.print(cmpt1 + " ");
             if (cmpt1 < 10) {
                 System.out.print(" ");
@@ -116,7 +139,7 @@ public class Graphe {
         }
         System.out.println();
         System.out.print("pre");
-        for (int cmpt2 = 0; cmpt2 < matrice.length; cmpt2++) {
+        for (int cmpt2 = 0; cmpt2 < matriceAdjacence.length; cmpt2++) {
             System.out.print("__");
             if (cmpt2 < 10) {
                 System.out.print("_");
@@ -125,125 +148,69 @@ public class Graphe {
         System.out.println();
 
         //affichage matrice
-        for (int i = 0; i < matrice.length; i++) {
+        for (int i = 0; i < matriceAdjacence.length; i++) {
             //affichage n°colonne
             System.out.print(i + " | ");
 
 
-            for (int j = 0; j < matrice.length; j++) {
+            for (int j = 0; j < matriceAdjacence.length; j++) {
 
-                System.out.print(matrice[i][j] + " ");
-                if (matrice[i][j] < 10) {
+                    System.out.print(matriceAdjacence[i][j] + " ");
+
+                if (matriceAdjacence[i][j] < 10) {
                     System.out.print(" ");
                 }
+
             }
             System.out.println();
         }
+
     }
 
-
-    public void bellman()
+    public void affichageValeurs() throws FileNotFoundException
     {
-        //ArrayList <HashMap> parcoursTotal = new ArrayList<>();
+        //affichage n°ligne
+        System.out.print("suc ");
+        for (int cmpt1 = 0; cmpt1 < matriceValeurs.length; cmpt1++) {
+            System.out.print(cmpt1 + " ");
+            if (cmpt1 < 10) {
+                System.out.print(" ");
+            }
+        }
+        System.out.println();
+        System.out.print("pre");
+        for (int cmpt2 = 0; cmpt2 < matriceValeurs.length; cmpt2++) {
+            System.out.print("__");
+            if (cmpt2 < 10) {
+                System.out.print("_");
+            }
+        }
+        System.out.println();
 
-        ArrayList<ArrayList<Noeud>> parcoursNoeuds = new ArrayList<>();
-        ArrayList<ArrayList<Integer>> parcoursLongueur = new ArrayList<>();
-        ArrayList<Noeud> Predecesseur = new ArrayList<>();
-
-        final int NOEUD_DEPART = 0; // a supprimer
-        int nombreIteration = 2;
-
-        for (int i = 0; i<nombreIteration; i++)
-        {
-            parcoursNoeuds.add(new ArrayList<>());
-            parcoursLongueur.add(new ArrayList<>());
-
-            parcoursNoeuds.get(i).add(noeuds.get(0));
-            parcoursLongueur.get(i).add(0);
+        //affichage matrice
+        for (int i = 0; i < matriceValeurs.length; i++) {
+            //affichage n°colonne
+            System.out.print(i + " | ");
 
 
-            for (int j = 0; j< noeuds.size();j++)
-            {
-
-                if (noeuds.get(i).getSuccesseurs().containsKey(noeuds.get(j)))
+            for (int j = 0; j < matriceValeurs.length; j++) {
+                if (matriceAdjacence[i][j]==1)
                 {
-                    if (i == 0)
-                    {
-                        parcoursNoeuds.get(i).add(noeuds.get(i));
-                        parcoursLongueur.get(i).add(noeuds.get(i).getSuccesseurs().get(noeuds.get(j)));
-                    }
-                    else
-                    {
-                        parcoursNoeuds.get(i).add(noeuds.get(i));
-                        parcoursLongueur.get(i).add(noeuds.get(i).getSuccesseurs().get(noeuds.get(j)) /*+Predecesseur*/);
-                    }
+                    System.out.print(matriceValeurs[i][j] + " ");
+
                 }
-            }
-        }
-        System.out.println("parcoursNoeuds : "+parcoursNoeuds);
-        System.out.println("parcoursLongueur : "+parcoursLongueur);
-    }
-
-    public void bellman2()
-    {
-        bellmanLongueur = new ArrayList<>();
-        bellmanNoeuds = new ArrayList<>();
-        bellmanNombreIteration = new ArrayList<>();
-
-        bellmanLongueur.add(0);
-        bellmanNoeuds.add(noeuds.get(0));
-        bellmanNombreIteration.add(1);
-
-        bellmanNombreIteration = new ArrayList<>();
-
-        bellmanIteration(0,noeuds.get(0),5 );
-
-        System.out.println(bellmanLongueur.size()+" "+bellmanNoeuds.size()+" "+bellmanNombreIteration.size());
-        for(int i = 0; i<bellmanNoeuds.size();i++)
-        {
-
-            System.out.println("noeuds : "+bellmanNoeuds.get(i)+ "   longueur : "+ bellmanLongueur.get(i)+"     nombre itération"+bellmanNombreIteration.get(i));
-
-        }
-
-        for (int i = 0; i<bellmanNombreIteration.size(); i++)
-        {
-            System.out.println("iteration : " + bellmanNombreIteration.get(i));
-
-            for (int j = 0; j<bellmanNoeuds.size(); j++)
-            {
-                System.out.println("noeuds  : " + bellmanNoeuds.get(j));
-
+                else
+                {
+                    System.out.print("-" + " ");
+                }
+                if (matriceValeurs[i][j] < 10) {
+                    System.out.print(" ");
+                }
 
             }
+            System.out.println();
         }
+
     }
-    public void bellmanIteration(int longueur, Noeud noeud, int nombreIteration)
-    {
-        if(nombreIteration <= 0)//condition si nbr iteration == 0
-        {
-            return;
-        }
-
-        for (int i = 0; i<noeuds.size(); i++)
-        {
-            if(noeud.getSuccesseurs().containsKey(noeuds.get(i)))
-            {
-                bellmanLongueur.add(longueur + noeud.getSuccesseurs().get(noeuds.get(i)));
-                bellmanNoeuds.add(noeuds.get(i));
-                bellmanNombreIteration.add(nombreIteration);
-
-                bellmanIteration(longueur + noeud.getSuccesseurs().get(noeuds.get(i)),noeuds.get(i),nombreIteration-1);
-
-            }
-        }
-
-        if(false)//condition si 2 lignes identiques
-        {
-            return;
-        }
-    }
-
-
 
 }
