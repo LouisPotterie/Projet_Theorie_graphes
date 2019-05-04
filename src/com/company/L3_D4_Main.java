@@ -246,6 +246,8 @@ public class L3_D4_Main
             {
                 ArrayList<Noeud> cle = entry.getValue();
 
+
+
                 System.out.print("Le chemin pour aller du sommet initiale (" + sommetDepart + ") à  " + entry.getKey().getSommet() + " de distance " + dijkstra[nombreSommets - 1][entry.getKey().getSommet()] + " est ");
                 enregistrement.print("Le chemin pour aller du sommet initiale (" + sommetDepart + ") à  " + entry.getKey().getSommet() + " de distance " + dijkstra[nombreSommets - 1][entry.getKey().getSommet()] + " est ");
                 for (Noeud n : cle)
@@ -547,26 +549,33 @@ public class L3_D4_Main
             a++;
         }
 
-        if (absorbant == 0)
-        {
+        if (absorbant == 0) {
             int w = MAX_SIZE;
             int p = MAX_SIZE;
             int longueur = 0;
 
-            for (int ii = 0; ii < nombreSommets; ii++)
-            {
+
+
+            for (int ii = 0; ii < nombreSommets; ii++){
                 p = ii;
-                System.out.println("Le chemin le plus court du sommet " + ii + " au sommet initial " + sommet_depart + " est : ");
+                System.out.println("Le chemin le plus court du sommet "+ii+" au sommet initial "+sommet_depart+" est : ");
                 w = MAX_SIZE;
-                while (w != sommet_depart)
-                {
-                    p = tableau_de_predecesseur[nombreSommets - 1][p];
-                    longueur += tableau_de_k[nombreSommets - 1][p];
-                    System.out.print(" " + p);
+                while (w != sommet_depart){
+                    if (tableau_de_predecesseur[nombreSommets-1][p] == 0)
+                        break;
+                    p = tableau_de_predecesseur[nombreSommets-1][p];
+                    longueur += tableau_de_k[nombreSommets-1][p];
+                    System.out.print(" " +p);
                     w = p;
                 }
-                longueur = tableau_de_k[nombreSommets - 1][ii];
-                System.out.println(" et de longueur : " + longueur);
+
+                longueur = tableau_de_k[nombreSommets-1][ii];
+                if (longueur == MAX_SIZE){
+                    System.out.println("infini");
+                }
+                else {
+                    System.out.println(" et de longueur : "+longueur);
+                }
                 System.out.println(" ");
                 longueur = 0;
             }
