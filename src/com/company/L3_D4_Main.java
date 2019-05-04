@@ -30,6 +30,7 @@ public class L3_D4_Main
     public static void dijkstra(Graphe graphe) throws FileNotFoundException
     {
         final String UNICODE_POINT = "\u2022";
+        final String UNICODE_INFINITY= "\u221E";
         ArrayList<Integer> cc = new ArrayList<>();
         Map<Noeud, Noeud> predecesseurCheminCourt = new HashMap<>();
         //Graphe graphe = new Graphe();
@@ -134,7 +135,7 @@ public class L3_D4_Main
                     }
                     if (dijkstra[ligne][sommet]== Integer.MAX_VALUE)
                     {
-                        System.out.print(" *, ");
+                        System.out.print(UNICODE_INFINITY+", ");
                     }
                     else
                     {
