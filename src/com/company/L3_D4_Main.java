@@ -22,33 +22,19 @@ public class L3_D4_Main
         final String UNICODE_INFINITY = "\u221E";
         ArrayList<Integer> cc = new ArrayList<>();
         Map<Noeud, Noeud> predecesseurCheminCourt = new HashMap<>();
-        //Graphe graphe = new Graphe();
         int nombreSommets = graphe.getNombreSommets();
         Integer[][] dijkstra = new Integer[nombreSommets][nombreSommets];
-
         //variables necessaires pour un affichage propre
         int espaceOccupe;
         int espacement;
-
-
-        //  System.out.println("L'algorithme de "+"a bien ete enregistre dans "+filename);
-        //enregistrement
-        String filename = "L3_D4_trace" + numFichier + "_" + sommetDepart + ".txt";
+        String filename = "L3-D4-trace" + numFichier + "_" + sommetDepart + ".txt";
         PrintWriter enregistrement = new PrintWriter(filename);
         try
         {
             enregistrement.println(filename);
-            enregistrement.println("Matrice d'adjacence:");
-            System.out.println("\n Matrice d'adjacence:");
-            graphe.affichageAdjascence(enregistrement);
-            enregistrement.println("\n\nMatrice des valeurs:");
-            System.out.println("\n Matrice des valeurs:");
-            graphe.affichageValeurs(enregistrement);
+            enregistrementEntete(enregistrement, graphe);
             ArrayList<Noeud> m = cloneList(graphe.getNoeuds());
-
             enregistrement.println("Le sommet choisi est :" + sommetDepart);
-
-
             Noeud i = m.get(sommetDepart);
             cc.add(sommetDepart); // Ajout du Noeud dans CC
             m.remove(i); // On retire le noeud de CC
@@ -107,11 +93,8 @@ public class L3_D4_Main
                         {
                             dijkstra[etape][noeud.getSommet()] = nouvelleDistance;
                             predecesseurCheminCourt.put(noeud, sommetProche);
-
                         }
                     }
-
-
             }
             //affichage
             System.out.println("Algorithme de Dijkstra:");
@@ -177,7 +160,7 @@ public class L3_D4_Main
 
                 espaceOccupe = 0;
                 espacement = 0;
-                for (int compteur = 0; compteur <= ligne; compteur++)
+                for (int compteur = 0; compteur < Math.min(ligne + 1, cc.size()); compteur++)
                 {
                     System.out.print(cc.get(compteur) + ";");
                     enregistrement.print(cc.get(compteur) + ";");
@@ -230,11 +213,7 @@ public class L3_D4_Main
             }
             System.out.println("|\n");
             enregistrement.println("|\n");
-
-
             Noeud sommet_choisi = new Noeud();
-
-
             for (Noeud j : graphe.getNoeuds())
             {
 
@@ -242,21 +221,28 @@ public class L3_D4_Main
                 cheminLePlusCourt(sommetDepart, sommet_choisi, cc, predecesseurCheminCourt, graphe);
             }
 
-            for (Map.Entry<Noeud, ArrayList> entry : graphe.getToutLesChemins().entrySet())
+            for (Noeud sommetArrivee : graphe.getNoeuds())
             {
-                ArrayList<Noeud> cle = entry.getValue();
-
-
-
-                System.out.print("Le chemin pour aller du sommet initiale (" + sommetDepart + ") à  " + entry.getKey().getSommet() + " de distance " + dijkstra[nombreSommets - 1][entry.getKey().getSommet()] + " est ");
-                enregistrement.print("Le chemin pour aller du sommet initiale (" + sommetDepart + ") à  " + entry.getKey().getSommet() + " de distance " + dijkstra[nombreSommets - 1][entry.getKey().getSommet()] + " est ");
-                for (Noeud n : cle)
+                ArrayList<Noeud> chemin = graphe.getToutLesChemins().get(sommetArrivee);
+                if (chemin!=null)
                 {
-                    System.out.print(n.getSommet());
-                    enregistrement.print(n.getSommet());
+                    System.out.print("Le chemin pour aller du sommet initiale (" + sommetDepart + ") à " + sommetArrivee.getSommet() + " de distance " + dijkstra[nombreSommets - 1][sommetArrivee.getSommet()] + " est ");
+                    enregistrement.print("Le chemin pour aller du sommet initiale (" + sommetDepart + ") à " +sommetArrivee.getSommet() + " de distance " + dijkstra[nombreSommets - 1][sommetArrivee.getSommet()] + " est ");
+                    for (Noeud n : chemin)
+                    {
+                        System.out.print(n.getSommet());
+                        enregistrement.print(n.getSommet());
+                    }
+                    System.out.println();
+                    enregistrement.println();
                 }
-                System.out.println();
-                enregistrement.println();
+                else
+                {
+                    System.out.println("Le chemin pour aller du sommet initiale (" + sommetDepart + ") à " + sommetArrivee.getSommet() + " est impossible.");
+                    enregistrement.println("Le chemin pour aller du sommet initiale (" + sommetDepart + ") à " +sommetArrivee.getSommet() + " est impossible.");
+
+                }
+
             }
         }
 
@@ -321,41 +307,25 @@ public class L3_D4_Main
         return tampon_sommet;
     }
 
-    public static void cheminLePlusCourt(int initiale, Noeud sommet_choisi, ArrayList<Integer> cc, Map<Noeud, Noeud> predecesseurCheminCourt, Graphe graphe)
+    public static void cheminLePlusCourt(int initiale, Noeud sommetArrivee, ArrayList<Integer> cc, Map<Noeud, Noeud> predecesseurCheminCourt, Graphe graphe)
     {
         //Map<Noeud, Noeud> chemin= new HashMap<>();
 
         ArrayList<Noeud> chemin = new ArrayList<>();
 
-
-        if (initiale == sommet_choisi.getSommet())
-        {
-
-            //chemin.put(sommet_choisi,sommet_choisi);
-            chemin.add(sommet_choisi);
-
-
-        }
-
         Noeud a = null;
         Noeud b = null;
-
-        a = sommet_choisi.clone();
-
-
-        if (a.getSommet() != initiale)
+        a = sommetArrivee.clone();
+        // Un sommet isolé ne possède pas de prédécesseurs, et n'est donc pas contenu dans les clés de la map
+        // Cela est aussi vrai pour le sommet initial
+        if (predecesseurCheminCourt.containsKey(a) || a.getSommet() == initiale)
         {
             while (a.getSommet() != initiale)
             {
-
                 //chemin.put(a, a);
                 chemin.add(a);
                 a = predecesseurCheminCourt.get(a).clone();
-
-
             }
-
-            //chemin.put(cc.get(initiale), cc.get(initiale));
 
             for (Noeud j : graphe.getNoeuds())
             {
@@ -366,21 +336,8 @@ public class L3_D4_Main
             }
 
             chemin.add(b);
-
-
             Collections.reverse(chemin);
-            /*
-            System.out.println("Le chemin est : ");
-            for (Noeud affichage : chemin)
-            {
-                System.out.print(affichage.getSommet());
-
-            }
-            */
-
-            graphe.getToutLesChemins().put(sommet_choisi, chemin);
-
-
+            graphe.getToutLesChemins().put(sommetArrivee, chemin);
         }
     }
 
@@ -392,8 +349,6 @@ public class L3_D4_Main
     public static void bellman(int numFichier, Graphe graphe, int sommet_depart)
     {
         //initialisation d'un graph sous la forme d'un tableau de transition
-
-
         int nombreSommets = graphe.getNombreSommets();
         int tableau_transitions[][] = new int[graphe.getNombreTransitions()][3];
         int transition = 0;
@@ -419,7 +374,6 @@ public class L3_D4_Main
 
         /*
             Tableau des k
-
             Taille :
             (en ligne) de k = 0 à k = nombreSommets - 1
             (en colonne) tous les sommets, donc nombreSommets
@@ -584,62 +538,20 @@ public class L3_D4_Main
     }
 
 
-    static void enregistrementTrace(Graphe graphe, int numGraphe, int sommetDepart, Integer[][] dijkstra) throws FileNotFoundException
+    static void enregistrementEntete(PrintWriter enregistrement, Graphe graphe) throws FileNotFoundException
     {
+        System.out.println("Nombre de sommets:" + graphe.getNombreSommets());
+        enregistrement.println("Nombre de sommets:" + graphe.getNombreSommets());
+        System.out.println("Nombre de transitions:" + graphe.getNombreTransitions());
+        enregistrement.println("Nombre de transitions:" + graphe.getNombreTransitions());
+        enregistrement.println("Matrice d'adjacence:");
+        System.out.println("\n Matrice d'adjacence:");
+        graphe.affichageAdjascence(enregistrement);
+        enregistrement.println("\n\nMatrice des valeurs:");
+        System.out.println("\n Matrice des valeurs:");
+        graphe.affichageValeurs(enregistrement);
 
     }
-
-    static void enregistrementMatrice(int[][] matrice, PrintWriter enregistrement)
-    {
-
-        int taille = matrice.length - 1;
-
-
-        //affichage n°ligne
-        enregistrement.print("suc ");
-        for (int cmpt1 = 0; cmpt1 < matrice.length; cmpt1++)
-        {
-            enregistrement.print(cmpt1 + " ");
-            if (cmpt1 < 10)
-            {
-                enregistrement.print(" ");
-            }
-        }
-        enregistrement.println();
-        enregistrement.print("pre");
-        for (int cmpt2 = 0; cmpt2 < matrice.length; cmpt2++)
-        {
-            enregistrement.print("__");
-            if (cmpt2 < 10)
-            {
-                enregistrement.print("_");
-            }
-        }
-        enregistrement.println();
-
-
-        //affichage matrice
-        for (int i = 0; i < matrice[taille].length; i++)
-        {
-            //affichage n°colonne
-            enregistrement.print(i + " | ");
-
-
-            for (int j = 0; j < matrice.length; j++)
-            {
-                enregistrement.print(matrice[i][j] + " ");
-                if (matrice[i][j] < 10)
-                {
-                    enregistrement.print(" ");
-                }
-            }
-            enregistrement.println();
-
-
-        }
-
-    }
-
 
     public static void menu()
     {
