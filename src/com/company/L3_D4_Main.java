@@ -72,7 +72,7 @@ public class L3_D4_Main
                 Noeud cle = entry.getKey();
                 cle.setDistance(entry.getValue());
                 dijkstra[0][cle.getSommet()] = (entry.getValue());
-                predecesseurCheminCourt.put(i, cle);
+                predecesseurCheminCourt.put(cle, i);
             }
 
             dijkstra[0][initiale] = 0;
@@ -209,6 +209,8 @@ public class L3_D4_Main
                 for (Noeud n : cle) {
                     System.out.print(n.getSommet());
                 }
+
+                System.out.println("\n");
 
             }
         }
