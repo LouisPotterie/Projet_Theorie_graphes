@@ -542,8 +542,6 @@ public class L3_D4_Main
                     enregistrement.println(" et de longueur : " + longueur);
                     System.out.println(" et de longueur : "+longueur);
                 }
-                enregistrement.println(" ");
-                System.out.println(" ");
                 longueur = 0;
             }
         }
