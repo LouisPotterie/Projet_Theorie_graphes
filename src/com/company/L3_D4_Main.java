@@ -198,7 +198,14 @@ public class L3_D4_Main
                     }
                     else
                     {
-                        System.out.print(dijkstra[ligne][sommet] + " | ");
+                        if (dijkstra[ligne][sommet]>=10)
+                        {
+                            System.out.print(dijkstra[ligne][sommet] + "| ");
+                        }
+                        else
+                        {
+                            System.out.print(dijkstra[ligne][sommet] + " | ");
+                        }
                     }
                 }
                 System.out.println();
