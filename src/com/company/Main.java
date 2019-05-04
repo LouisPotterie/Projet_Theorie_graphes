@@ -2,7 +2,7 @@ package com.company;
 
 import java.io.FileNotFoundException;
 import java.util.Map;
-
+/*
 public class Main {
 
     public static void main(String[] args) throws FileNotFoundException
@@ -29,7 +29,7 @@ public class Main {
 
         //le nombre  de sommet est à récuperer en première ligne du txt
 
-     
+
         //le nombre de transition du graph
         int nombreTransitions;
         nombreTransitions = tableau_transitions.length;
@@ -41,7 +41,7 @@ public class Main {
             (en ligne) de k = 0 à k = nombreSommets - 1
             (en colonne) tous les sommets, donc nombreSommets
         */
-        int tableau_de_k[][] = new int[nombreSommets][nombreSommets];
+    /*    int tableau_de_k[][] = new int[nombreSommets][nombreSommets];
 
         /*
             Tableau des predecesseurs
@@ -49,7 +49,7 @@ public class Main {
             meme dimensions que le tableau des k
             il permet de recuperer les prédecesseurs permettant de dresser le chemin le plus cours
          */
-        int tableau_de_predecesseur[][] = new int[nombreSommets][nombreSommets];
+     /*   int tableau_de_predecesseur[][] = new int[nombreSommets][nombreSommets];
 
         // Le MAX_SIZE permet de remplacer le signe infini dans le tableau des k
          int MAX_SIZE = 999;
@@ -87,7 +87,7 @@ public class Main {
         /*
             initialisation des différentes variables
          */
-        int prec = 0;
+     /*   int prec = 0;
         int succ = 0;
         int prec_v2 = 0;
         int succ_v2 = 0;
@@ -159,7 +159,7 @@ public class Main {
         /*
         Affichage des deux tableaux combinés, tableau des k et prédécesseur
          */
-        int a = 1;
+      /*  int a = 1;
         int b;
 
         while (a < nombreSommets)
@@ -184,3 +184,4 @@ public class Main {
 
     }
 }
+*/

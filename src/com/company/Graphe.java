@@ -21,6 +21,17 @@ public class Graphe {
     }
 
 
+    private boolean arcsPositifs = true;
+
+    public boolean isArcsPositifs() {
+        return arcsPositifs;
+    }
+
+    public void setArcsPositifs(boolean arcsPositifs) {
+        this.arcsPositifs = arcsPositifs;
+    }
+
+
 
     private ArrayList<Noeud> noeuds;
 
@@ -44,10 +55,11 @@ public class Graphe {
     private int[][] matriceAdjacence;
     private int[][] matriceValeurs;
 
-    public Graphe() throws FileNotFoundException
+    public Graphe(String fichier) throws FileNotFoundException
     {
         noeuds = new ArrayList<>();
-        initialisationMatrices();
+        initialisationMatrices(fichier);
+        //initialisationMatrices();
     }
 
     public ArrayList<Noeud> getNoeuds() {
@@ -58,8 +70,10 @@ public class Graphe {
         this.noeuds = noeuds;
     }
 
-    private void initialisationMatrices() throws FileNotFoundException {
-        File fileMatrice = new File("L3-D4-1.txt");
+     void initialisationMatrices(String fichier) throws FileNotFoundException {
+        //File fileMatrice = new File("L3-D4-1.txt");
+
+        File fileMatrice = new File(fichier);
         Scanner readMatrice = new Scanner(fileMatrice);
 
         ArrayList<Noeud> noeudsAdjascence = new ArrayList<>();
@@ -79,6 +93,10 @@ public class Graphe {
         while (readMatrice.hasNext()) {
             pred = readMatrice.nextInt();
             longueur = readMatrice.nextInt();// meme si la longeur n'est pas utilisée, il est préférable de la stocker pour éviter tout désagrément
+            if (longueur<0)
+            {
+                arcsPositifs = false;
+            }
             succ = readMatrice.nextInt();
             nombreTransitions++;
             noeudsAdjascence.get(succ).addPredecesseurs(pred);//ajout du predecesseur
