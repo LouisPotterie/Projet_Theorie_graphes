@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.regex.*;
 
 public class L3_D4_Main
 {
@@ -28,6 +29,7 @@ public class L3_D4_Main
     //
     public static void dijkstra(Graphe graphe) throws FileNotFoundException
     {
+        final String UNICODE_POINT = "\u2022";
         ArrayList<Integer> cc = new ArrayList<>();
         Map<Noeud, Noeud> predecesseurCheminCourt = new HashMap<>();
         //Graphe graphe = new Graphe();
@@ -82,8 +84,9 @@ public class L3_D4_Main
                 {
 
                     System.out.println(Arrays.toString(dijkstra[ligne]));
-                }*/
+                }
 
+                System.out.println("--");*/
 
                 Noeud sommetProche = distanceLaPlusCourte(m, dijkstra, etape - 1);
                 if (sommetProche != null)
@@ -114,6 +117,7 @@ public class L3_D4_Main
                         {
                             dijkstra[etape][noeud.getSommet()] = nouvelleDistance;
                             predecesseurCheminCourt.put(noeud, sommetProche);
+
                         }
                     }
 
@@ -122,25 +126,19 @@ public class L3_D4_Main
 
             for (int ligne = 0; ligne < nombreSommets; ligne++)
             {
-                for (int compteur = 0; compteur<ligne; compteur++)
-                {
-                    System.out.print(cc.get(compteur)+", ");
-                }
-                System.out.print(" ok|");
-
                 for (int sommet = 0; sommet < nombreSommets; sommet++)
                 {
                     if (cc.contains(sommet) && ligne >= cc.indexOf(sommet) && ligne != 0 && ligne != nombreSommets - 1)
                     {
-                        System.out.print("  .  |");
+                        System.out.print(UNICODE_POINT+", ");
                     }
-                    else if (dijkstra[ligne][sommet]!= Integer.MAX_VALUE)
+                    if (dijkstra[ligne][sommet]== Integer.MAX_VALUE)
                     {
-                        System.out.print("  "+dijkstra[ligne][sommet] + "  |");
+                        System.out.print(" *, ");
                     }
                     else
                     {
-                        System.out.print(" inf |");
+                        System.out.print(dijkstra[ligne][sommet] + ", ");
                     }
                 }
                 System.out.println();
