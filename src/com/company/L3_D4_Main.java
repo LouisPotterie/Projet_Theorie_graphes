@@ -27,7 +27,7 @@ public class L3_D4_Main
     }
 
     //
-    public static void dijkstra(Graphe graphe) throws FileNotFoundException
+    public static Integer[][] dijkstra(Graphe graphe) throws FileNotFoundException
     {
         final String UNICODE_POINT = "\u2022";
         final String UNICODE_INFINITY= "\u221E";
@@ -229,8 +229,6 @@ public class L3_D4_Main
                 }
             }
 
-            System.out.println("Taille Map Predecesseur :" + predecesseurCheminCourt.size());
-
             //cheminLePlusCourt(initiale, sommet_choisi, cc, predecesseurCheminCourt,graphe);
 
 
@@ -239,6 +237,7 @@ public class L3_D4_Main
         {
             System.out.println("Aucun fichier trouvé");
         }
+        return dijkstra;
     }
 
     public static ArrayList<Noeud> cloneList(ArrayList<Noeud> noeuds)
@@ -680,7 +679,8 @@ public class L3_D4_Main
 
             try
             {
-                String fichier = choixFichier();
+                int numFichier=choixFichier();
+                String fichier = "L3-D4-" + numFichier + ".txt";
                 Graphe graphe = new Graphe(fichier);
                 if (graphe.isArcsPositifs() == false)
                 {
@@ -700,7 +700,8 @@ public class L3_D4_Main
 
                     if (choix == 1)
                     {
-                        dijkstra(graphe);
+                        Integer[][] resultatDijkstra=dijkstra(graphe);
+                        enregistrementTrace(graphe,numFichier,1, resultatDijkstra);
                     }
 
                     if (choix == 2)
@@ -730,9 +731,9 @@ public class L3_D4_Main
      * Methode qui demande à la personne de choisir quelle graphe elle souhaite ouvrir parmi les 10 disponibles
      * avec une saisie sécurisée contre les caracteres
      *
-     * @return le fichier que l'on souhaite ouvrir
+     * @return le numéro du fichier que l'on souhaite ouvrir
      */
-    public static String choixFichier()
+    public static int choixFichier()
     {
         int saisie;
         System.out.println("Choisissez un graphe entre 1 et 10 :");
@@ -741,7 +742,7 @@ public class L3_D4_Main
             saisie = inputWithOnlyInt();
         } while (saisie < 1 || saisie > 10);
 
-        return "L3-D4-" + saisie + ".txt";
+        return saisie;
     }
 
     public static int inputWithOnlyInt()
