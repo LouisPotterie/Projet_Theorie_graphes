@@ -2,6 +2,7 @@ package com.company;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -155,88 +156,113 @@ public class Graphe {
         return tableau;
     }
 
-    public void affichageAdjascence() throws FileNotFoundException
+    public void affichageAdjascence(PrintWriter enregistrement) throws FileNotFoundException
     {
         //affichage n°ligne
         System.out.print("suc ");
+        enregistrement.print("suc ");
         for (int cmpt1 = 0; cmpt1 < matriceAdjacence.length; cmpt1++) {
+            enregistrement.print(cmpt1 + " ");
             System.out.print(cmpt1 + " ");
             if (cmpt1 < 10) {
                 System.out.print(" ");
+                enregistrement.print(" ");
             }
         }
         System.out.println();
+        enregistrement.println();
         System.out.print("pre");
+        enregistrement.print("pre");
         for (int cmpt2 = 0; cmpt2 < matriceAdjacence.length; cmpt2++) {
+            enregistrement.print("__");
             System.out.print("__");
             if (cmpt2 < 10) {
                 System.out.print("_");
+                enregistrement.print("_");
             }
         }
         System.out.println();
+        enregistrement.println();
 
         //affichage matrice
         for (int i = 0; i < matriceAdjacence.length; i++) {
             //affichage n°colonne
             System.out.print(i + " | ");
+            enregistrement.print(i + " | ");
 
 
             for (int j = 0; j < matriceAdjacence.length; j++) {
 
                     System.out.print(matriceAdjacence[i][j] + " ");
+                    enregistrement.print(matriceAdjacence[i][j] + " ");
 
                 if (matriceAdjacence[i][j] < 10) {
                     System.out.print(" ");
+                    enregistrement.print(" ");
                 }
 
             }
             System.out.println();
+            enregistrement.println("\n");
         }
 
     }
 
-    public void affichageValeurs() throws FileNotFoundException
+    public void affichageValeurs(PrintWriter enregistrement) throws FileNotFoundException
     {
         //affichage n°ligne
         System.out.print("suc ");
+        enregistrement.print("suc ");
         for (int cmpt1 = 0; cmpt1 < matriceValeurs.length; cmpt1++) {
             System.out.print(cmpt1 + " ");
+            enregistrement.print(cmpt1 + " ");
             if (cmpt1 < 10) {
                 System.out.print(" ");
+                enregistrement.print(" ");
             }
         }
         System.out.println();
+        enregistrement.println();
         System.out.print("pre");
+        enregistrement.print("pre");
         for (int cmpt2 = 0; cmpt2 < matriceValeurs.length; cmpt2++) {
             System.out.print("__");
+            enregistrement.print("__");
             if (cmpt2 < 10) {
                 System.out.print("_");
+                enregistrement.print("_");
             }
         }
         System.out.println();
+        enregistrement.println();
 
         //affichage matrice
         for (int i = 0; i < matriceValeurs.length; i++) {
             //affichage n°colonne
             System.out.print(i + " | ");
+            enregistrement.print(i + " | ");
 
 
             for (int j = 0; j < matriceValeurs.length; j++) {
                 if (matriceAdjacence[i][j]==1)
                 {
                     System.out.print(matriceValeurs[i][j] + " ");
+                    enregistrement.print(matriceValeurs[i][j] + " ");
 
                 }
                 else
                 {
                     System.out.print("-" + " ");
+                    enregistrement.print("-" + " ");
                 }
                 if (matriceValeurs[i][j] < 10) {
                     System.out.print(" ");
+                    enregistrement.print(" ");
                 }
 
             }
             System.out.println();
+            enregistrement.println("\n");
         }
 
     }
