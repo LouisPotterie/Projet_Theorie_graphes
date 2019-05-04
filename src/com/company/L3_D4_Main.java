@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.regex.*;
 
 public class L3_D4_Main
 {
@@ -26,15 +27,20 @@ public class L3_D4_Main
     }
 
     //
-    public static void dijkstra(Graphe graphe) throws FileNotFoundException
-    {
+    public static void dijkstra(Graphe graphe) throws FileNotFoundException {
+        final String UNICODE_POINT = "\u2022";
+        final String UNICODE_INFINITY = "\u221E";
         ArrayList<Integer> cc = new ArrayList<>();
         Map<Noeud, Noeud> predecesseurCheminCourt = new HashMap<>();
         //Graphe graphe = new Graphe();
         int nombreSommets = graphe.getNombreSommets();
         Integer[][] dijkstra = new Integer[nombreSommets][nombreSommets];
-        try
-        {
+
+        //variables necessaires pour un affichage propre
+        int espaceOccupe;
+        int espacement;
+
+        try {
             graphe.affichageAdjascence();
             graphe.affichageValeurs();
             ArrayList<Noeud> m = cloneList(graphe.getNoeuds());
@@ -53,10 +59,8 @@ public class L3_D4_Main
 
 
             //tout initialiser à l'infini
-            for (int ligne = 0; ligne < nombreSommets; ligne++)
-            {
-                for (int colonne = 0; colonne < nombreSommets; colonne++)
-                {
+            for (int ligne = 0; ligne < nombreSommets; ligne++) {
+                for (int colonne = 0; colonne < nombreSommets; colonne++) {
                     dijkstra[ligne][colonne] = Integer.MAX_VALUE;
 
                 }
@@ -64,20 +68,18 @@ public class L3_D4_Main
             }
 
 
-            for (Map.Entry<Noeud, Integer> entry : i.getSuccesseurs().entrySet())
-            {
+            for (Map.Entry<Noeud, Integer> entry : i.getSuccesseurs().entrySet()) {
                 Noeud cle = entry.getKey();
                 cle.setDistance(entry.getValue());
                 dijkstra[0][cle.getSommet()] = (entry.getValue());
-                predecesseurCheminCourt.put(cle, i);
+                predecesseurCheminCourt.put(i, cle);
             }
 
             dijkstra[0][initiale] = 0;
 
 
-            for (int etape = 1; etape < nombreSommets; etape++)
-            {
-               dijkstra[etape] = dijkstra[etape - 1].clone();
+            for (int etape = 1; etape < nombreSommets; etape++) {
+                dijkstra[etape] = dijkstra[etape - 1].clone();
                /* for (int ligne = 0; ligne < nombreSommets; ligne++)
                 {
 
@@ -86,32 +88,26 @@ public class L3_D4_Main
 
 
                 Noeud sommetProche = distanceLaPlusCourte(m, dijkstra, etape - 1);
-                if (sommetProche != null)
-                {
+                if (sommetProche != null) {
                     m.remove(sommetProche);
                     cc.add(sommetProche.getSommet());
-                } else
-                {
+                } else {
                     continue;
                 }
 
 //                sommetProche.setDistance(sommetProche.getDistance());
 
                 for (Noeud noeud : m)  // parcourt de l'ensemble M
-                    if (sommetProche.estPredecesseur(noeud) && graphe.getMatriceAdjacence()[sommetProche.getSommet()][noeud.getSommet()] == 1)
-                    {
+                    if (sommetProche.estPredecesseur(noeud) && graphe.getMatriceAdjacence()[sommetProche.getSommet()][noeud.getSommet()] == 1) {
                         int distance_sommetproche_vers_noeud = sommetProche.getSuccesseurs().get(noeud);
                         int nouvelleDistance;
                         //Vérifier qu'à la ligne d'avant, le pi[sommetProche] n'est pas à égal à l'infini, sinon overflow et nouvelleDistance deviendrait négatif
-                        if (dijkstra[etape][sommetProche.getSommet()] != Integer.MAX_VALUE)
-                        {
+                        if (dijkstra[etape][sommetProche.getSommet()] != Integer.MAX_VALUE) {
                             nouvelleDistance = dijkstra[etape][sommetProche.getSommet()] + distance_sommetproche_vers_noeud;
-                        } else
-                        {
+                        } else {
                             nouvelleDistance = Integer.MAX_VALUE;
                         }
-                        if (nouvelleDistance < dijkstra[etape][noeud.getSommet()])
-                        {
+                        if (nouvelleDistance < dijkstra[etape][noeud.getSommet()]) {
                             dijkstra[etape][noeud.getSommet()] = nouvelleDistance;
                             predecesseurCheminCourt.put(noeud, sommetProche);
 
@@ -120,21 +116,75 @@ public class L3_D4_Main
 
 
             }
+            //affichage
+            for (int compteur = 0; compteur < nombreSommets; compteur++) {
+                System.out.print("__");
+            }
+            for (int compteur = 0; compteur < nombreSommets; compteur++) {
+                System.out.print("____");
+            }
+            System.out.print("\nsommets ");
+            for (int compteur = 4; compteur < nombreSommets; compteur++) {
+                System.out.print("  ");
+            }
+            for (int compteur = 0; compteur < nombreSommets; compteur++) {
+                System.out.print("|   ");
+            }
+            System.out.println("|");
+            System.out.print("cc");
+            for (int compteur = 1; compteur < nombreSommets; compteur++) {
+                System.out.print("  ");
+            }
+            System.out.print("|");
+            for (int compteur = 0; compteur < nombreSommets; compteur++) {
+                System.out.print(" " + compteur + " |");
+            }
+            System.out.println();
+            for (int compteur = 0; compteur < nombreSommets; compteur++) {
+                System.out.print("__");
+            }
+            for (int compteur = 0; compteur < nombreSommets; compteur++) {
+                System.out.print("|___");
+            }
+            System.out.println("|");
 
-            for (int ligne = 0; ligne < nombreSommets; ligne++)
-            {
-                for (int sommet = 0; sommet < nombreSommets; sommet++)
-                {
-                    if (cc.contains(sommet) && ligne >= cc.indexOf(sommet) && ligne != 0 && ligne != nombreSommets - 1)
-                    {
-                        System.out.print(". ,");
-                    } else
-                    {
-                        System.out.print(dijkstra[ligne][sommet] + " ,");
+
+            for (int ligne = 0; ligne < nombreSommets; ligne++) {
+
+                espaceOccupe = 0;
+                espacement = 0;
+                for (int compteur = 0; compteur <= ligne; compteur++) {
+                    System.out.print(cc.get(compteur) + ";");
+                    espaceOccupe++;
+                }
+                while (espaceOccupe + espacement < nombreSommets) {
+                    System.out.print("  ");
+                    espacement++;
+                }
+
+                System.out.print("| ");
+                for (int sommet = 0; sommet < nombreSommets; sommet++) {
+                    if (cc.contains(sommet) && ligne >= cc.indexOf(sommet) && ligne != 0 && ligne != nombreSommets - 1) {
+                        System.out.print(". | ");
+                    } else if (dijkstra[ligne][sommet] == Integer.MAX_VALUE) {
+                        System.out.print(UNICODE_INFINITY + " | ");
+                    } else {
+                        if (dijkstra[ligne][sommet] >= 10) {
+                            System.out.print(dijkstra[ligne][sommet] + "| ");
+                        } else {
+                            System.out.print(dijkstra[ligne][sommet] + " | ");
+                        }
                     }
                 }
                 System.out.println();
             }
+            for (int compteur = 0; compteur < nombreSommets; compteur++) {
+                System.out.print("__");
+            }
+            for (int compteur = 0; compteur < nombreSommets; compteur++) {
+                System.out.print("|___");
+            }
+            System.out.println("|\n");
 
             /*
             System.out.println("Choisir un sommet : ");
@@ -143,38 +193,32 @@ public class L3_D4_Main
             Noeud sommet_choisi = new Noeud();
 
 
+            for (Noeud j : graphe.getNoeuds()) {
 
-            for (Noeud j : graphe.getNoeuds())
-            {
-
-                    sommet_choisi = j.clone();
-                    cheminLePlusCourt(initiale, sommet_choisi, cc, predecesseurCheminCourt,graphe);
+                sommet_choisi = j.clone();
+                cheminLePlusCourt(initiale, sommet_choisi, cc, predecesseurCheminCourt, graphe);
 
             }
 
 
-            for (Map.Entry<Noeud, ArrayList> entry : graphe.getToutLesChemins().entrySet())
-            {
+            for (Map.Entry<Noeud, ArrayList> entry : graphe.getToutLesChemins().entrySet()) {
                 ArrayList<Noeud> cle = entry.getValue();
 
-                System.out.println("Le chemin pour aller du sommet initiale ("+ initiale +") à  " + entry.getKey().getSommet() + " de distance " + dijkstra[nombreSommets-1][entry.getKey().getSommet()]+ " est " );
+                System.out.println("Le chemin pour aller du sommet initiale (" + initiale + ") à  " + entry.getKey().getSommet() + " de distance " + dijkstra[nombreSommets - 1][entry.getKey().getSommet()] + " est ");
 
-                for (Noeud n : cle)
-                {
+                for (Noeud n : cle) {
                     System.out.print(n.getSommet());
                 }
 
-                System.out.println("\n");
+            }
+        }
+
+        catch(FileNotFoundException e)
+            {
+                System.out.println("Aucun fichier trouvé");
             }
 
 
-
-
-        }
-        catch (FileNotFoundException e)
-        {
-            System.out.println("Aucun fichier trouvé");
-        }
     }
 
     public static ArrayList<Noeud> cloneList(ArrayList<Noeud> noeuds)
@@ -308,7 +352,6 @@ public class L3_D4_Main
             }
             */
 
-            System.out.println("\n");
             graphe.getToutLesChemins().put(sommet_choisi, chemin);
 
 
@@ -367,7 +410,7 @@ public class L3_D4_Main
         int tableau_de_predecesseur[][] = new int[nombreSommets][nombreSommets];
 
         // Le MAX_SIZE permet de remplacer le signe infini dans le tableau des k
-        int MAX_SIZE = 999;
+        int MAX_SIZE = Integer.MAX_VALUE;
 
         // On initialise le tableau des k avec la variable MAX_SIZE (inifini)
         for (int i = 0; i < nombreSommets; i++)
@@ -512,16 +555,26 @@ public class L3_D4_Main
         }
 
     }
-
-
-    static void enregistrementMatrice(int[][] matrice) throws FileNotFoundException
+    static void enregistrementTrace(Graphe graphe, int numGraphe, int sommetDepart, Integer[][] dijkstra)throws FileNotFoundException
     {
-        final int NUMERO_GRAPHE = 1;
-        final int SOMMET_DEPART = 1;
+        String filename= "L3-D4-trace"+numGraphe+"_"+sommetDepart+".txt";
+        PrintWriter enregistrement = new PrintWriter(filename);
+        enregistrement.println(filename+"\nMatrice d'adjacence:");
+        enregistrementMatrice(graphe.getMatriceAdjacence(), enregistrement);
+        enregistrement.println("\nMatrice des valeurs:");
+        enregistrementMatrice(graphe.getMatriceValeurs(), enregistrement);
+       // enregistrementMatrice(dijkstra, PrintWriter enregistrement);
+        enregistrement.close();
+
+        System.out.println("L'algorithme de "+"a bien ete enregistre dans "+filename);
+    }
+
+    static void enregistrementMatrice(int[][] matrice, PrintWriter enregistrement)
+    {
 
         int taille = matrice.length - 1;
 
-        PrintWriter enregistrement = new PrintWriter("L3-D4-trace" + NUMERO_GRAPHE + "_" + SOMMET_DEPART + ".txt");
+
 
         //affichage n°ligne
         enregistrement.print("suc ");
@@ -565,7 +618,7 @@ public class L3_D4_Main
 
 
         }
-        enregistrement.close();
+
     }
 
 

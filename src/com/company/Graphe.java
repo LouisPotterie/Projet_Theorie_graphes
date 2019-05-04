@@ -55,7 +55,14 @@ public class Graphe {
     }
 
     private int[][] matriceAdjacence;
+
+    public int[][] getMatriceValeurs()
+    {
+        return matriceValeurs;
+    }
+
     private int[][] matriceValeurs;
+
 
     public Graphe(String fichier) throws FileNotFoundException
     {
