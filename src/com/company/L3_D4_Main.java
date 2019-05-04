@@ -36,6 +36,11 @@ public class L3_D4_Main
         //Graphe graphe = new Graphe();
         int nombreSommets = graphe.getNombreSommets();
         Integer[][] dijkstra = new Integer[nombreSommets][nombreSommets];
+
+        //variables necessaires pour un affichage propre
+        int espaceOccupe;
+        int espacement;
+
         try
         {
             graphe.affichageAdjascence();
@@ -124,26 +129,89 @@ public class L3_D4_Main
 
 
             }
+            //affichage
+            for(int compteur = 0; compteur<nombreSommets; compteur++)
+            {
+                System.out.print("__");
+            }
+            for(int compteur = 0; compteur<nombreSommets; compteur++)
+            {
+                System.out.print("____");
+            }
+            System.out.print("\nsommets ");
+            for (int compteur = 4; compteur<nombreSommets;compteur++)
+            {
+                System.out.print("  ");
+            }
+            for (int compteur= 0; compteur<nombreSommets;compteur++ )
+            {
+                System.out.print("|   ");
+            }
+            System.out.println("|");
+            System.out.print("cc");
+            for(int compteur = 1; compteur<nombreSommets; compteur++)
+            {
+                System.out.print("  ");
+            }
+            System.out.print("|");
+            for (int compteur = 0; compteur<nombreSommets;compteur++)
+            {
+                System.out.print(" "+compteur+" |");
+            }
+            System.out.println();
+            for(int compteur = 0; compteur<nombreSommets; compteur++)
+            {
+                System.out.print("__");
+            }
+            for(int compteur = 0; compteur<nombreSommets; compteur++)
+            {
+                System.out.print("|___");
+            }
+            System.out.println("|");
 
             for (int ligne = 0; ligne < nombreSommets; ligne++)
             {
+
+                espaceOccupe = 0;
+                espacement = 0;
+                for (int compteur = 0; compteur<=ligne; compteur++)
+                {
+                    System.out.print(cc.get(compteur)+";");
+                    espaceOccupe++;
+                }
+                while (espaceOccupe+espacement<nombreSommets)
+                {
+                    System.out.print("  ");
+                    espacement++;
+                }
+
+                System.out.print("| ");
                 for (int sommet = 0; sommet < nombreSommets; sommet++)
                 {
                     if (cc.contains(sommet) && ligne >= cc.indexOf(sommet) && ligne != 0 && ligne != nombreSommets - 1)
                     {
-                        System.out.print(UNICODE_POINT+", ");
+                        System.out.print(". | ");
                     }
                     else if (dijkstra[ligne][sommet]== Integer.MAX_VALUE)
                     {
-                        System.out.print(UNICODE_INFINITY+", ");
+                        System.out.print(UNICODE_INFINITY+" | ");
                     }
                     else
                     {
-                        System.out.print(dijkstra[ligne][sommet] + ", ");
+                        System.out.print(dijkstra[ligne][sommet] + " | ");
                     }
                 }
                 System.out.println();
             }
+            for(int compteur = 0; compteur<nombreSommets; compteur++)
+            {
+                System.out.print("__");
+            }
+            for(int compteur = 0; compteur<nombreSommets; compteur++)
+            {
+                System.out.print("|___");
+            }
+            System.out.println("|\n");
 
 
             System.out.println("Choisir un sommet : ");
