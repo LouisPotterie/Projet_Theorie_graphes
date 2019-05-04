@@ -12,24 +12,19 @@ public class L3_D4_Main
     public static void main(String[] args) throws FileNotFoundException
     {
 
-        System.out.println("Hello World!");
 
-        int[][] matrice = creationMatrice();
+//        int[][] matrice = creationMatrice();
 
-        System.out.println("\n\n");
+  //      enregistrementMatrice(matrice);
 
-        int[][] matriceValeur = creationMatriceValeur();
+        dijkstra();
 
-        enregistrementMatrice(matrice);
-
-        djistra();
-
-        //test2();
+        //test();
 
     }
 
-
-    public static void djistra() throws FileNotFoundException
+    //
+    public static void dijkstra() throws FileNotFoundException
     {
         ArrayList<Integer>  cc = new ArrayList<>();
         Map<Noeud, Noeud> predecesseurCheminCourt = new HashMap<>();
@@ -38,7 +33,7 @@ public class L3_D4_Main
         Integer[][] dijkstra = new Integer[nombreSommets][nombreSommets];
         try
         {
-            graphe.initialisationMatriceValeur();
+            graphe.affichageAdjascence();
             graphe.affichageValeurs();
             ArrayList<Noeud> m = cloneList(graphe.getNoeuds());
 
@@ -88,7 +83,6 @@ public class L3_D4_Main
                 System.out.println("--");
 
                 Noeud sommetProche= distanceLaPlusCourte(m, dijkstra, etape-1);
-                m.remove(sommetProche);
                 if (sommetProche!=null)
                 {
                     m.remove(sommetProche);
@@ -98,7 +92,7 @@ public class L3_D4_Main
                 {
                     continue;
                 }
-                cc.add(sommetProche.getSommet());
+
 //                sommetProche.setDistance(sommetProche.getDistance());
 
                 for (Noeud noeud : m)  // parcourt de l'ensemble M
@@ -121,8 +115,6 @@ public class L3_D4_Main
                             predecesseurCheminCourt.put(noeud,sommetProche);
                         }
                     }
-
-
 
 
 
@@ -181,12 +173,9 @@ public class L3_D4_Main
 
     public static void test() throws FileNotFoundException
     {
-        Graphe test = new Graphe();
-
         try
         {
-            test.initialisationMatriceValeur();
-            test.initialisationMatriceAdjacence();
+            Graphe test = new Graphe();
 
             for (Noeud n : test.getNoeuds())
             {
