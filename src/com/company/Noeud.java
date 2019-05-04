@@ -89,4 +89,15 @@ public class Noeud implements Cloneable {
     public Map<Noeud, Integer> getSuccesseurs() {
         return successeurs;
     }
+
+    public ArrayList<Integer> getPredecesseurs() {
+        return predecesseurs;
+    }
+
+    @Override
+    public String toString() {
+        return "Noeud{" +
+                "sommet=" + sommet +
+                '}';
+    }
 }
