@@ -520,15 +520,16 @@ public class L3_D4_Main
 
             for (int ii = 0; ii < nombreSommets; ii++){
                 p = ii;
-                System.out.println("Le chemin le plus court du sommet "+ii+" au sommet initial "+sommet_depart+" est : ");
-                System.out.print(ii);
+                enregistrement.print("Le chemin le plus court du sommet " + ii + " au sommet initial " + sommet_depart + " est : ");
+                System.out.print("Le chemin le plus court du sommet " + ii + " au sommet initial " + sommet_depart + " est : ");
                 w = MAX_SIZE;
                 while (w != sommet_depart){
                     if (tableau_de_predecesseur[nombreSommets-1][p] == 0)
                         break;
                     p = tableau_de_predecesseur[nombreSommets-1][p];
                     longueur += tableau_de_k[nombreSommets-1][p];
-                    System.out.print(" " +p);
+                    enregistrement.print(p);
+                    System.out.print(p);
                     w = p;
                 }
                 System.out.print(" "+sommet_depart);
@@ -537,6 +538,7 @@ public class L3_D4_Main
                     System.out.println("infini");
                 }
                 else {
+                    enregistrement.println(" et de longueur : " + longueur);
                     System.out.println(" et de longueur : "+longueur);
                 }
                 System.out.println(" ");
