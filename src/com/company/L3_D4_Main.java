@@ -133,7 +133,7 @@ public class L3_D4_Main
                     {
                         System.out.print(UNICODE_POINT+", ");
                     }
-                    if (dijkstra[ligne][sommet]== Integer.MAX_VALUE)
+                    else if (dijkstra[ligne][sommet]== Integer.MAX_VALUE)
                     {
                         System.out.print(UNICODE_INFINITY+", ");
                     }
