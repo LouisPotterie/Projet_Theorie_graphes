@@ -77,7 +77,7 @@ public class L3_D4_Main
                 Noeud cle = entry.getKey();
                 cle.setDistance(entry.getValue());
                 dijkstra[0][cle.getSommet()] = (entry.getValue());
-                predecesseurCheminCourt.put(i, cle);
+                predecesseurCheminCourt.put(cle, i);
             }
 
             dijkstra[0][initiale] = 0;
@@ -86,7 +86,8 @@ public class L3_D4_Main
             for (int etape = 1; etape < nombreSommets; etape++)
             {
                dijkstra[etape] = dijkstra[etape - 1].clone();
-               /* for (int ligne = 0; ligne < nombreSommets; ligne++)
+               /* Vérification pour chaque étape de dijkstra
+               for (int ligne = 0; ligne < nombreSommets; ligne++)
                 {
 
                     System.out.println(Arrays.toString(dijkstra[ligne]));
@@ -169,6 +170,7 @@ public class L3_D4_Main
             }
             System.out.println("|");
 
+
             for (int ligne = 0; ligne < nombreSommets; ligne++)
             {
 
@@ -192,7 +194,7 @@ public class L3_D4_Main
                     {
                         System.out.print(". | ");
                     }
-                    else if (dijkstra[ligne][sommet]== Integer.MAX_VALUE)
+                    else    if (dijkstra[ligne][sommet]== Integer.MAX_VALUE)
                     {
                         System.out.print(UNICODE_INFINITY+" | ");
                     }
@@ -453,7 +455,7 @@ public class L3_D4_Main
         int tableau_de_predecesseur[][] = new int[nombreSommets][nombreSommets];
 
         // Le MAX_SIZE permet de remplacer le signe infini dans le tableau des k
-        int MAX_SIZE = 999;
+        int MAX_SIZE = Integer.MAX_VALUE;
 
         // On initialise le tableau des k avec la variable MAX_SIZE (inifini)
         for (int i = 0; i < nombreSommets; i++)
@@ -598,16 +600,26 @@ public class L3_D4_Main
         }
 
     }
-
-
-    static void enregistrementMatrice(int[][] matrice) throws FileNotFoundException
+    static void enregistrementTrace(Graphe graphe, int numGraphe, int sommetDepart, Integer[][] dijkstra)throws FileNotFoundException
     {
-        final int NUMERO_GRAPHE = 1;
-        final int SOMMET_DEPART = 1;
+        String filename= "L3-D4-trace"+numGraphe+"_"+sommetDepart+".txt";
+        PrintWriter enregistrement = new PrintWriter(filename);
+        enregistrement.println(filename+"\nMatrice d'adjacence:");
+        enregistrementMatrice(graphe.getMatriceAdjacence(), enregistrement);
+        enregistrement.println("\nMatrice des valeurs:");
+        enregistrementMatrice(graphe.getMatriceValeurs(), enregistrement);
+       // enregistrementMatrice(dijkstra, PrintWriter enregistrement);
+        enregistrement.close();
+
+        System.out.println("L'algorithme de "+"a bien ete enregistre dans "+filename);
+    }
+
+    static void enregistrementMatrice(int[][] matrice, PrintWriter enregistrement)
+    {
 
         int taille = matrice.length - 1;
 
-        PrintWriter enregistrement = new PrintWriter("L3-D4-trace" + NUMERO_GRAPHE + "_" + SOMMET_DEPART + ".txt");
+
 
         //affichage n°ligne
         enregistrement.print("suc ");
@@ -651,7 +663,7 @@ public class L3_D4_Main
 
 
         }
-        enregistrement.close();
+
     }
 
 
