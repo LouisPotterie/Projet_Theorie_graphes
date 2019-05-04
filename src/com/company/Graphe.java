@@ -12,6 +12,8 @@ public class Graphe {
 
     private Map<Noeud,ArrayList> toutLesChemins = new HashMap<>();
 
+
+
     public Map<Noeud, ArrayList> getToutLesChemins() {
         return toutLesChemins;
     }
@@ -69,6 +71,25 @@ public class Graphe {
     public void setNoeuds(ArrayList<Noeud> noeuds) {
         this.noeuds = noeuds;
     }
+
+
+    public void affichage_toutLesChemins()
+    {
+        for (Map.Entry<Noeud, ArrayList> entry : toutLesChemins.entrySet())
+        {
+            ArrayList<Noeud> cle = entry.getValue();
+
+            System.out.println("Le chemin pour aller du sommet initiale à " + entry.getKey().getSommet() + " est" );
+
+            for (Noeud n : cle)
+            {
+                System.out.print(n.getSommet());
+            }
+
+            System.out.println("\n");
+        }
+    }
+
 
      void initialisationMatrices(String fichier) throws FileNotFoundException {
         //File fileMatrice = new File("L3-D4-1.txt");
