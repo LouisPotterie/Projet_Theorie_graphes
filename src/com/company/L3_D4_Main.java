@@ -40,9 +40,12 @@ public class L3_D4_Main
         int espaceOccupe;
         int espacement;
 
+        //enregistrement
+        PrintWriter enregistrement = new PrintWriter("L3-D4-trace NUMERO_GRAPHE SOMMET_DEPART.txt");
+
         try {
-            graphe.affichageAdjascence();
-            graphe.affichageValeurs();
+            graphe.affichageAdjascence(enregistrement);
+            graphe.affichageValeurs(enregistrement);
             ArrayList<Noeud> m = cloneList(graphe.getNoeuds());
 
 
@@ -52,6 +55,7 @@ public class L3_D4_Main
             int initiale = kb.nextInt();
 
             System.out.println("Le sommet choisi est :" + initiale);
+            enregistrement.println("Le sommet choisi est :" + initiale);
 
             Noeud i = m.get(initiale);
             cc.add(initiale); // Ajout du Noeud dans CC
@@ -119,34 +123,50 @@ public class L3_D4_Main
             //affichage
             for (int compteur = 0; compteur < nombreSommets; compteur++) {
                 System.out.print("__");
+                enregistrement.print("__");
             }
             for (int compteur = 0; compteur < nombreSommets; compteur++) {
-                System.out.print("____");
+                System.out.print("_____");
+                enregistrement.print("_____");
             }
+            enregistrement.println();
             System.out.print("\nsommets ");
+            enregistrement.print("\nsommets ");
+
             for (int compteur = 4; compteur < nombreSommets; compteur++) {
                 System.out.print("  ");
+                enregistrement.print("  ");
             }
             for (int compteur = 0; compteur < nombreSommets; compteur++) {
-                System.out.print("|   ");
+                System.out.print("|    ");
+                enregistrement.print("|    ");
             }
             System.out.println("|");
+            enregistrement.println("|");
             System.out.print("cc");
+            enregistrement.print("cc");
             for (int compteur = 1; compteur < nombreSommets; compteur++) {
                 System.out.print("  ");
+                enregistrement.print("  ");
             }
             System.out.print("|");
+            enregistrement.print("|");
             for (int compteur = 0; compteur < nombreSommets; compteur++) {
-                System.out.print(" " + compteur + " |");
+                System.out.print(" " + compteur + "  |");
+                enregistrement.print(" " + compteur + "  |");
             }
             System.out.println();
+            enregistrement.println();
             for (int compteur = 0; compteur < nombreSommets; compteur++) {
                 System.out.print("__");
+                enregistrement.print("__");
             }
             for (int compteur = 0; compteur < nombreSommets; compteur++) {
-                System.out.print("|___");
+                System.out.print("|____");
+                enregistrement.print("|____");
             }
             System.out.println("|");
+            enregistrement.println("|");
 
 
             for (int ligne = 0; ligne < nombreSommets; ligne++) {
@@ -155,36 +175,47 @@ public class L3_D4_Main
                 espacement = 0;
                 for (int compteur = 0; compteur <= ligne; compteur++) {
                     System.out.print(cc.get(compteur) + ";");
+                    enregistrement.print(cc.get(compteur) + ";");
                     espaceOccupe++;
                 }
                 while (espaceOccupe + espacement < nombreSommets) {
                     System.out.print("  ");
+                    enregistrement.print("  ");
                     espacement++;
                 }
 
                 System.out.print("| ");
+                enregistrement.print("| ");
                 for (int sommet = 0; sommet < nombreSommets; sommet++) {
                     if (cc.contains(sommet) && ligne >= cc.indexOf(sommet) && ligne != 0 && ligne != nombreSommets - 1) {
-                        System.out.print(". | ");
+                        System.out.print(".  | ");
+                        enregistrement.print(".  | ");
                     } else if (dijkstra[ligne][sommet] == Integer.MAX_VALUE) {
-                        System.out.print(UNICODE_INFINITY + " | ");
+                        System.out.print(UNICODE_INFINITY + "  | ");
+                        enregistrement.print(UNICODE_INFINITY + "  | ");
                     } else {
                         if (dijkstra[ligne][sommet] >= 10) {
-                            System.out.print(dijkstra[ligne][sommet] + "| ");
-                        } else {
                             System.out.print(dijkstra[ligne][sommet] + " | ");
+                            enregistrement.print(dijkstra[ligne][sommet] + " | ");
+                        } else {
+                            System.out.print(dijkstra[ligne][sommet] + "  | ");
+                            enregistrement.print(dijkstra[ligne][sommet] + "  | ");
                         }
                     }
                 }
                 System.out.println();
+                enregistrement.println();
             }
             for (int compteur = 0; compteur < nombreSommets; compteur++) {
                 System.out.print("__");
+                enregistrement.print("__");
             }
             for (int compteur = 0; compteur < nombreSommets; compteur++) {
-                System.out.print("|___");
+                System.out.print("|____");
+                enregistrement.print("|____");
             }
             System.out.println("|\n");
+            enregistrement.println("|\n");
 
             /*
             System.out.println("Choisir un sommet : ");
@@ -205,13 +236,14 @@ public class L3_D4_Main
                 ArrayList<Noeud> cle = entry.getValue();
 
                 System.out.println("Le chemin pour aller du sommet initiale (" + initiale + ") à  " + entry.getKey().getSommet() + " de distance " + dijkstra[nombreSommets - 1][entry.getKey().getSommet()] + " est ");
-
+                enregistrement.print("Le chemin pour aller du sommet initiale (" + initiale + ") à  " + entry.getKey().getSommet() + " de distance " + dijkstra[nombreSommets - 1][entry.getKey().getSommet()] + " est ");
                 for (Noeud n : cle) {
                     System.out.print(n.getSommet());
+                    enregistrement.print(n.getSommet());
                 }
 
                 System.out.println("\n");
-
+                enregistrement.println("\n");
             }
         }
 
@@ -220,7 +252,7 @@ public class L3_D4_Main
                 System.out.println("Aucun fichier trouvé");
             }
 
-
+        enregistrement.close();
     }
 
     public static ArrayList<Noeud> cloneList(ArrayList<Noeud> noeuds)
