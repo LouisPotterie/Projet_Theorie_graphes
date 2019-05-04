@@ -65,11 +65,11 @@ public class Graphe {
     private int[][] matriceValeurs;
 
 
-    public Graphe(String fichier) throws FileNotFoundException
+    public Graphe(int numFichier) throws FileNotFoundException
     {
         noeuds = new ArrayList<>();
-        initialisationMatrices(fichier);
-        //initialisationMatrices();
+        initialisationMatrices(numFichier);
+
     }
 
     public ArrayList<Noeud> getNoeuds() {
@@ -99,10 +99,10 @@ public class Graphe {
     }
 
 
-     void initialisationMatrices(String fichier) throws FileNotFoundException {
+     void initialisationMatrices(int numFichier) throws FileNotFoundException {
         //File fileMatrice = new File("L3-D4-1.txt");
 
-        File fileMatrice = new File(fichier);
+        File fileMatrice = new File("L3_D4_" + numFichier + ".txt");
         Scanner readMatrice = new Scanner(fileMatrice);
 
         ArrayList<Noeud> noeudsAdjascence = new ArrayList<>();

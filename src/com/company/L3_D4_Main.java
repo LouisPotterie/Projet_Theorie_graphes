@@ -4,30 +4,19 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.*;
-import java.util.regex.*;
+
 
 public class L3_D4_Main
 {
 
-    //Leo
     public static void main(String[] args) throws FileNotFoundException
     {
 
-
-//        int[][] matrice = creationMatrice();
-
-        //      enregistrementMatrice(matrice);
-
-        //dijkstra();
-
         menu();
-
-        //test();
-
     }
 
     //
-    public static void dijkstra(Graphe graphe) throws FileNotFoundException {
+    public static void dijkstra(int numFichier, Graphe graphe, int sommetDepart) throws FileNotFoundException {
         final String UNICODE_POINT = "\u2022";
         final String UNICODE_INFINITY = "\u221E";
         ArrayList<Integer> cc = new ArrayList<>();
@@ -40,25 +29,26 @@ public class L3_D4_Main
         int espaceOccupe;
         int espacement;
 
-        //enregistrement
-        PrintWriter enregistrement = new PrintWriter("L3-D4-trace NUMERO_GRAPHE SOMMET_DEPART.txt");
 
+      //  System.out.println("L'algorithme de "+"a bien ete enregistre dans "+filename);
+        //enregistrement
+        String filename= "L3_D4_trace"+numFichier+"_"+sommetDepart+".txt";
+        PrintWriter enregistrement = new PrintWriter(filename);
         try {
+            enregistrement.println(filename);
+            enregistrement.println("Matrice d'adjacence:");
+            System.out.println("\n Matrice d'adjacence:");
             graphe.affichageAdjascence(enregistrement);
+            enregistrement.println("\n\nMatrice des valeurs:");
+            System.out.println("\n Matrice des valeurs:");
             graphe.affichageValeurs(enregistrement);
             ArrayList<Noeud> m = cloneList(graphe.getNoeuds());
 
+            enregistrement.println("Le sommet choisi est :" + sommetDepart);
 
-            Scanner kb = new Scanner(System.in);
-            System.out.println("Quel est le sommet de départ ?"); // choix du sommet de départ
 
-            int initiale = kb.nextInt();
-
-            System.out.println("Le sommet choisi est :" + initiale);
-            enregistrement.println("Le sommet choisi est :" + initiale);
-
-            Noeud i = m.get(initiale);
-            cc.add(initiale); // Ajout du Noeud dans CC
+            Noeud i = m.get(sommetDepart);
+            cc.add(sommetDepart); // Ajout du Noeud dans CC
             m.remove(i); // On retire le noeud de CC
 
 
@@ -79,7 +69,7 @@ public class L3_D4_Main
                 predecesseurCheminCourt.put(cle, i);
             }
 
-            dijkstra[0][initiale] = 0;
+            dijkstra[0][sommetDepart] = 0;
 
 
             for (int etape = 1; etape < nombreSommets; etape++) {
@@ -98,8 +88,6 @@ public class L3_D4_Main
                 } else {
                     continue;
                 }
-
-//                sommetProche.setDistance(sommetProche.getDistance());
 
                 for (Noeud noeud : m)  // parcourt de l'ensemble M
                     if (sommetProche.estPredecesseur(noeud) && graphe.getMatriceAdjacence()[sommetProche.getSommet()][noeud.getSommet()] == 1) {
@@ -121,6 +109,8 @@ public class L3_D4_Main
 
             }
             //affichage
+            System.out.println("Algorithme de Dijkstra:");
+            enregistrement.println("Algorithme de Dijkstra:");
             for (int compteur = 0; compteur < nombreSommets; compteur++) {
                 System.out.print("__");
                 enregistrement.print("__");
@@ -217,17 +207,14 @@ public class L3_D4_Main
             System.out.println("|\n");
             enregistrement.println("|\n");
 
-            /*
-            System.out.println("Choisir un sommet : ");
-            int choix = kb.nextInt();
-            */
+
             Noeud sommet_choisi = new Noeud();
 
 
             for (Noeud j : graphe.getNoeuds()) {
 
                 sommet_choisi = j.clone();
-                cheminLePlusCourt(initiale, sommet_choisi, cc, predecesseurCheminCourt, graphe);
+                cheminLePlusCourt(sommetDepart, sommet_choisi, cc, predecesseurCheminCourt, graphe);
 
             }
 
@@ -235,15 +222,15 @@ public class L3_D4_Main
             for (Map.Entry<Noeud, ArrayList> entry : graphe.getToutLesChemins().entrySet()) {
                 ArrayList<Noeud> cle = entry.getValue();
 
-                System.out.println("Le chemin pour aller du sommet initiale (" + initiale + ") à  " + entry.getKey().getSommet() + " de distance " + dijkstra[nombreSommets - 1][entry.getKey().getSommet()] + " est ");
-                enregistrement.print("Le chemin pour aller du sommet initiale (" + initiale + ") à  " + entry.getKey().getSommet() + " de distance " + dijkstra[nombreSommets - 1][entry.getKey().getSommet()] + " est ");
+                System.out.print("Le chemin pour aller du sommet initiale (" + sommetDepart + ") à  " + entry.getKey().getSommet() + " de distance " + dijkstra[nombreSommets - 1][entry.getKey().getSommet()] + " est ");
+                enregistrement.print("Le chemin pour aller du sommet initiale (" + sommetDepart + ") à  " + entry.getKey().getSommet() + " de distance " + dijkstra[nombreSommets - 1][entry.getKey().getSommet()] + " est ");
                 for (Noeud n : cle) {
                     System.out.print(n.getSommet());
                     enregistrement.print(n.getSommet());
                 }
+                System.out.println();
+                enregistrement.println();
 
-                System.out.println("\n");
-                enregistrement.println("\n");
             }
         }
 
@@ -251,8 +238,11 @@ public class L3_D4_Main
             {
                 System.out.println("Aucun fichier trouvé");
             }
+        finally
+        {
+            enregistrement.close();
+        }
 
-        enregistrement.close();
     }
 
     public static ArrayList<Noeud> cloneList(ArrayList<Noeud> noeuds)
@@ -398,7 +388,7 @@ public class L3_D4_Main
     }
 
 
-    public static void bellman(Graphe graphe)
+    public static void bellman(int numFichier, Graphe graphe, int sommet_depart )
     {
         //initialisation d'un graph sous la forme d'un tableau de transition
 
@@ -444,7 +434,7 @@ public class L3_D4_Main
         int tableau_de_predecesseur[][] = new int[nombreSommets+1][nombreSommets];
 
         // Le MAX_SIZE permet de remplacer le signe infini dans le tableau des k
-        int MAX_SIZE = 999;
+        int MAX_SIZE = Integer.MAX_VALUE;
 
         // On initialise le tableau des k avec la variable MAX_SIZE (inifini)
         for (int i = 0; i < nombreSommets+1; i++){
@@ -454,8 +444,7 @@ public class L3_D4_Main
         }
 
         //l'utilisateur choisit le sommet de départ
-        int sommet_depart;
-        sommet_depart = 0;
+
 
         //initialisation de la colonne du sommet de départ
         for(int j = 0; j < nombreSommets+1; j++)
@@ -564,16 +553,7 @@ public class L3_D4_Main
     }
     static void enregistrementTrace(Graphe graphe, int numGraphe, int sommetDepart, Integer[][] dijkstra)throws FileNotFoundException
     {
-        String filename= "L3-D4-trace"+numGraphe+"_"+sommetDepart+".txt";
-        PrintWriter enregistrement = new PrintWriter(filename);
-        enregistrement.println(filename+"\nMatrice d'adjacence:");
-        enregistrementMatrice(graphe.getMatriceAdjacence(), enregistrement);
-        enregistrement.println("\nMatrice des valeurs:");
-        enregistrementMatrice(graphe.getMatriceValeurs(), enregistrement);
-       // enregistrementMatrice(dijkstra, PrintWriter enregistrement);
-        enregistrement.close();
 
-        System.out.println("L'algorithme de "+"a bien ete enregistre dans "+filename);
     }
 
     static void enregistrementMatrice(int[][] matrice, PrintWriter enregistrement)
@@ -642,45 +622,46 @@ public class L3_D4_Main
 
             try
             {
-                String fichier = choixFichier();
-                Graphe graphe = new Graphe(fichier);
+                int numFichier = choixFichier();
+                Graphe graphe = new Graphe(numFichier);
                 if (graphe.isArcsPositifs() == false)
                 {
+                    int initiale=choixSommet(graphe.getNombreSommets());
                     //appel Bellman
-                    bellman(graphe);
+                    bellman(numFichier,graphe, initiale);
                 } else
                 {
-                    System.out.println("Voulez-vous utiliser l'algorithme de Dijkstra (1) ou de Bellman (2) ? \n");
+                    System.out.println("Voulez-vous utiliser l'algorithme de Dijkstra (1) ou de Bellman (2) ?");
+                    System.out.print("-> ");
                     int choix = 0;
                     choix = kb.nextInt();
 
                     while (choix < 1 || choix > 2)
                     {
                         System.out.println("Veuillez refaire votre choix (1 ou 2) : ");
+                        System.out.print("-> ");
                         choix = kb.nextInt();
                     }
-
+                    int initiale=choixSommet(graphe.getNombreSommets());
                     if (choix == 1)
                     {
-                        dijkstra(graphe);
-
-
+                        dijkstra(numFichier,graphe, initiale);
                     }
 
                     if (choix == 2)
                     {
-                        bellman(graphe);
+                        bellman(numFichier,graphe, initiale);
                     }
 
                 }
             }
             catch (FileNotFoundException e)
             {
-                System.out.println("Aucun fichier trouvé");
+                System.out.println("Aucun fichier trouvé::"+e.getMessage());
             }
 
-
             System.out.println("Voulez vous continuer (1) ou quitter ? (2)");
+
 
             rep = inputWithOnlyInt();
 
@@ -690,13 +671,27 @@ public class L3_D4_Main
 
     }
 
+
+    public static int choixSommet(int nombreSommets)
+    {
+        Scanner kb = new Scanner(System.in);
+        System.out.println("Quel est le sommet de départ ?"); // choix du sommet de départ
+        int initiale;
+        do
+        {
+            initiale = inputWithOnlyInt();
+        } while (initiale < 0 || initiale > nombreSommets-1);
+
+        System.out.println("Le sommet choisi est :" + initiale);
+        return initiale;
+    }
     /**
      * Methode qui demande à la personne de choisir quelle graphe elle souhaite ouvrir parmi les 10 disponibles
      * avec une saisie sécurisée contre les caracteres
      *
      * @return le fichier que l'on souhaite ouvrir
      */
-    public static String choixFichier()
+    public static int choixFichier()
     {
         int saisie;
         System.out.println("Choisissez un graphe entre 1 et 10 :");
@@ -705,7 +700,7 @@ public class L3_D4_Main
             saisie = inputWithOnlyInt();
         } while (saisie < 1 || saisie > 10);
 
-        return "L3_D4_" + saisie + ".txt";
+        return saisie;
     }
 
     public static int inputWithOnlyInt()
@@ -715,7 +710,7 @@ public class L3_D4_Main
         System.out.print("-> ");
         while (!kb.hasNextInt())  //si la selection est différente d'un entier on coninue de demander une saisie
         {
-            System.out.print("Make a correct selection please\n-> ");
+            System.out.print("Veuillez choisir un nombre valide\n-> ");
             kb.next();
         }
 
