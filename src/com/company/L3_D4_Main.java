@@ -24,11 +24,11 @@ public class L3_D4_Main
 
         djistra();
 
-        //test();
+        //test2();
 
     }
 
-    //
+
     public static void djistra() throws FileNotFoundException
     {
         ArrayList<Integer>  cc = new ArrayList<>();
@@ -40,7 +40,8 @@ public class L3_D4_Main
         {
             graphe.initialisationMatriceValeur();
             graphe.affichageValeurs();
-            ArrayList<Noeud> m = graphe.getNoeuds();
+            ArrayList<Noeud> m = cloneList(graphe.getNoeuds());
+
 
             Scanner kb = new Scanner(System.in);
             System.out.println("Quel est le sommet de départ ?"); // choix du sommet de départ
@@ -88,6 +89,15 @@ public class L3_D4_Main
 
                 Noeud sommetProche= distanceLaPlusCourte(m, dijkstra, etape-1);
                 m.remove(sommetProche);
+                if (sommetProche!=null)
+                {
+                    m.remove(sommetProche);
+                    cc.add(sommetProche.getSommet());
+                }
+                else
+                {
+                    continue;
+                }
                 cc.add(sommetProche.getSommet());
 //                sommetProche.setDistance(sommetProche.getDistance());
 
@@ -133,6 +143,27 @@ public class L3_D4_Main
                 System.out.println();
             }
 
+
+            System.out.println("Choisir un sommet : ");
+            int choix = kb.nextInt();
+
+            Noeud sommet_choisi = new Noeud();
+
+            for (Noeud j : graphe.getNoeuds())
+            {
+                if(j.getSommet() == choix)
+                {
+                    sommet_choisi = j.clone();
+                }
+            }
+
+            System.out.println("Taille Map Predecesseur :" + predecesseurCheminCourt.size());
+
+            //cheminLePlusCourt(initiale, sommet_choisi, cc, predecesseurCheminCourt,graphe);
+
+
+
+
         }
         catch (FileNotFoundException e)
         {
@@ -140,7 +171,12 @@ public class L3_D4_Main
         }
     }
 
-
+    public static ArrayList<Noeud> cloneList( ArrayList<Noeud> noeuds)
+    {
+        ArrayList<Noeud> clone = new ArrayList<>(noeuds.size());
+        for(Noeud item : noeuds) clone.add(item.clone());
+        return clone;
+    }
 
 
     public static void test() throws FileNotFoundException
@@ -210,12 +246,12 @@ public class L3_D4_Main
         return tampon_sommet;
     }
 
- /*   public static void cheminLePlusCourt(int initiale, Noeud sommet_choisi, Map<Integer, Noeud> cc)
+  public static void cheminLePlusCourt(int initiale, Noeud sommet_choisi, ArrayList<Integer> cc, Map<Noeud,Noeud> predecesseurCheminCourt, Graphe graphe)
     {
         //Map<Noeud, Noeud> chemin= new HashMap<>();
 
         ArrayList<Noeud> chemin = new ArrayList<>();
-        Map<Noeud,ArrayList> toutLesChemins = new HashMap<>();
+
         if (initiale == sommet_choisi.getSommet())
         {
             System.out.println("Le sommet choisi est le sommet initiale \n");
@@ -223,13 +259,14 @@ public class L3_D4_Main
             chemin.add(sommet_choisi);
             System.out.println("Le chemin est : ");
 
-
+            /*
             for (Map.Entry<Noeud, Noeud> entry : chemin.entrySet())
             {
                 Noeud cle = entry.getKey();
                 System.out.print(cle.getSommet());
 
             }
+            */
 
 
             for (Noeud affichage : chemin)
@@ -241,32 +278,40 @@ public class L3_D4_Main
         }
 
         Noeud a = null;
+        Noeud b = null;
 
         a = sommet_choisi.clone();
 
         System.out.println("Le sommet clone a pour nom : " + a.getSommet());
 
 
-        if (a.getSommetChemin() == initiale)
-        {
+        if (predecesseurCheminCourt.get(a).getSommet() == initiale) {
             System.out.println("Le chemin le plus court est " + sommet_choisi.getDistance() + "," + initiale);
-        }
+
             //System.out.println("Le chemin le plus court est " + sommet_choisi + "," + initiale);
             //chemin.put(sommet_choisi,sommet_choisi);
             //chemin.put(cc.get(initiale),cc.get(initiale));
 
 
+
+            for (Noeud j : graphe.getNoeuds())
+            {
+                if(j.getSommet() == cc.get(0))
+                {
+                    b = j.clone();
+                }
+            }
+
             chemin.add(sommet_choisi);
-            chemin.add(cc.get(initiale));
+            chemin.add(b);
+
             System.out.println("Le chemin est : ");
 
 
-
-
-            for (Noeud affichage : chemin)
-            {
+            for (Noeud affichage : chemin) {
                 System.out.print(affichage.getSommet());
             }
+        }
 
 
 
@@ -277,7 +322,7 @@ public class L3_D4_Main
                 System.out.println("Valeur mise dans la map de a :  " + a.getSommet());
                 //chemin.put(a, a);
                 chemin.add(a);
-                a = cc.get(a.getSommetChemin()).clone();
+                a = predecesseurCheminCourt.get(a).clone();
                 System.out.println("Nouvelle valeur de a : " + a.getSommet());
 
 
@@ -285,26 +330,27 @@ public class L3_D4_Main
 
             //chemin.put(cc.get(initiale), cc.get(initiale));
 
-            chemin.add(cc.get(initiale));
+            chemin.add(b);
 
             /*
             for (Map.Entry<Noeud, Noeud> entry : chemin.entrySet())
             {
                 Noeud cle = entry.getKey();
                 System.out.print(cle.getSommet());
-            }
+            }*/
 
+            Collections.reverse(chemin);
             System.out.println("Le chemin est : ");
             for (Noeud affichage : chemin)
             {
                 System.out.print(affichage.getSommet());
             }
 
-            toutLesChemins.put(sommet_choisi,chemin);
+            graphe.getToutLesChemins().put(sommet_choisi,chemin);
 
 
         }
-    }*/
+    }
 
     public static Noeud predecesseur(Map<Integer, Noeud> cc, int pred)
     {

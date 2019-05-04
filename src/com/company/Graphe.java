@@ -9,8 +9,23 @@ import java.util.Scanner;
 
 public class Graphe {
 
+    private Map<Noeud,ArrayList> toutLesChemins = new HashMap<>();
+
+    public Map<Noeud, ArrayList> getToutLesChemins() {
+        return toutLesChemins;
+    }
+
+    public void setToutLesChemins(Map<Noeud, ArrayList> toutLesChemins) {
+        this.toutLesChemins = toutLesChemins;
+    }
+
+
 
     private ArrayList<Noeud> noeuds;
+
+
+
+
 
     public int[][] getMatriceAdjacence()
     {
