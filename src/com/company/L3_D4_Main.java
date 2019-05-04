@@ -50,8 +50,6 @@ public class L3_D4_Main
                 }
 
             }
-
-
             for (Map.Entry<Noeud, Integer> entry : i.getSuccesseurs().entrySet())
             {
                 Noeud cle = entry.getKey();
@@ -224,10 +222,10 @@ public class L3_D4_Main
             for (Noeud sommetArrivee : graphe.getNoeuds())
             {
                 ArrayList<Noeud> chemin = graphe.getToutLesChemins().get(sommetArrivee);
-                if (chemin!=null)
+                if (chemin != null)
                 {
                     System.out.print("Le chemin pour aller du sommet initiale (" + sommetDepart + ") à " + sommetArrivee.getSommet() + " de distance " + dijkstra[nombreSommets - 1][sommetArrivee.getSommet()] + " est ");
-                    enregistrement.print("Le chemin pour aller du sommet initiale (" + sommetDepart + ") à " +sommetArrivee.getSommet() + " de distance " + dijkstra[nombreSommets - 1][sommetArrivee.getSommet()] + " est ");
+                    enregistrement.print("Le chemin pour aller du sommet initiale (" + sommetDepart + ") à " + sommetArrivee.getSommet() + " de distance " + dijkstra[nombreSommets - 1][sommetArrivee.getSommet()] + " est ");
                     for (Noeud n : chemin)
                     {
                         System.out.print(n.getSommet());
@@ -235,11 +233,10 @@ public class L3_D4_Main
                     }
                     System.out.println();
                     enregistrement.println();
-                }
-                else
+                } else
                 {
                     System.out.println("Le chemin pour aller du sommet initiale (" + sommetDepart + ") à " + sommetArrivee.getSommet() + " est impossible.");
-                    enregistrement.println("Le chemin pour aller du sommet initiale (" + sommetDepart + ") à " +sommetArrivee.getSommet() + " est impossible.");
+                    enregistrement.println("Le chemin pour aller du sommet initiale (" + sommetDepart + ") à " + sommetArrivee.getSommet() + " est impossible.");
 
                 }
 
@@ -346,9 +343,16 @@ public class L3_D4_Main
         return cc.get(pred);
     }
 
-    public static void bellman(int numFichier, Graphe graphe, int sommet_depart)
+    public static void bellman(int numFichier, Graphe graphe, int sommet_depart) throws FileNotFoundException
     {
         //initialisation d'un graph sous la forme d'un tableau de transition
+        String filename = "L3-D4-trace" + numFichier + "_" + sommet_depart + ".txt";
+        PrintWriter enregistrement = new PrintWriter(filename);
+        enregistrement.println(filename);
+        enregistrementEntete(enregistrement, graphe);
+        enregistrement.println("\nLe sommet choisi est :" + sommet_depart);
+        enregistrement.println("Algorithme de Bellman");
+        System.out.println("Algorithme de Bellman");
         int nombreSommets = graphe.getNombreSommets();
         int tableau_transitions[][] = new int[graphe.getNombreTransitions()][3];
         int transition = 0;
@@ -465,9 +469,11 @@ public class L3_D4_Main
             }
             if (compteur == nombreSommets)
             {
+                enregistrement.println("Ce graphe ne contient pas de circuit absorbant");
                 System.out.println("Ce graphe ne contient pas de circuit absorbant");
             } else
             {
+                enregistrement.println("Ce graphe contient un circuit absorbant");
                 System.out.println("Ce graphe contient un circuit absorbant");
                 absorbant = 1;
 
@@ -488,6 +494,7 @@ public class L3_D4_Main
             {
                 if (tableau_de_k[a][b] > 900)
                 {
+                    enregistrement.printf("%4s    |", "*");
                     System.out.printf("%4s    |", "*");
                 } else
                 {
@@ -495,24 +502,27 @@ public class L3_D4_Main
                     {
                         tableau_de_predecesseur[a][b] = tableau_de_predecesseur[a - 1][b];
                     }
+                    enregistrement.printf("%3d (%d) |", tableau_de_k[a][b], tableau_de_predecesseur[a][b]);
                     System.out.printf("%3d (%d) |", tableau_de_k[a][b], tableau_de_predecesseur[a][b]);
                 }
                 b++;
             }
+            enregistrement.println();
             System.out.println("");
             a++;
         }
 
-        if (absorbant == 0) {
+        if (absorbant == 0)
+        {
             int w = MAX_SIZE;
             int p = MAX_SIZE;
             int longueur = 0;
 
-
-
-            for (int ii = 0; ii < nombreSommets; ii++){
+            for (int ii = 0; ii < nombreSommets; ii++)
+            {
                 p = ii;
-                System.out.println("Le chemin le plus court du sommet "+ii+" au sommet initial "+sommet_depart+" est : ");
+                enregistrement.println("Le chemin le plus court du sommet " + ii + " au sommet initial " + sommet_depart + " est : ");
+                System.out.println("Le chemin le plus court du sommet " + ii + " au sommet initial " + sommet_depart + " est : ");
                 w = MAX_SIZE;
                 while (w != sommet_depart){
                     if (tableau_de_predecesseur[nombreSommets-1][p] == 0)
@@ -525,15 +535,19 @@ public class L3_D4_Main
 
                 longueur = tableau_de_k[nombreSommets-1][ii];
                 if (longueur == MAX_SIZE){
-                    System.out.println("infini");
+                    enregistrement.println("infinie");
+                    System.out.println("infinie");
                 }
                 else {
+                    enregistrement.println(" et de longueur : " + longueur);
                     System.out.println(" et de longueur : "+longueur);
                 }
+                enregistrement.println(" ");
                 System.out.println(" ");
                 longueur = 0;
             }
         }
+        enregistrement.close();
 
     }
 
@@ -544,10 +558,12 @@ public class L3_D4_Main
         enregistrement.println("Nombre de sommets:" + graphe.getNombreSommets());
         System.out.println("Nombre de transitions:" + graphe.getNombreTransitions());
         enregistrement.println("Nombre de transitions:" + graphe.getNombreTransitions());
+        enregistrement.println();
         enregistrement.println("Matrice d'adjacence:");
         System.out.println("\n Matrice d'adjacence:");
         graphe.affichageAdjascence(enregistrement);
         enregistrement.println("\n\nMatrice des valeurs:");
+        enregistrement.println();
         System.out.println("\n Matrice des valeurs:");
         graphe.affichageValeurs(enregistrement);
 
