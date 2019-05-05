@@ -511,6 +511,9 @@ public class L3_D4_Main
             System.out.println("");
             a++;
         }
+
+        ArrayList<Integer> chemin = new ArrayList<>();
+
         if (absorbant == 0) {
             int w = MAX_SIZE;
             int p = MAX_SIZE;
@@ -520,29 +523,52 @@ public class L3_D4_Main
 
             for (int ii = 0; ii < nombreSommets; ii++){
                 p = ii;
-                enregistrement.print("Le chemin le plus court du sommet " + ii + " au sommet initial " + sommet_depart + " est : ");
-                System.out.print("Le chemin le plus court du sommet " + ii + " au sommet initial " + sommet_depart + " est : ");
+
                 w = MAX_SIZE;
                 while (w != sommet_depart){
                     if (tableau_de_predecesseur[nombreSommets-1][p] == 0)
                         break;
                     p = tableau_de_predecesseur[nombreSommets-1][p];
                     longueur += tableau_de_k[nombreSommets-1][p];
-                    enregistrement.print(p);
-                    System.out.print(p);
+                    chemin.add(p);
+                    //enregistrement.print(p);
+                    //System.out.print(p);
                     w = p;
                 }
-                System.out.print(" "+sommet_depart);
+
                 longueur = tableau_de_k[nombreSommets-1][ii];
                 if (longueur == MAX_SIZE){
-                    System.out.println("infini");
+
+                    enregistrement.print("Le chemin le plus court du sommet " + sommet_depart + " a " + ii + " , de longueur  infini est : ");
+                    System.out.print("Le chemin le plus court du sommet " + sommet_depart + " a " + ii + " , de longueur  infini est : ");
                 }
                 else {
-                    enregistrement.println(" et de longueur : " + longueur);
-                    System.out.println(" et de longueur : "+longueur);
+
+                    enregistrement.print("Le chemin le plus court du sommet " + sommet_depart + " a " + ii + " , de longueur " + longueur +" est : ");
+                    System.out.print("Le chemin le plus court du sommet " + sommet_depart + " a " + ii + " , de longueur " + longueur +" est : ");
                 }
-                System.out.println(" ");
+
                 longueur = 0;
+
+
+                System.out.print(sommet_depart);
+                enregistrement.print(sommet_depart);
+
+                Collections.reverse(chemin);
+                for (Integer j : chemin)
+                {
+                    enregistrement.print(j);
+                    System.out.print(j);
+                }
+
+                chemin.clear();
+
+                System.out.print(ii);
+                enregistrement.print(ii);
+                System.out.println("\n");
+                enregistrement.print("\n");
+
+
             }
         }
         enregistrement.close();
