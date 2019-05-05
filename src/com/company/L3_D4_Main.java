@@ -662,49 +662,48 @@ public class L3_D4_Main
     {
         Scanner kb = new Scanner(System.in);
 
-        int rep = 0;
+        int rep = 0; // variable permettant de sortir de la boucle selon sa valeur
 
         do
         {
             System.out.println("Projet Théorie des Graphes L3 Groupe D equipe 4 \n");
 
 
-            try
+            try // try catch pour FileNotFoundException
             {
-                int numFichier = choixFichier();
-                Graphe graphe = new Graphe(numFichier);
-                if (graphe.isArcsPositifs() == false)
+                int numFichier = choixFichier(); // stock le numéro du graphe voulu retourné par la fonction choixFichier()
+                Graphe graphe = new Graphe(numFichier); // Instanciation du graphe
+                if (graphe.isArcsPositifs() == false) // Vérification de la présence d'arc négatif, si oui appel automatique de Bellman
                 {
-                    int initiale = choixSommet(graphe.getNombreSommets());
-                    //appel Bellman
-                    bellman(numFichier, graphe, initiale);
-                } else
+                    int initiale = choixSommet(graphe.getNombreSommets()); // stockage du numéro du sommet initiale
+                    bellman(numFichier, graphe, initiale); //appel de l'algorithm de Bellman
+                } else // si il n'y a pas d'arc négatif alors l'utilisateur peut soit choisir l'algo de Dijkstra soit celui de Bellman
                 {
                     System.out.println("Voulez-vous utiliser l'algorithme de Dijkstra (1) ou de Bellman (2) ?");
                     System.out.print("-> ");
                     int choix = 0;
-                    choix = kb.nextInt();
+                    choix = kb.nextInt(); // Input utilisateur du choix
 
-                    while (choix < 1 || choix > 2)
+                    while (choix < 1 || choix > 2) // sécurité pour l'input
                     {
                         System.out.println("Veuillez refaire votre choix (1 ou 2) : ");
                         System.out.print("-> ");
                         choix = kb.nextInt();
                     }
-                    int initiale = choixSommet(graphe.getNombreSommets());
-                    if (choix == 1)
+                    int initiale = choixSommet(graphe.getNombreSommets());// stockage du numéro du sommet initiale
+                    if (choix == 1) // si choix 1 alors appel de l'algorithme de Dijkstra
                     {
                         dijkstra(numFichier, graphe, initiale);
                     }
 
-                    if (choix == 2)
+                    if (choix == 2) // si choix 2 alors appel de l'algorithme de Dijkstra
                     {
                         bellman(numFichier, graphe, initiale);
                     }
 
                 }
             }
-            catch (FileNotFoundException e)
+            catch (FileNotFoundException e) // si le fichier n'existe pas
             {
                 System.out.println("Aucun fichier trouvé::" + e.getMessage());
             }
