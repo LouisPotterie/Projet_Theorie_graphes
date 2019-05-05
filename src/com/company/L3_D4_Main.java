@@ -99,8 +99,8 @@ public class L3_D4_Main
             enregistrement.println("Algorithme de Dijkstra:");
             for (int compteur = 0; compteur < nombreSommets; compteur++)
             {
-                System.out.print("__");
-                enregistrement.print("__");
+                System.out.print("_");
+                enregistrement.print("_");
             }
             for (int compteur = 0; compteur < nombreSommets; compteur++)
             {
@@ -111,10 +111,10 @@ public class L3_D4_Main
             System.out.print("\nsommets ");
             enregistrement.print("\nsommets ");
 
-            for (int compteur = 4; compteur < nombreSommets; compteur++)
+            for (int compteur = 8; compteur < nombreSommets; compteur++)
             {
-                System.out.print("  ");
-                enregistrement.print("  ");
+                System.out.print(" ");
+                enregistrement.print(" ");
             }
             for (int compteur = 0; compteur < nombreSommets; compteur++)
             {
@@ -125,10 +125,10 @@ public class L3_D4_Main
             enregistrement.println("|");
             System.out.print("cc");
             enregistrement.print("cc");
-            for (int compteur = 1; compteur < nombreSommets; compteur++)
+            for (int compteur = 2; compteur < nombreSommets; compteur++)
             {
-                System.out.print("  ");
-                enregistrement.print("  ");
+                System.out.print(" ");
+                enregistrement.print(" ");
             }
             System.out.print("|");
             enregistrement.print("|");
@@ -141,8 +141,8 @@ public class L3_D4_Main
             enregistrement.println();
             for (int compteur = 0; compteur < nombreSommets; compteur++)
             {
-                System.out.print("__");
-                enregistrement.print("__");
+                System.out.print("_");
+                enregistrement.print("_");
             }
             for (int compteur = 0; compteur < nombreSommets; compteur++)
             {
@@ -160,14 +160,14 @@ public class L3_D4_Main
                 espacement = 0;
                 for (int compteur = 0; compteur < Math.min(ligne + 1, cc.size()); compteur++)
                 {
-                    System.out.print(cc.get(compteur) + ";");
-                    enregistrement.print(cc.get(compteur) + ";");
+                    System.out.print(cc.get(compteur));
+                    enregistrement.print(cc.get(compteur));
                     espaceOccupe++;
                 }
                 while (espaceOccupe + espacement < nombreSommets)
                 {
-                    System.out.print("  ");
-                    enregistrement.print("  ");
+                    System.out.print(" ");
+                    enregistrement.print(" ");
                     espacement++;
                 }
 
@@ -201,8 +201,8 @@ public class L3_D4_Main
             }
             for (int compteur = 0; compteur < nombreSommets; compteur++)
             {
-                System.out.print("__");
-                enregistrement.print("__");
+                System.out.print("_");
+                enregistrement.print("_");
             }
             for (int compteur = 0; compteur < nombreSommets; compteur++)
             {
