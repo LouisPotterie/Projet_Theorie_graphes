@@ -3,25 +3,21 @@ package com.company;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class Graphe {
+public class L3_D4_Graphe
+{
 
-    private Map<Noeud,ArrayList> toutLesChemins = new HashMap<>(); // map qui va stocker en key des sommets et en value les des arraylists qui represente les chemins du sommet initiale vers le sommet en KEY
+    private Map<L3_D4_Noeud,ArrayList> toutLesChemins = new HashMap<>(); // map qui va stocker en key des sommets et en value les des arraylists qui represente les chemins du sommet initiale vers le sommet en KEY
 
 
 
-    public Map<Noeud, ArrayList> getToutLesChemins() {
+    public Map<L3_D4_Noeud, ArrayList> getToutLesChemins() {
         return toutLesChemins;
     } //getter de la map
-
-    public void setToutLesChemins(Map<Noeud, ArrayList> toutLesChemins) {
-        this.toutLesChemins = toutLesChemins;
-    } // setter de la map
 
 
     private boolean arcsPositifs = true; // boolean pour savoir si le graphe possede que des arcs positifs
@@ -36,7 +32,7 @@ public class Graphe {
 
 
 
-    private ArrayList<Noeud> noeuds; // arrayList contenant tous les noeuds
+    private ArrayList<L3_D4_Noeud> noeuds; // arrayList contenant tous les noeuds
 
     public int getNombreTransitions()
     {
@@ -70,32 +66,32 @@ public class Graphe {
      * @param numFichier on lui passe le numero du fichier
      * @throws FileNotFoundException
      */
-    public Graphe(int numFichier) throws FileNotFoundException
+
+    public L3_D4_Graphe(int numFichier) throws FileNotFoundException
     {
         noeuds = new ArrayList<>();
         initialisationMatrices(numFichier); //initialisation des matrices de valeurs et d adjacence
 
     }
 
-
-    public ArrayList<Noeud> getNoeuds() { //getter de l'ArrayList noeuds
+    public ArrayList<L3_D4_Noeud> getNoeuds() { //getter de l'ArrayList noeuds
         return noeuds;
     }
 
-    public void setNoeuds(ArrayList<Noeud> noeuds) {
+    public void setNoeuds(ArrayList<L3_D4_Noeud> noeuds) {
         this.noeuds = noeuds;
     }
 
 
     public void affichage_toutLesChemins() // methode permettant d'afficher la Map toutLesChemins si nescessaire
     {
-        for (Map.Entry<Noeud, ArrayList> entry : toutLesChemins.entrySet()) // Parcourt de la map
+        for (Map.Entry<L3_D4_Noeud, ArrayList> entry : toutLesChemins.entrySet()) // Parcourt de la map
         {
-            ArrayList<Noeud> cle = entry.getValue();
+            ArrayList<L3_D4_Noeud> cle = entry.getValue();
 
             System.out.println("Le chemin pour aller du sommet initiale à " + entry.getKey().getSommet() + " est" );
 
-            for (Noeud n : cle) // parcourt de l'ArrayList
+            for (L3_D4_Noeud n : cle) // parcourt de l'ArrayList
             {
                 System.out.print(n.getSommet()); // affichage des noeuds présent dans l'Arraylist
             }
@@ -111,7 +107,7 @@ public class Graphe {
         File fileMatrice = new File("L3_D4_" + numFichier + ".txt"); // récupération du txt selon la valeur choisi par l'utilisateur
         Scanner readMatrice = new Scanner(fileMatrice); // scanner permettant la lecture du txt
 
-        ArrayList<Noeud> noeudsAdjascence = new ArrayList<>();
+        ArrayList<L3_D4_Noeud> noeudsAdjascence = new ArrayList<>();
 
         int taille = readMatrice.nextInt(); //recupere le nombre de sommet écrit 1ere ligne du txt
         int succ; //le nom du noeud du départ de l'arc
@@ -121,8 +117,8 @@ public class Graphe {
         noeuds.clear(); // clear pour être sûr que l'ArrayList est bien vide avant de la remplir
 
         for (int i = 0; i < taille; i++) {
-            this.noeuds.add(new Noeud(i));
-            noeudsAdjascence.add(new Noeud(i));
+            this.noeuds.add(new L3_D4_Noeud(i));
+            noeudsAdjascence.add(new L3_D4_Noeud(i));
         }
         nombreTransitions=0;
         while (readMatrice.hasNext()) { // tant qu'il y a des données disponibles
@@ -152,7 +148,7 @@ public class Graphe {
      * @return tableau
      */
 
-    int[][] creationTableauAffichage(ArrayList<Noeud> noeuds2)
+    int[][] creationTableauAffichage(ArrayList<L3_D4_Noeud> noeuds2)
     {
         int tableau[][] = new int [noeuds2.size()][noeuds2.size()];
 
