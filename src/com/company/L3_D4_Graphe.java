@@ -104,7 +104,7 @@ public class L3_D4_Graphe
      void initialisationMatrices(int numFichier) throws FileNotFoundException {
 
 
-        File fileMatrice = new File("L3_D4_" + numFichier + ".txt"); // récupération du txt selon la valeur choisi par l'utilisateur
+        File fileMatrice = new File("L3-D4-" + numFichier + ".txt"); // récupération du txt selon la valeur choisi par l'utilisateur
         Scanner readMatrice = new Scanner(fileMatrice); // scanner permettant la lecture du txt
 
         ArrayList<L3_D4_Noeud> noeudsAdjascence = new ArrayList<>();
