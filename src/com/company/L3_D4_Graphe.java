@@ -171,7 +171,7 @@ public class L3_D4_Graphe
      * @throws FileNotFoundException
      */
 
-    public void affichageAdjascence(PrintWriter enregistrement) throws FileNotFoundException
+    public void affichageAdjacence(PrintWriter enregistrement) throws FileNotFoundException
     {
         //affichage n°ligne
         System.out.print("suc ");
@@ -208,8 +208,17 @@ public class L3_D4_Graphe
 
             for (int j = 0; j < matriceAdjacence.length; j++) {
 
+                if((matriceAdjacence[i][j]!=0))
+                {
                     System.out.print(matriceAdjacence[i][j] + " ");
                     enregistrement.print(matriceAdjacence[i][j] + " ");
+                }
+                else
+                {
+                    System.out.print( "- ");
+                    enregistrement.print( "- ");
+                }
+
 
                 if (matriceAdjacence[i][j] < 10) {
                     System.out.print(" ");

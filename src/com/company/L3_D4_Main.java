@@ -599,13 +599,13 @@ public class L3_D4_Main
                 longueur = tableau_de_k[nombreSommets-1][ii];
                 if (longueur == MAX_SIZE){
 
-                    enregistrement.print("Le chemin le plus court du sommet " + sommet_depart + " a " + ii + " est impossible");
-                    System.out.print("Le chemin le plus court du sommet " + sommet_depart + " a " + ii + " est impossible");
+                    enregistrement.print("Le chemin pour aller du sommet " + sommet_depart + " à " + ii + " est impossible");
+                    System.out.print("Le chemin pour aller du sommet " + sommet_depart + " à " + ii + " est impossible");
                 }
                 else {
 
-                    enregistrement.print("Le chemin le plus court du sommet " + sommet_depart + " a " + ii + ", de longueur " + longueur +" est : ");
-                    System.out.print("Le chemin le plus court du sommet " + sommet_depart + " a " + ii + ", de longueur " + longueur +" est : ");
+                    enregistrement.print("Le chemin le plus court du sommet " + sommet_depart + " à " + ii + ", de longueur " + longueur +" est : ");
+                    System.out.print("Le chemin le plus court du sommet " + sommet_depart + " à " + ii + ", de longueur " + longueur +" est : ");
 
                     if (sommet_depart == ii) {
                         System.out.print(ii);
@@ -628,8 +628,8 @@ public class L3_D4_Main
 
                 longueur = 0;
 
-                System.out.println();
-                enregistrement.println();
+                System.out.println(".");
+                enregistrement.println(".");
             }
         }
         enregistrement.close();
@@ -649,11 +649,11 @@ public class L3_D4_Main
         enregistrement.println("Nombre de transitions: " + graphe.getNombreTransitions());
         enregistrement.println();
         enregistrement.println("Matrice d'adjacence:");
-        System.out.println("\n Matrice d'adjacence:");
-        graphe.affichageAdjascence(enregistrement);
+        System.out.println("\nMatrice d'adjacence:");
+        graphe.affichageAdjacence(enregistrement);
         enregistrement.println("\n\nMatrice des valeurs:");
         enregistrement.println();
-        System.out.println("\n Matrice des valeurs:");
+        System.out.println("\nMatrice des valeurs:");
         graphe.affichageValeurs(enregistrement);
 
     }
