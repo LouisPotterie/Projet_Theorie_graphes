@@ -1,0 +1,58 @@
+L3-D4-trace5_5_bellman.txt
+Nombre de sommets: 6
+Nombre de transitions: 5
+
+Matrice d'adjacence:
+suc 0  1  2  3  4  5  
+pre__________________
+0 | -  -  -  -  -  -  
+
+1 | 1  -  -  -  -  -  
+
+2 | -  1  -  -  -  -  
+
+3 | -  -  1  -  -  -  
+
+4 | -  -  -  1  -  -  
+
+5 | -  -  -  -  1  -  
+
+
+
+Matrice des valeurs:
+
+suc 0  1  2  3  4  5  
+pre__________________
+0 | -  -  -  -  -  -  
+
+1 | 5  -  -  -  -  -  
+
+2 | -  4  -  -  -  -  
+
+3 | -  -  3  -  -  -  
+
+4 | -  -  -  2  -  -  
+
+5 | -  -  -  -  1  -  
+
+
+Le sommet choisi est: 5
+Algorithme de Bellman
+________________________________________________________________
+ Sommets |   0    |   1    |   2    |   3    |   4    |   5    |
+   k     |        |        |        |        |        |        |
+---------|--------|--------|--------|--------|--------|--------|
+   1     |   *    |   *    |   *    |   *    |  1 (5) |  0 (5) |
+   2     |   *    |   *    |   *    |  3 (4) |  1 (5) |  0 (5) |
+   3     |   *    |   *    |  6 (3) |  3 (4) |  1 (5) |  0 (5) |
+   4     |   *    | 10 (2) |  6 (3) |  3 (4) |  1 (5) |  0 (5) |
+   5     | 15 (1) | 10 (2) |  6 (3) |  3 (4) |  1 (5) |  0 (5) |
+   6     | 15 (1) | 10 (2) |  6 (3) |  3 (4) |  1 (5) |  0 (5) |
+_________|________|________|________|________|________|________|
+
+Le chemin le plus court du sommet 5 à 0, de longueur 15 est : 43210.
+Le chemin le plus court du sommet 5 à 1, de longueur 10 est : 4321.
+Le chemin le plus court du sommet 5 à 2, de longueur 6 est : 432.
+Le chemin le plus court du sommet 5 à 3, de longueur 3 est : 43.
+Le chemin le plus court du sommet 5 à 4, de longueur 1 est : 4.
+Le chemin le plus court du sommet 5 à 5, de longueur 0 est : 5.

@@ -1,0 +1,70 @@
+L3-D4-trace1_0_dijkstra.txt
+Nombre de sommets: 8
+Nombre de transitions: 12
+
+Matrice d'adjacence:
+suc 0  1  2  3  4  5  6  7  
+pre________________________
+0 | -  1  -  -  -  -  -  -  
+
+1 | -  -  1  -  1  1  -  -  
+
+2 | -  -  -  -  -  -  1  -  
+
+3 | -  -  1  -  -  -  1  -  
+
+4 | 1  -  -  -  -  -  -  -  
+
+5 | -  -  -  -  1  -  1  -  
+
+6 | -  -  -  -  -  -  -  1  
+
+7 | -  -  -  1  -  -  -  -  
+
+
+
+Matrice des valeurs:
+
+suc 0  1  2  3  4  5  6  7  
+pre________________________
+0 | -  5  -  -  -  -  -  -  
+
+1 | -  -  0  -  5  1  -  -  
+
+2 | -  -  -  -  -  -  1  -  
+
+3 | -  -  2  -  -  -  0  -  
+
+4 | 3  -  -  -  -  -  -  -  
+
+5 | -  -  -  -  2  -  0  -  
+
+6 | -  -  -  -  -  -  -  4  
+
+7 | -  -  -  1  -  -  -  -  
+
+Le sommet choisi est :0
+Algorithme de Dijkstra:
+________________________________________________
+
+sommets |    |    |    |    |    |    |    |    |
+cc      | 0  | 1  | 2  | 3  | 4  | 5  | 6  | 7  |
+________|____|____|____|____|____|____|____|____|
+0       | 0  | 5  | ∞  | ∞  | ∞  | ∞  | ∞  | ∞  | 
+01      | .  | .  | 5  | ∞  | 10 | 6  | ∞  | ∞  | 
+012     | .  | .  | .  | ∞  | 10 | 6  | 6  | ∞  | 
+0125    | .  | .  | .  | ∞  | 8  | .  | 6  | ∞  | 
+01256   | .  | .  | .  | ∞  | 8  | .  | .  | 10 | 
+012564  | .  | .  | .  | ∞  | .  | .  | .  | 10 | 
+0125647 | .  | .  | .  | 11 | .  | .  | .  | .  | 
+01256473| 0  | 5  | 5  | 11 | 8  | 6  | 6  | 10 | 
+________|____|____|____|____|____|____|____|____|
+
+Le chemin le plus court du sommet 0 à 0, de longueur 0 est 0.
+Le chemin le plus court du sommet 0 à 1, de longueur 5 est 01.
+Le chemin le plus court du sommet 0 à 2, de longueur 5 est 012.
+Le chemin le plus court du sommet 0 à 3, de longueur 11 est 012673.
+Le chemin le plus court du sommet 0 à 4, de longueur 8 est 0154.
+Le chemin le plus court du sommet 0 à 5, de longueur 6 est 015.
+Le chemin le plus court du sommet 0 à 6, de longueur 6 est 0126.
+Le chemin le plus court du sommet 0 à 7, de longueur 10 est 01267.

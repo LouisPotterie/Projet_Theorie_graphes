@@ -1,0 +1,52 @@
+L3-D4-trace6_2_dijkstra.txt
+Nombre de sommets: 5
+Nombre de transitions: 10
+
+Matrice d'adjacence:
+suc 0  1  2  3  4  
+pre_______________
+0 | -  1  1  1  1  
+
+1 | -  -  1  1  1  
+
+2 | -  -  -  1  1  
+
+3 | -  -  -  -  1  
+
+4 | -  -  -  -  -  
+
+
+
+Matrice des valeurs:
+
+suc 0  1  2  3  4  
+pre_______________
+0 | -  1  4  8  13 
+
+1 | -  -  2  6  11 
+
+2 | -  -  -  3  8  
+
+3 | -  -  -  -  4  
+
+4 | -  -  -  -  -  
+
+Le sommet choisi est :2
+Algorithme de Dijkstra:
+______________________________
+
+sommets |    |    |    |    |    |
+cc   | 0  | 1  | 2  | 3  | 4  |
+_____|____|____|____|____|____|
+2    | ∞  | ∞  | 0  | 3  | 8  | 
+23   | ∞  | ∞  | .  | .  | 7  | 
+234  | ∞  | ∞  | .  | .  | .  | 
+234  | ∞  | ∞  | .  | .  | .  | 
+234  | ∞  | ∞  | 0  | 3  | 7  | 
+_____|____|____|____|____|____|
+
+Le chemin pour aller du sommet 2 à 0 est impossible.
+Le chemin pour aller du sommet 2 à 1 est impossible.
+Le chemin le plus court du sommet 2 à 2, de longueur 0 est 2.
+Le chemin le plus court du sommet 2 à 3, de longueur 3 est 23.
+Le chemin le plus court du sommet 2 à 4, de longueur 7 est 234.

@@ -1,0 +1,65 @@
+L3-D4-trace1_3_bellman.txt
+Nombre de sommets: 8
+Nombre de transitions: 12
+
+Matrice d'adjacence:
+suc 0  1  2  3  4  5  6  7  
+pre________________________
+0 | -  1  -  -  -  -  -  -  
+
+1 | -  -  1  -  1  1  -  -  
+
+2 | -  -  -  -  -  -  1  -  
+
+3 | -  -  1  -  -  -  1  -  
+
+4 | 1  -  -  -  -  -  -  -  
+
+5 | -  -  -  -  1  -  1  -  
+
+6 | -  -  -  -  -  -  -  1  
+
+7 | -  -  -  1  -  -  -  -  
+
+
+
+Matrice des valeurs:
+
+suc 0  1  2  3  4  5  6  7  
+pre________________________
+0 | -  5  -  -  -  -  -  -  
+
+1 | -  -  0  -  5  1  -  -  
+
+2 | -  -  -  -  -  -  1  -  
+
+3 | -  -  2  -  -  -  0  -  
+
+4 | 3  -  -  -  -  -  -  -  
+
+5 | -  -  -  -  2  -  0  -  
+
+6 | -  -  -  -  -  -  -  4  
+
+7 | -  -  -  1  -  -  -  -  
+
+
+Le sommet choisi est: 3
+Algorithme de Bellman
+__________________________________________________________________________________
+ Sommets |   0    |   1    |   2    |   3    |   4    |   5    |   6    |   7    |
+   k     |        |        |        |        |        |        |        |        |
+---------|--------|--------|--------|--------|--------|--------|--------|--------|
+   1     |   *    |   *    |  2 (3) |  0 (3) |   *    |   *    |  0 (3) |   *    |
+   2     |   *    |   *    |  2 (3) |  0 (3) |   *    |   *    |  0 (3) |  4 (6) |
+   3     |   *    |   *    |  2 (3) |  0 (3) |   *    |   *    |  0 (3) |  4 (6) |
+_________|________|________|________|________|________|________|________|________|
+
+Le chemin pour aller du sommet 3 à 0 est impossible.
+Le chemin pour aller du sommet 3 à 1 est impossible.
+Le chemin le plus court du sommet 3 à 2, de longueur 2 est : 2.
+Le chemin le plus court du sommet 3 à 3, de longueur 0 est : 3.
+Le chemin pour aller du sommet 3 à 4 est impossible.
+Le chemin pour aller du sommet 3 à 5 est impossible.
+Le chemin le plus court du sommet 3 à 6, de longueur 0 est : 6.
+Le chemin le plus court du sommet 3 à 7, de longueur 4 est : 67.

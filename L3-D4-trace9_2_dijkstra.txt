@@ -1,0 +1,70 @@
+L3-D4-trace9_2_dijkstra.txt
+Nombre de sommets: 8
+Nombre de transitions: 13
+
+Matrice d'adjacence:
+suc 0  1  2  3  4  5  6  7  
+pre________________________
+0 | -  1  -  -  1  -  -  -  
+
+1 | -  -  -  1  -  1  -  -  
+
+2 | -  -  -  -  -  -  -  1  
+
+3 | -  -  -  -  -  1  1  -  
+
+4 | -  1  -  -  -  1  -  -  
+
+5 | -  -  -  -  -  -  1  -  
+
+6 | -  -  1  -  -  -  -  1  
+
+7 | -  -  1  -  -  -  -  -  
+
+
+
+Matrice des valeurs:
+
+suc 0  1  2  3  4  5  6  7  
+pre________________________
+0 | -  4  -  -  0  -  -  -  
+
+1 | -  -  -  4  -  0  -  -  
+
+2 | -  -  -  -  -  -  -  0  
+
+3 | -  -  -  -  -  3  2  -  
+
+4 | -  2  -  -  -  8  -  -  
+
+5 | -  -  -  -  -  -  2  -  
+
+6 | -  -  3  -  -  -  -  2  
+
+7 | -  -  0  -  -  -  -  -  
+
+Le sommet choisi est :2
+Algorithme de Dijkstra:
+________________________________________________
+
+sommets |    |    |    |    |    |    |    |    |
+cc      | 0  | 1  | 2  | 3  | 4  | 5  | 6  | 7  |
+________|____|____|____|____|____|____|____|____|
+2       | ∞  | ∞  | 0  | ∞  | ∞  | ∞  | ∞  | 0  | 
+27      | ∞  | ∞  | .  | ∞  | ∞  | ∞  | ∞  | .  | 
+27      | ∞  | ∞  | .  | ∞  | ∞  | ∞  | ∞  | .  | 
+27      | ∞  | ∞  | .  | ∞  | ∞  | ∞  | ∞  | .  | 
+27      | ∞  | ∞  | .  | ∞  | ∞  | ∞  | ∞  | .  | 
+27      | ∞  | ∞  | .  | ∞  | ∞  | ∞  | ∞  | .  | 
+27      | ∞  | ∞  | .  | ∞  | ∞  | ∞  | ∞  | .  | 
+27      | ∞  | ∞  | 0  | ∞  | ∞  | ∞  | ∞  | 0  | 
+________|____|____|____|____|____|____|____|____|
+
+Le chemin pour aller du sommet 2 à 0 est impossible.
+Le chemin pour aller du sommet 2 à 1 est impossible.
+Le chemin le plus court du sommet 2 à 2, de longueur 0 est 2.
+Le chemin pour aller du sommet 2 à 3 est impossible.
+Le chemin pour aller du sommet 2 à 4 est impossible.
+Le chemin pour aller du sommet 2 à 5 est impossible.
+Le chemin pour aller du sommet 2 à 6 est impossible.
+Le chemin le plus court du sommet 2 à 7, de longueur 0 est 27.

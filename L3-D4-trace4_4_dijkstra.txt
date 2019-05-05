@@ -1,0 +1,58 @@
+L3-D4-trace4_4_dijkstra.txt
+Nombre de sommets: 6
+Nombre de transitions: 5
+
+Matrice d'adjacence:
+suc 0  1  2  3  4  5  
+pre__________________
+0 | -  1  -  -  -  -  
+
+1 | -  -  1  -  -  -  
+
+2 | -  -  -  1  -  -  
+
+3 | -  -  -  -  1  -  
+
+4 | -  -  -  -  -  1  
+
+5 | -  -  -  -  -  -  
+
+
+
+Matrice des valeurs:
+
+suc 0  1  2  3  4  5  
+pre__________________
+0 | -  1  -  -  -  -  
+
+1 | -  -  2  -  -  -  
+
+2 | -  -  -  3  -  -  
+
+3 | -  -  -  -  4  -  
+
+4 | -  -  -  -  -  5  
+
+5 | -  -  -  -  -  -  
+
+Le sommet choisi est :4
+Algorithme de Dijkstra:
+____________________________________
+
+sommets |    |    |    |    |    |    |
+cc    | 0  | 1  | 2  | 3  | 4  | 5  |
+______|____|____|____|____|____|____|
+4     | ∞  | ∞  | ∞  | ∞  | 0  | 5  | 
+45    | ∞  | ∞  | ∞  | ∞  | .  | .  | 
+45    | ∞  | ∞  | ∞  | ∞  | .  | .  | 
+45    | ∞  | ∞  | ∞  | ∞  | .  | .  | 
+45    | ∞  | ∞  | ∞  | ∞  | .  | .  | 
+45    | ∞  | ∞  | ∞  | ∞  | 0  | 5  | 
+______|____|____|____|____|____|____|
+
+Le chemin pour aller du sommet 4 à 0 est impossible.
+Le chemin pour aller du sommet 4 à 1 est impossible.
+Le chemin pour aller du sommet 4 à 2 est impossible.
+Le chemin pour aller du sommet 4 à 3 est impossible.
+Le chemin le plus court du sommet 4 à 4, de longueur 0 est 4.
+Le chemin le plus court du sommet 4 à 5, de longueur 5 est 45.
