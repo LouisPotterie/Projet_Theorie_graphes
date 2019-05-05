@@ -26,12 +26,6 @@ public class L3_D4_Graphe
         return arcsPositifs;
     } // getter du boolean
 
-    public void setArcsPositifs(boolean arcsPositifs) {
-        this.arcsPositifs = arcsPositifs;
-    } // setter du boolean
-
-
-
     private ArrayList<L3_D4_Noeud> noeuds; // arrayList contenant tous les noeuds
 
     public int getNombreTransitions()
@@ -76,28 +70,6 @@ public class L3_D4_Graphe
 
     public ArrayList<L3_D4_Noeud> getNoeuds() { //getter de l'ArrayList noeuds
         return noeuds;
-    }
-
-    public void setNoeuds(ArrayList<L3_D4_Noeud> noeuds) {
-        this.noeuds = noeuds;
-    }
-
-
-    public void affichage_toutLesChemins() // methode permettant d'afficher la Map toutLesChemins si nescessaire
-    {
-        for (Map.Entry<L3_D4_Noeud, ArrayList> entry : toutLesChemins.entrySet()) // Parcourt de la map
-        {
-            ArrayList<L3_D4_Noeud> cle = entry.getValue();
-
-            System.out.println("Le chemin pour aller du sommet initiale à " + entry.getKey().getSommet() + " est" );
-
-            for (L3_D4_Noeud n : cle) // parcourt de l'ArrayList
-            {
-                System.out.print(n.getSommet()); // affichage des noeuds présent dans l'Arraylist
-            }
-
-            System.out.println("\n");
-        }
     }
 
 
