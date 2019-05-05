@@ -338,7 +338,7 @@ public class L3_D4_Main
     public static void bellman(int numFichier, L3_D4_Graphe graphe, int sommet_depart) throws FileNotFoundException
     {
         //initialisation d'un graph sous la forme d'un tableau de transition
-        String filename = "L3-D4-trace" + numFichier + "_" + sommet_depart + ".txt";
+        String filename = "L3-D4-trace" + numFichier + "_" + sommet_depart + "_bellman.txt";
         PrintWriter enregistrement = new PrintWriter(filename);
         enregistrement.println(filename);
         enregistrementEntete(enregistrement, graphe);
