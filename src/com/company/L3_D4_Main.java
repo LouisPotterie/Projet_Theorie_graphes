@@ -254,6 +254,12 @@ public class L3_D4_Main
 
     }
 
+
+    /**
+     * Méthode permettant de renvoyer une ArrayList venant du clonage d'une ArrayList passée en param
+     * @param noeuds ArrayList à cloner
+     * @return l'ArrayList clone
+     */
     public static ArrayList<Noeud> cloneList(ArrayList<Noeud> noeuds)
     {
         ArrayList<Noeud> clone = new ArrayList<>(noeuds.size());
@@ -304,37 +310,47 @@ public class L3_D4_Main
         return tampon_sommet;
     }
 
+    /**
+     *  Méthode permettant de trouver le chemin le plus court entre un sommet et le sommet initial du Graphe
+     *
+     * @param initiale nom du noeud initiale
+     * @param sommetArrivee Noeud vers lequel on cherche le chemin le plus court
+     * @param cc ArrayList cc ensemble des noeuds placé suite à l'algo de dijkstra
+     * @param predecesseurCheminCourt Map <Noeud,Noeud> qui contient en Key un noeud et en value son predecesseur avec le moins de distance
+     * @param graphe Instance de la classe Graphe qui ici nous est utile pour sa map ToutLesChemins<Noeud,ArrayList>
+     */
+
     public static void cheminLePlusCourt(int initiale, Noeud sommetArrivee, ArrayList<Integer> cc, Map<Noeud, Noeud> predecesseurCheminCourt, Graphe graphe)
     {
         //Map<Noeud, Noeud> chemin= new HashMap<>();
 
-        ArrayList<Noeud> chemin = new ArrayList<>();
+        ArrayList<Noeud> chemin = new ArrayList<>(); // On va placer les noeuds du chemin le plus court dans cette Arraylist
 
-        Noeud a = null;
-        Noeud b = null;
-        a = sommetArrivee.clone();
+        Noeud a = null; // Noeud tampon
+        Noeud b = null; // Noeud tampon
+        a = sommetArrivee.clone(); // On clone dans a le sommet cible
         // Un sommet isolé ne possède pas de prédécesseurs, et n'est donc pas contenu dans les clés de la map
         // Cela est aussi vrai pour le sommet initial
-        if (predecesseurCheminCourt.containsKey(a) || a.getSommet() == initiale)
+        if (predecesseurCheminCourt.containsKey(a) || a.getSommet() == initiale) // Si la map des predecesseurs contient le sommet tampon a en Key ou que a est le sommet initiale du graphe
         {
-            while (a.getSommet() != initiale)
+            while (a.getSommet() != initiale) // tant que le numero du noeud tampon a est different que le numéro du noeud initial
             {
                 //chemin.put(a, a);
-                chemin.add(a);
-                a = predecesseurCheminCourt.get(a).clone();
+                chemin.add(a); // ajoute le noeud tampon a
+                a = predecesseurCheminCourt.get(a).clone(); // on clone dans a le predecesseur du sommet a courant
             }
 
             for (Noeud j : graphe.getNoeuds())
             {
-                if (j.getSommet() == cc.get(0))
+                if (j.getSommet() == cc.get(0)) // si le noeud courant j est égale au noeud intiale
                 {
                     b = j.clone();
                 }
             }
 
-            chemin.add(b);
-            Collections.reverse(chemin);
-            graphe.getToutLesChemins().put(sommetArrivee, chemin);
+            chemin.add(b); // Ajout du sommet initiale
+            Collections.reverse(chemin); // On inverse l'ordre pour avoir un chemin du sommet initiale vers le sommet d'arrivée
+            graphe.getToutLesChemins().put(sommetArrivee, chemin); // On stock l'arrayList dans une map avec comme Key le sommet finale (le sommet initiale est connus puisque choisi)
         }
     }
 
