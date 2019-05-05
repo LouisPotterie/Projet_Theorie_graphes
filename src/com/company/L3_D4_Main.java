@@ -338,7 +338,7 @@ public class L3_D4_Main
     public static void bellman(int numFichier, L3_D4_Graphe graphe, int sommet_depart) throws FileNotFoundException
     {
         //initialisation d'un graph sous la forme d'un tableau de transition
-        String filename = "L3-D4-trace" + numFichier + "_" + sommet_depart + "_bellman.txt";
+        String filename = "L3-D4-trace" + numFichier + "_" + sommet_depart + ".txt";
         PrintWriter enregistrement = new PrintWriter(filename);
         enregistrement.println(filename);
         enregistrementEntete(enregistrement, graphe);
@@ -403,6 +403,7 @@ public class L3_D4_Main
         int value = 0;
         int v = 0;
         int compteur = 0;
+        int new_k = MAX_SIZE;
 
         for (int k = 1; k < nombreSommets + 1; k++)
         {
@@ -428,6 +429,23 @@ public class L3_D4_Main
                     }
                 }
             }
+
+            for (int m = 0; m < nombreSommets; m++)
+            {
+                if (tableau_de_k[k - 1][m] == tableau_de_k[k][m])
+                {
+                    compteur++;
+                }
+            }
+            if (compteur == nombreSommets)
+            {
+                new_k = Math.min(new_k,k);
+            }
+            compteur = 0;
+        }
+
+        if (new_k == MAX_SIZE){
+            new_k = nombreSommets;
         }
 
         int absorbant = 0;
@@ -500,7 +518,24 @@ public class L3_D4_Main
         }
         System.out.println();
         enregistrement.println();
-        while (a < nombreSommets + 1)
+
+        while (a < nombreSommets +1){
+            b=0;
+            while (b < nombreSommets){
+                if (tableau_de_k[a][b] < 900)
+                {
+                    if (tableau_de_predecesseur[a][b] == 0)
+                    {
+                        tableau_de_predecesseur[a][b] = tableau_de_predecesseur[a - 1][b];
+                    }
+                }
+                b++;
+            }
+            a++;
+        }
+
+        a = 1;
+        while (a < new_k + 1)
         {
             b = 0;
             System.out.print("   "+nombreIteration + "     |");
@@ -553,7 +588,9 @@ public class L3_D4_Main
                         break;
                     p = tableau_de_predecesseur[nombreSommets-1][p];
                     longueur += tableau_de_k[nombreSommets-1][p];
-                    chemin.add(p);
+                    if (p != tableau_de_predecesseur[nombreSommets-2][p]) {
+                        chemin.add(p);
+                    }
                     //enregistrement.print(p);
                     //System.out.print(p);
                     w = p;
@@ -562,28 +599,35 @@ public class L3_D4_Main
                 longueur = tableau_de_k[nombreSommets-1][ii];
                 if (longueur == MAX_SIZE){
 
-                    enregistrement.print("Le chemin le plus court du sommet " + sommet_depart + " a " + ii + ", de longueur infini est : ");
-                    System.out.print("Le chemin le plus court du sommet " + sommet_depart + " a " + ii + ", de longueur infini est : ");
+                    enregistrement.print("Le chemin le plus court du sommet " + sommet_depart + " a " + ii + " est impossible");
+                    System.out.print("Le chemin le plus court du sommet " + sommet_depart + " a " + ii + " est impossible");
                 }
                 else {
 
                     enregistrement.print("Le chemin le plus court du sommet " + sommet_depart + " a " + ii + ", de longueur " + longueur +" est : ");
                     System.out.print("Le chemin le plus court du sommet " + sommet_depart + " a " + ii + ", de longueur " + longueur +" est : ");
+
+                    if (sommet_depart == ii) {
+                        System.out.print(ii);
+                        enregistrement.print(ii);
+                    }
+                    else {
+                        System.out.print(sommet_depart);
+                        Collections.reverse(chemin);
+                        for (Integer j : chemin)
+                        {
+                            enregistrement.print(j);
+                            System.out.print(j);
+                        }
+                        chemin.clear();
+                        System.out.print(ii);
+                        enregistrement.print(ii);
+                    }
+
                 }
 
                 longueur = 0;
-                System.out.print(sommet_depart);
-                enregistrement.print(sommet_depart);
 
-                Collections.reverse(chemin);
-                for (Integer j : chemin)
-                {
-                    enregistrement.print(j);
-                    System.out.print(j);
-                }
-                chemin.clear();
-                System.out.print(ii);
-                enregistrement.print(ii);
                 System.out.println();
                 enregistrement.println();
             }
