@@ -1,6 +1,4 @@
 package com.company;
-
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.*;
@@ -9,20 +7,30 @@ import java.util.*;
 public class L3_D4_Main
 {
 
-    public static void main(String[] args) throws FileNotFoundException
+    public static void main(String[] args)
     {
-
+        // démarrage du programme avec son menu
         menu();
     }
 
-    //
+    /**
+     * Algorithme de Dijkstra, chemin le plus court d'un sommet de départ choisi vers tous les autres sommets du graphe
+     * @param numFichier Numéro du graphe choisi parmi les 10 graphes de test
+     * @param graphe Graphe avec toutes ses informations
+     * @param sommetDepart Sommet de départ choisi
+     * @throws FileNotFoundException exception si aucun fichier n'est trouvé
+     */
     public static void dijkstra(int numFichier, Graphe graphe, int sommetDepart) throws FileNotFoundException
     {
+        //Unicode pour l'affichage des éléments du tableau de dijkstra
         final String UNICODE_POINT = "\u2022";
         final String UNICODE_INFINITY = "\u221E";
+        //Liste cc, correspondant à l'ensemble CC vu en cours
         ArrayList<Integer> cc = new ArrayList<>();
+        //predecesseurCheminCourt est une map ; la clé est un noeud du graphe, la valeur est le prédecesseur dans le chemin le plus court du sommet de départ au noeud.
         Map<Noeud, Noeud> predecesseurCheminCourt = new HashMap<>();
         int nombreSommets = graphe.getNombreSommets();
+        //tableau de Dijkstra, chaque ligne correspondant à une étape de l'algorithme de Dijkstra
         Integer[][] dijkstra = new Integer[nombreSommets][nombreSommets];
         //variables necessaires pour un affichage propre
         int espaceOccupe;
@@ -35,35 +43,32 @@ public class L3_D4_Main
             enregistrementEntete(enregistrement, graphe);
             ArrayList<Noeud> m = cloneList(graphe.getNoeuds());
             enregistrement.println("Le sommet choisi est :" + sommetDepart);
-            Noeud i = m.get(sommetDepart);
+            Noeud sommetChoisi = m.get(sommetDepart);
             cc.add(sommetDepart); // Ajout du Noeud dans CC
-            m.remove(i); // On retire le noeud de CC
-
-
+            m.remove(sommetChoisi); // On retire le noeud de M
             //tout initialiser à l'infini
             for (int ligne = 0; ligne < nombreSommets; ligne++)
             {
                 for (int colonne = 0; colonne < nombreSommets; colonne++)
                 {
                     dijkstra[ligne][colonne] = Integer.MAX_VALUE;
-
                 }
-
             }
-            for (Map.Entry<Noeud, Integer> entry : i.getSuccesseurs().entrySet())
+            //On récupère les distances du sommet choisi vers tous ses successeurs dans la première ligne du tableau de DIjkstra
+            for (Map.Entry<Noeud, Integer> entry : sommetChoisi.getSuccesseurs().entrySet())
             {
                 Noeud cle = entry.getKey();
                 cle.setDistance(entry.getValue());
                 dijkstra[0][cle.getSommet()] = (entry.getValue());
-                predecesseurCheminCourt.put(cle, i);
+                //initialement, tous les successeurs du sommet de départ ont comme prédecesseur dans le chemin le plus court le sommet de départ
+                predecesseurCheminCourt.put(cle, sommetChoisi);
             }
 
             dijkstra[0][sommetDepart] = 0;
-
-
             for (int etape = 1; etape < nombreSommets; etape++)
             {
                 dijkstra[etape] = dijkstra[etape - 1].clone();
+                //on prend le sommet du pi le plus court (dans M)
                 Noeud sommetProche = distanceLaPlusCourte(m, dijkstra, etape - 1);
                 if (sommetProche != null)
                 {
@@ -87,6 +92,7 @@ public class L3_D4_Main
                         {
                             nouvelleDistance = Integer.MAX_VALUE;
                         }
+                        //si changement de pi, on modifie le pi et le prédecesseur "optimal" dans le chemin le plus du Noeud noeud
                         if (nouvelleDistance < dijkstra[etape][noeud.getSommet()])
                         {
                             dijkstra[etape][noeud.getSommet()] = nouvelleDistance;
@@ -152,17 +158,18 @@ public class L3_D4_Main
             System.out.println("|");
             enregistrement.println("|");
 
-
             for (int ligne = 0; ligne < nombreSommets; ligne++)
             {
-
                 espaceOccupe = 0;
                 espacement = 0;
                 for (int compteur = 0; compteur < Math.min(ligne + 1, cc.size()); compteur++)
                 {
-                    System.out.print(cc.get(compteur) + ";");
-                    enregistrement.print(cc.get(compteur) + ";");
-                    espaceOccupe++;
+                    if (compteur!=Math.min(ligne + 1, cc.size()-1))
+                    {
+                    System.out.print(cc.get(compteur) + ",");
+                    enregistrement.print(cc.get(compteur) + ",");
+                    espaceOccupe++;                }
+
                 }
                 while (espaceOccupe + espacement < nombreSommets)
                 {
@@ -214,7 +221,6 @@ public class L3_D4_Main
             Noeud sommet_choisi = new Noeud();
             for (Noeud j : graphe.getNoeuds())
             {
-
                 sommet_choisi = j.clone();
                 cheminLePlusCourt(sommetDepart, sommet_choisi, cc, predecesseurCheminCourt, graphe);
             }
@@ -237,12 +243,9 @@ public class L3_D4_Main
                 {
                     System.out.println("Le chemin pour aller du sommet initiale (" + sommetDepart + ") à " + sommetArrivee.getSommet() + " est impossible.");
                     enregistrement.println("Le chemin pour aller du sommet initiale (" + sommetDepart + ") à " + sommetArrivee.getSommet() + " est impossible.");
-
                 }
-
             }
         }
-
         catch (FileNotFoundException e)
         {
             System.out.println("Aucun fichier trouvé");
@@ -253,7 +256,6 @@ public class L3_D4_Main
         }
 
     }
-
 
     /**
      * Méthode permettant de renvoyer une ArrayList venant du clonage d'une ArrayList passée en param
@@ -267,33 +269,13 @@ public class L3_D4_Main
         return clone;
     }
 
-    public static void test2() throws FileNotFoundException
-    {
-        int nom_1 = 1;
-        int nom_2 = 2;
-        int nom_3 = 3;
-        int nom_4 = 4;
-        Noeud premier = new Noeud(nom_1);
-        Noeud deux = new Noeud(nom_2);
-        Noeud trois = new Noeud(nom_3);
-        Noeud quatre = new Noeud(nom_4);
-
-        quatre.setSommetChemin(nom_3);
-        trois.setSommetChemin(nom_2);
-        deux.setSommetChemin(nom_1);
-
-        Map<Integer, Noeud> cc = new HashMap<>();
-
-        cc.put(premier.getSommet(), premier);
-        cc.put(deux.getSommet(), deux);
-        cc.put(trois.getSommet(), trois);
-        cc.put(quatre.getSommet(), quatre);
-
-
-        //  cheminLePlusCourt(premier.getSommet(),quatre,cc);
-    }
-
-
+    /**
+     * Trouver le sommet le plus proche du sommet de départ (pi minimum) parmi l'ensemble M
+     * @param m Liste des noeud de M
+     * @param dijkstra tableau de l'algorithme de Dijkstra
+     * @param etape ligne ou étape de l'algo de Dijkstra
+     * @return Noeud qui a le pi minimum à l'étape actuelle
+     */
     public static Noeud distanceLaPlusCourte(ArrayList<Noeud> m, Integer[][] dijkstra, int etape)
     {
         Noeud tampon_sommet = null;
@@ -312,18 +294,15 @@ public class L3_D4_Main
 
     /**
      *  Méthode permettant de trouver le chemin le plus court entre un sommet et le sommet initial du Graphe
-     *
      * @param initiale nom du noeud initiale
      * @param sommetArrivee Noeud vers lequel on cherche le chemin le plus court
-     * @param cc ArrayList cc ensemble des noeuds placé suite à l'algo de dijkstra
+     * @param cc ArrayList cc ensemble des noeuds placés suite à l'algo de dijkstra
      * @param predecesseurCheminCourt Map <Noeud,Noeud> qui contient en Key un noeud et en value son predecesseur avec le moins de distance
      * @param graphe Instance de la classe Graphe qui ici nous est utile pour sa map ToutLesChemins<Noeud,ArrayList>
      */
 
     public static void cheminLePlusCourt(int initiale, Noeud sommetArrivee, ArrayList<Integer> cc, Map<Noeud, Noeud> predecesseurCheminCourt, Graphe graphe)
     {
-        //Map<Noeud, Noeud> chemin= new HashMap<>();
-
         ArrayList<Noeud> chemin = new ArrayList<>(); // On va placer les noeuds du chemin le plus court dans cette Arraylist
 
         Noeud a = null; // Noeud tampon
@@ -339,7 +318,6 @@ public class L3_D4_Main
                 chemin.add(a); // ajoute le noeud tampon a
                 a = predecesseurCheminCourt.get(a).clone(); // on clone dans a le predecesseur du sommet a courant
             }
-
             for (Noeud j : graphe.getNoeuds())
             {
                 if (j.getSommet() == cc.get(0)) // si le noeud courant j est égale au noeud intiale
@@ -347,18 +325,19 @@ public class L3_D4_Main
                     b = j.clone();
                 }
             }
-
             chemin.add(b); // Ajout du sommet initiale
             Collections.reverse(chemin); // On inverse l'ordre pour avoir un chemin du sommet initiale vers le sommet d'arrivée
             graphe.getToutLesChemins().put(sommetArrivee, chemin); // On stock l'arrayList dans une map avec comme Key le sommet finale (le sommet initiale est connus puisque choisi)
         }
     }
 
-    public static Noeud predecesseur(Map<Integer, Noeud> cc, int pred)
-    {
-        return cc.get(pred);
-    }
-
+    /**
+     * Algorithme de Bellman
+     * @param numFichier Numéro du graphe choisi parmi les 10 graphes de test
+     * @param graphe Graphe avec toutes ses informations
+     * @param sommet_depart Sommet de départ choisi
+     * @throws FileNotFoundException exception si aucun fichier n'est trouvé
+     */
     public static void bellman(int numFichier, Graphe graphe, int sommet_depart) throws FileNotFoundException
     {
         //initialisation d'un graph sous la forme d'un tableau de transition
@@ -375,22 +354,14 @@ public class L3_D4_Main
         for (Noeud noeud : graphe.getNoeuds())
         {
             for (Map.Entry<Noeud, Integer> entry : noeud.getSuccesseurs().entrySet())
-            {
+            {// prec - succ - valeur de transition
                 tableau_transitions[transition] = new int[]{noeud.getSommet(), entry.getKey().getSommet(), entry.getValue()};
                 transition++;
             }
         }
 
-
-        // prec - succ - valeur de transition
-        //int tableau_transitions[][] = { {0,1,5},{1,2,-10}, {2,0,3} };
-
-        //le nombre  de sommet est à récuperer en première ligne du txt
-
-
         //le nombre de transition du graph
-        int nombreTransitions;
-        nombreTransitions = tableau_transitions.length;
+        int nombreTransitions= tableau_transitions.length;
 
         /*
             Tableau des k
@@ -420,7 +391,6 @@ public class L3_D4_Main
             }
         }
 
-
         //initialisation de la colonne du sommet de départ
         for (int j = 0; j < nombreSommets + 1; j++)
         {
@@ -428,9 +398,7 @@ public class L3_D4_Main
             tableau_de_predecesseur[j][sommet_depart] = sommet_depart;
         }
 
-        /*
-            initialisation des différentes variables
-         */
+        //initialisation des différentes variables
         int prec = 0;
         int succ = 0;
         int prec_v2 = 0;
@@ -443,11 +411,9 @@ public class L3_D4_Main
         {
             for (int o = 0; o < nombreTransitions; o++)
             {
-
                 prec = tableau_transitions[o][0]; //on récup le prec grace au graph
                 succ = tableau_transitions[o][1];
                 value = tableau_transitions[o][2];
-
                 prec_v2 = tableau_de_k[k - 1][prec]; //on recup le poids pour le prec dans le tableau k
                 succ_v2 = tableau_de_k[k - 1][succ];
 
@@ -496,9 +462,7 @@ public class L3_D4_Main
             }
         }
 
-        /*
-        Affichage des deux tableaux combinés, tableau des k et prédécesseur
-         */
+        //Affichage des deux tableaux combinés, tableau des k et prédécesseur
         int a = 1;
         int b;
         int nombreIteration = 1;
@@ -583,9 +547,6 @@ public class L3_D4_Main
             int w = MAX_SIZE;
             int p = MAX_SIZE;
             int longueur = 0;
-
-
-
             for (int ii = 0; ii < nombreSommets; ii++){
                 p = ii;
 
@@ -625,22 +586,23 @@ public class L3_D4_Main
                     enregistrement.print(j);
                     System.out.print(j);
                 }
-
                 chemin.clear();
 
                 System.out.print(ii);
                 enregistrement.print(ii);
                 System.out.println("\n");
                 enregistrement.println("\n");
-
-
             }
         }
         enregistrement.close();
-
     }
 
-
+    /**
+     * Enregistrement et affichage des informations du graphe (nombre de sommets, nombre de transitions, matrice d'adjacence et des valeurs.
+     * @param enregistrement
+     * @param graphe
+     * @throws FileNotFoundException
+     */
     static void enregistrementEntete(PrintWriter enregistrement, Graphe graphe) throws FileNotFoundException
     {
         System.out.println("Nombre de sommets:" + graphe.getNombreSommets());
@@ -663,12 +625,9 @@ public class L3_D4_Main
         Scanner kb = new Scanner(System.in);
 
         int rep = 0;
-
         do
         {
             System.out.println("Projet Théorie des Graphes L3 Groupe D equipe 4 \n");
-
-
             try
             {
                 int numFichier = choixFichier();
@@ -696,12 +655,10 @@ public class L3_D4_Main
                     {
                         dijkstra(numFichier, graphe, initiale);
                     }
-
                     if (choix == 2)
                     {
                         bellman(numFichier, graphe, initiale);
                     }
-
                 }
             }
             catch (FileNotFoundException e)
@@ -710,17 +667,14 @@ public class L3_D4_Main
             }
 
             System.out.println("Voulez vous continuer (1) ou quitter ? (2)");
-
-
             rep = inputWithOnlyInt();
-
-
         } while (rep != 2);
-
-
     }
 
-
+    /**
+     * Methode permettant le choix du sommet de départ pour les algorithmes de dijkstra et/ou Bellman
+     * @return le sommet de départ
+     */
     public static int choixSommet(int nombreSommets)
     {
         Scanner kb = new Scanner(System.in);
@@ -753,6 +707,10 @@ public class L3_D4_Main
         return saisie;
     }
 
+    /**
+     * Methode qui s'assure que la saisie est bien un entier
+     * @return un entier saisie
+     */
     public static int inputWithOnlyInt()
     {
         Scanner kb = new Scanner(System.in);
@@ -763,10 +721,8 @@ public class L3_D4_Main
             System.out.print("Veuillez choisir un nombre valide\n-> ");
             kb.next();
         }
-
         return kb.nextInt();
     }
 
-//a
 }
 
