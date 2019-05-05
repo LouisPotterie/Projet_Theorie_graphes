@@ -81,7 +81,7 @@ public class L3_D4_Main
                 for (L3_D4_Noeud noeud : m)  // parcourt de l'ensemble M
                     if (sommetProche.estPredecesseur(noeud) && graphe.getMatriceAdjacence()[sommetProche.getSommet()][noeud.getSommet()] == 1)
                     {
-                        // distance entre le
+                        // distance entre le le sommet avec le pi minimum et les noeuds de M
                         int distanceSommetProcheVersNoeud = sommetProche.getSuccesseurs().get(noeud);
                         int nouvelleDistance;
                         //Vérifier qu'à la ligne d'avant, le pi[sommetProche] n'est pas à égal à l'infini, sinon overflow et nouvelleDistance deviendrait négatif
@@ -92,7 +92,9 @@ public class L3_D4_Main
                         {
                             nouvelleDistance = Integer.MAX_VALUE;
                         }
-                        //si changement de pi, on modifie le pi et le prédecesseur "optimal" dans le chemin le plus du L3_D4_Noeud noeud
+                        /*si changement de pi, c'est à dire que la nouvelle distance calculée est inférieure à son ancien pi,
+                        on modifie le pi, et le prédecesseur "optimal" dans le chemin le plus du L3_D4_Noeud noeud
+                         */
                         if (nouvelleDistance < dijkstra[etape][noeud.getSommet()])
                         {
                             dijkstra[etape][noeud.getSommet()] = nouvelleDistance;
@@ -100,7 +102,7 @@ public class L3_D4_Main
                         }
                     }
             }
-            //affichage
+            //affichage du tableau de Dijkstra
             System.out.println("Algorithme de Dijkstra:");
             enregistrement.println("Algorithme de Dijkstra:");
             for (int compteur = 0; compteur < nombreSommets; compteur++)
