@@ -3,24 +3,20 @@ package com.company;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class Graphe {
+public class L3_D4_Graphe
+{
 
-    private Map<Noeud,ArrayList> toutLesChemins = new HashMap<>();
+    private Map<L3_D4_Noeud,ArrayList> toutLesChemins = new HashMap<>();
 
 
 
-    public Map<Noeud, ArrayList> getToutLesChemins() {
+    public Map<L3_D4_Noeud, ArrayList> getToutLesChemins() {
         return toutLesChemins;
-    }
-
-    public void setToutLesChemins(Map<Noeud, ArrayList> toutLesChemins) {
-        this.toutLesChemins = toutLesChemins;
     }
 
 
@@ -36,7 +32,7 @@ public class Graphe {
 
 
 
-    private ArrayList<Noeud> noeuds;
+    private ArrayList<L3_D4_Noeud> noeuds;
 
     public int getNombreTransitions()
     {
@@ -65,31 +61,31 @@ public class Graphe {
     private int[][] matriceValeurs;
 
 
-    public Graphe(int numFichier) throws FileNotFoundException
+    public L3_D4_Graphe(int numFichier) throws FileNotFoundException
     {
         noeuds = new ArrayList<>();
         initialisationMatrices(numFichier);
 
     }
 
-    public ArrayList<Noeud> getNoeuds() {
+    public ArrayList<L3_D4_Noeud> getNoeuds() {
         return noeuds;
     }
 
-    public void setNoeuds(ArrayList<Noeud> noeuds) {
+    public void setNoeuds(ArrayList<L3_D4_Noeud> noeuds) {
         this.noeuds = noeuds;
     }
 
 
     public void affichage_toutLesChemins()
     {
-        for (Map.Entry<Noeud, ArrayList> entry : toutLesChemins.entrySet())
+        for (Map.Entry<L3_D4_Noeud, ArrayList> entry : toutLesChemins.entrySet())
         {
-            ArrayList<Noeud> cle = entry.getValue();
+            ArrayList<L3_D4_Noeud> cle = entry.getValue();
 
             System.out.println("Le chemin pour aller du sommet initiale à " + entry.getKey().getSommet() + " est" );
 
-            for (Noeud n : cle)
+            for (L3_D4_Noeud n : cle)
             {
                 System.out.print(n.getSommet());
             }
@@ -105,7 +101,7 @@ public class Graphe {
         File fileMatrice = new File("L3_D4_" + numFichier + ".txt");
         Scanner readMatrice = new Scanner(fileMatrice);
 
-        ArrayList<Noeud> noeudsAdjascence = new ArrayList<>();
+        ArrayList<L3_D4_Noeud> noeudsAdjascence = new ArrayList<>();
 
         int taille = readMatrice.nextInt();
         int succ;
@@ -115,8 +111,8 @@ public class Graphe {
         noeuds.clear();
 
         for (int i = 0; i < taille; i++) {
-            this.noeuds.add(new Noeud(i));
-            noeudsAdjascence.add(new Noeud(i));
+            this.noeuds.add(new L3_D4_Noeud(i));
+            noeudsAdjascence.add(new L3_D4_Noeud(i));
         }
         nombreTransitions=0;
         while (readMatrice.hasNext()) {
@@ -139,7 +135,7 @@ public class Graphe {
         readMatrice.close();
     }
 
-    int[][] creationTableauAffichage(ArrayList<Noeud> noeuds2)
+    int[][] creationTableauAffichage(ArrayList<L3_D4_Noeud> noeuds2)
     {
         int tableau[][] = new int [noeuds2.size()][noeuds2.size()];
 
