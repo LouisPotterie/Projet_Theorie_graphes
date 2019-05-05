@@ -501,13 +501,53 @@ public class L3_D4_Main
          */
         int a = 1;
         int b;
+        int nombreIteration = 1;
 
+        System.out.print("__________");
+        enregistrement.print("__________");
+        for(int i = 0; i< nombreSommets;i++)
+        {
+            System.out.print("_________");
+            enregistrement.print("_________");
+        }
+        System.out.println();
+        enregistrement.println();
+        System.out.print(" Sommets |");
+        enregistrement.print(" Sommets |");
+        for(int i = 0; i< nombreSommets;i++)
+        {
+            System.out.print("   "+i+"    |");
+            enregistrement.print("   "+i+"    |");
+        }
+        System.out.println();
+        enregistrement.println();
+        System.out.print("   k     |");
+        enregistrement.print("   k     |");
+        for(int i = 0; i< nombreSommets;i++)
+        {
+            System.out.print("        |");
+            enregistrement.print("        |");
+        }
+        System.out.println();
+        enregistrement.println();
+        System.out.print("---------|");
+        enregistrement.print("---------|");
+        for(int i = 0; i< nombreSommets;i++)
+        {
+            System.out.print("--------|");
+            enregistrement.print("--------|");
+        }
+        System.out.println();
+        enregistrement.println();
         while (a < nombreSommets + 1)
         {
             b = 0;
-
+            System.out.print("   "+nombreIteration + "     |");
+            enregistrement.print("   "+nombreIteration+ "     |");
+            nombreIteration++;
             while (b < nombreSommets)
             {
+
                 if (tableau_de_k[a][b] > 900)
                 {
                     enregistrement.printf("%4s    |", "*");
@@ -527,6 +567,15 @@ public class L3_D4_Main
             System.out.println("");
             a++;
         }
+        System.out.print("_________|");
+        enregistrement.print("_________|");
+        for(int i = 0; i< nombreSommets;i++)
+        {
+            System.out.print("________|");
+            enregistrement.print("________|");
+        }
+        System.out.println("\n");
+        enregistrement.println("\n");
 
         ArrayList<Integer> chemin = new ArrayList<>();
 
@@ -582,7 +631,7 @@ public class L3_D4_Main
                 System.out.print(ii);
                 enregistrement.print(ii);
                 System.out.println("\n");
-                enregistrement.print("\n");
+                enregistrement.println("\n");
 
 
             }
