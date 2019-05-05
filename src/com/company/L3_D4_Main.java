@@ -361,13 +361,6 @@ public class L3_D4_Main
 
         //le nombre de transition du graph
         int nombreTransitions= tableau_transitions.length;
-
-        /*
-            Tableau des k
-            Taille :
-            (en ligne) de k = 0 à k = nombreSommets - 1
-            (en colonne) tous les sommets, donc nombreSommets
-        */
         int tableau_de_k[][] = new int[nombreSommets + 1][nombreSommets];
 
         /*
